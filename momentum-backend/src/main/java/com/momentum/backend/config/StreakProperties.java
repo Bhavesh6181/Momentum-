@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "app.streak")
 @Data
 public class StreakProperties {
-    private int minStudyMinutes = 15;
+    private int minimumStudyMinutes = 15;
 }

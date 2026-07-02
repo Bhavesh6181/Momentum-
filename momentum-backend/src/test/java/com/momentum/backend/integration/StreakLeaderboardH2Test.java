@@ -52,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     "spring.jpa.properties.hibernate.type.preferred_enum_jdbc_type=VARCHAR",
     "management.health.redis.enabled=false",
     "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration",
-    "app.streak.min-study-minutes=15"
+    "app.streak.minimum-study-minutes=15"
 })
 @AutoConfigureMockMvc
 @RecordApplicationEvents
@@ -108,12 +108,12 @@ public class StreakLeaderboardH2Test {
         when(clock.instant()).thenReturn(fixedInstant);
         when(clock.getZone()).thenReturn(ZoneId.of("UTC"));
 
-        // Mock Redis value and zset operations
+        // Mock Redis value, zset, and hash operations
         ZSetOperations<String, String> zSetOps = Mockito.mock(ZSetOperations.class);
         when(redisTemplate.opsForZSet()).thenReturn(zSetOps);
 
-        org.springframework.data.redis.core.ValueOperations<String, String> valOps = Mockito.mock(org.springframework.data.redis.core.ValueOperations.class);
-        when(redisTemplate.opsForValue()).thenReturn(valOps);
+        org.springframework.data.redis.core.HashOperations<String, Object, Object> hashOps = Mockito.mock(org.springframework.data.redis.core.HashOperations.class);
+        when(redisTemplate.opsForHash()).thenReturn(hashOps);
     }
 
     private User createUser(String username, String email, String name) {
@@ -157,8 +157,8 @@ public class StreakLeaderboardH2Test {
 
         // Fetch leaderboard via REST endpoint
         mockMvc.perform(get("/api/v1/groups/global/leaderboard")
-                        .param("type", "studyHours")
-                        .param("range", "weekly")
+                        .param("type", "STUDY_HOURS")
+                        .param("range", "WEEKLY")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3))
@@ -206,17 +206,17 @@ public class StreakLeaderboardH2Test {
         // Date under evaluation is yesterday: 2026-07-01
         String yesterdayStr = "2026-07-01";
 
-        // Mock daily activity records in Redis:
+        // Mock daily activity records in Redis using Hash operations:
         // User A studied 20 minutes (>= 15 threshold)
-        when(redisTemplate.opsForValue().get("user:streak:study-minutes:" + userA.getId() + ":" + yesterdayStr))
+        when(redisTemplate.opsForHash().get("user:streak:study-minutes:" + yesterdayStr, userA.getId().toString()))
                 .thenReturn("20");
 
         // User B completed 1 goal
-        when(redisTemplate.opsForValue().get("user:streak:goals:" + userB.getId() + ":" + yesterdayStr))
+        when(redisTemplate.opsForHash().get("user:streak:goals:" + yesterdayStr, userB.getId().toString()))
                 .thenReturn("1");
 
         // User C studied only 5 minutes and completed no goals
-        when(redisTemplate.opsForValue().get("user:streak:study-minutes:" + userC.getId() + ":" + yesterdayStr))
+        when(redisTemplate.opsForHash().get("user:streak:study-minutes:" + yesterdayStr, userC.getId().toString()))
                 .thenReturn("5");
 
         // Run nightly streaks evaluation

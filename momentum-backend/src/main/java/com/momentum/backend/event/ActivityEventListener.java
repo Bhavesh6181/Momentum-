@@ -1,10 +1,11 @@
 package com.momentum.backend.event;
 
 import com.momentum.backend.enums.ActivityType;
+import com.momentum.backend.enums.LeaderboardType;
 import com.momentum.backend.service.ActivityService;
-import com.momentum.backend.service.LeaderboardService;
 import com.momentum.backend.service.StreakService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -15,16 +16,16 @@ public class ActivityEventListener {
 
     private final ActivityService activityService;
     private final StreakService streakService;
-    private final LeaderboardService leaderboardService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ActivityEventListener(
             ActivityService activityService,
             StreakService streakService,
-            LeaderboardService leaderboardService
+            ApplicationEventPublisher eventPublisher
     ) {
         this.activityService = activityService;
         this.streakService = streakService;
-        this.leaderboardService = leaderboardService;
+        this.eventPublisher = eventPublisher;
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -59,8 +60,14 @@ public class ActivityEventListener {
         // Record streak qualifying minutes
         streakService.recordDailyStudyMinutes(event.getUserId(), event.getDurationMinutes());
 
-        // Update leaderboard score
-        leaderboardService.updateScore(event.getUserId(), event.getGroupId(), "studyHours", event.getDurationMinutes() / 60.0);
+        // Publish leaderboard score update event
+        eventPublisher.publishEvent(new LeaderboardUpdatedEvent(
+                this,
+                event.getUserId(),
+                event.getGroupId(),
+                LeaderboardType.STUDY_HOURS,
+                event.getDurationMinutes() / 60.0
+        ));
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -81,8 +88,14 @@ public class ActivityEventListener {
         // Record streak qualifying goal completion
         streakService.recordDailyGoalCompleted(event.getUserId());
 
-        // Update leaderboard score
-        leaderboardService.updateScore(event.getUserId(), event.getGroupId(), "tasksCompleted", 1.0);
+        // Publish leaderboard score update event
+        eventPublisher.publishEvent(new LeaderboardUpdatedEvent(
+                this,
+                event.getUserId(),
+                event.getGroupId(),
+                LeaderboardType.TASKS_COMPLETED,
+                1.0
+        ));
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

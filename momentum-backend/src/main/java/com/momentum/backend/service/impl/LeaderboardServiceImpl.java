@@ -2,6 +2,8 @@ package com.momentum.backend.service.impl;
 
 import com.momentum.backend.dto.response.LeaderboardEntryResponse;
 import com.momentum.backend.entity.User;
+import com.momentum.backend.enums.LeaderboardRange;
+import com.momentum.backend.enums.LeaderboardType;
 import com.momentum.backend.repository.UserRepository;
 import com.momentum.backend.service.LeaderboardService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,15 +34,16 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     }
 
     @Override
-    public void updateScore(UUID userId, UUID groupId, String type, double increment) {
+    public void updateScore(UUID userId, UUID groupId, LeaderboardType type, double increment) {
         LocalDate now = LocalDate.now(clock);
         int year = now.getYear();
         int month = now.getMonthValue();
         int week = now.get(WeekFields.of(Locale.getDefault()).weekOfYear());
 
         String userIdStr = userId.toString();
+        String typeStr = type.name().toLowerCase();
 
-        if ("streak".equalsIgnoreCase(type)) {
+        if (type == LeaderboardType.STREAK) {
             // Streaks are absolute values. We only track all-time/current values.
             // Update global
             String globalKey = "leaderboard:streak:global:all-time";
@@ -61,13 +64,13 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
             for (String range : ranges) {
                 // Update global leaderboard
-                String globalKey = String.format("leaderboard:%s:global:%s", type, range);
+                String globalKey = String.format("leaderboard:%s:global:%s", typeStr, range);
                 redisTemplate.opsForZSet().incrementScore(globalKey, userIdStr, increment);
                 setTtlIfPartitioned(globalKey, range);
 
                 // Update group-scoped leaderboard
                 if (groupId != null) {
-                    String groupKey = String.format("leaderboard:%s:%s:%s", type, groupId, range);
+                    String groupKey = String.format("leaderboard:%s:%s:%s", typeStr, groupId, range);
                     redisTemplate.opsForZSet().incrementScore(groupKey, userIdStr, increment);
                     setTtlIfPartitioned(groupKey, range);
                 }
@@ -75,27 +78,8 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         }
     }
 
-    /*
-     * WHY REDIS SORTED SETS BEAT SQL ORDER BY + AGGREGATION AT SCALE:
-     *
-     * 1. Computational Complexity:
-     *    - A SQL database executing an ORDER BY with aggregates (SUM, COUNT, etc.) over millions of study sessions
-     *      or tasks completed has a complexity of O(N log N) on every query execution, requiring high I/O, heavy CPU utilization,
-     *      and temporary table creation, unless heavily indexed (which itself introduces major write lock contention).
-     *    - Redis Sorted Sets (ZSETs) are implemented internally using a dual data structure: a Skip List combined with a Hash Map.
-     *      - Inserting or updating scores (ZADD / ZINCRBY) executes in O(log N) complexity, maintaining sorting at write time.
-     *      - Fetching top ranks (ZREVRANGE) executes in O(log N + M) complexity, where M is the limit requested (e.g. top 10 users).
-     *      No on-the-fly sorting or heavy aggregations are required during read requests; the data is pre-sorted.
-     *
-     * 2. In-Memory Operations:
-     *    - Redis runs completely in RAM. All operations bypass the disk bottleneck, yielding sub-millisecond retrieval.
-     *
-     * 3. Relational DB Relief:
-     *    - Offloading rankings to Redis reduces the load on Postgres significantly. Instead of querying full tables,
-     *      Postgres is queried only once in a simple primary key lookup (IN clause) to retrieve (hydrate) the top N users' details.
-     */
     @Override
-    public List<LeaderboardEntryResponse> getLeaderboard(String groupIdStr, String type, String range, int limit) {
+    public List<LeaderboardEntryResponse> getLeaderboard(String groupIdStr, LeaderboardType type, LeaderboardRange range, int limit) {
         String redisKey = buildRedisKey(groupIdStr, type, range);
         log.info("Fetching leaderboard using Redis key: {}", redisKey);
 
@@ -144,10 +128,10 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         return responseEntries;
     }
 
-    private String buildRedisKey(String groupIdStr, String type, String range) {
+    private String buildRedisKey(String groupIdStr, LeaderboardType type, LeaderboardRange range) {
         String rangeSuffix;
 
-        if ("streak".equalsIgnoreCase(type)) {
+        if (type == LeaderboardType.STREAK) {
             // Streaks are only tracked all-time/current
             rangeSuffix = "all-time";
         } else {
@@ -156,16 +140,16 @@ public class LeaderboardServiceImpl implements LeaderboardService {
             int month = now.getMonthValue();
             int week = now.get(WeekFields.of(Locale.getDefault()).weekOfYear());
 
-            if ("weekly".equalsIgnoreCase(range)) {
+            if (range == LeaderboardRange.WEEKLY) {
                 rangeSuffix = String.format("weekly:%d-W%d", year, week);
-            } else if ("monthly".equalsIgnoreCase(range)) {
+            } else if (range == LeaderboardRange.MONTHLY) {
                 rangeSuffix = String.format("monthly:%d-M%d", year, month);
             } else {
                 rangeSuffix = "all-time";
             }
         }
 
-        return String.format("leaderboard:%s:%s:%s", type.toLowerCase(), groupIdStr, rangeSuffix);
+        return String.format("leaderboard:%s:%s:%s", type.name().toLowerCase(), groupIdStr, rangeSuffix);
     }
 
     private void setTtlIfPartitioned(String key, String range) {

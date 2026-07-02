@@ -4,10 +4,11 @@ import com.momentum.backend.config.StreakProperties;
 import com.momentum.backend.entity.GroupMember;
 import com.momentum.backend.entity.UserStats;
 import com.momentum.backend.enums.GroupMembershipStatus;
+import com.momentum.backend.enums.LeaderboardType;
+import com.momentum.backend.event.LeaderboardUpdatedEvent;
 import com.momentum.backend.event.StreakMilestoneEvent;
 import com.momentum.backend.repository.GroupMemberRepository;
 import com.momentum.backend.repository.UserStatsRepository;
-import com.momentum.backend.service.LeaderboardService;
 import com.momentum.backend.service.StreakService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -26,13 +27,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class StreakServiceImpl implements StreakService {
 
-    private static final String STUDY_MINUTES_KEY_PREFIX = "user:streak:study-minutes:";
-    private static final String GOALS_KEY_PREFIX = "user:streak:goals:";
+    private static final String STUDY_MINUTES_HASH_PREFIX = "user:streak:study-minutes:";
+    private static final String GOALS_HASH_PREFIX = "user:streak:goals:";
 
     private final StringRedisTemplate redisTemplate;
     private final UserStatsRepository userStatsRepository;
     private final GroupMemberRepository groupMemberRepository;
-    private final LeaderboardService leaderboardService;
     private final StreakProperties streakProperties;
     private final ApplicationEventPublisher eventPublisher;
     private final Clock clock;
@@ -41,7 +41,6 @@ public class StreakServiceImpl implements StreakService {
             StringRedisTemplate redisTemplate,
             UserStatsRepository userStatsRepository,
             GroupMemberRepository groupMemberRepository,
-            LeaderboardService leaderboardService,
             StreakProperties streakProperties,
             ApplicationEventPublisher eventPublisher,
             Clock clock
@@ -49,7 +48,6 @@ public class StreakServiceImpl implements StreakService {
         this.redisTemplate = redisTemplate;
         this.userStatsRepository = userStatsRepository;
         this.groupMemberRepository = groupMemberRepository;
-        this.leaderboardService = leaderboardService;
         this.streakProperties = streakProperties;
         this.eventPublisher = eventPublisher;
         this.clock = clock;
@@ -58,23 +56,23 @@ public class StreakServiceImpl implements StreakService {
     @Override
     public void recordDailyStudyMinutes(UUID userId, int durationMinutes) {
         String dateStr = LocalDate.now(clock).toString();
-        String key = STUDY_MINUTES_KEY_PREFIX + userId + ":" + dateStr;
-        redisTemplate.opsForValue().increment(key, durationMinutes);
+        String key = STUDY_MINUTES_HASH_PREFIX + dateStr;
+        redisTemplate.opsForHash().increment(key, userId.toString(), durationMinutes);
         redisTemplate.expire(key, 7, TimeUnit.DAYS);
-        log.debug("Recorded {} study minutes for user {} on {}", durationMinutes, userId, dateStr);
+        log.debug("Recorded {} study minutes for user {} in daily hash {} on {}", durationMinutes, userId, key, dateStr);
     }
 
     @Override
     public void recordDailyGoalCompleted(UUID userId) {
         String dateStr = LocalDate.now(clock).toString();
-        String key = GOALS_KEY_PREFIX + userId + ":" + dateStr;
-        redisTemplate.opsForValue().increment(key, 1);
+        String key = GOALS_HASH_PREFIX + dateStr;
+        redisTemplate.opsForHash().increment(key, userId.toString(), 1);
         redisTemplate.expire(key, 7, TimeUnit.DAYS);
-        log.debug("Recorded goal completion for user {} on {}", userId, dateStr);
+        log.debug("Recorded goal completion for user {} in daily hash {} on {}", userId, key, dateStr);
     }
 
     @Override
-    @Scheduled(cron = "0 1 0 * * *") // Runs at 00:01 every day
+    @Scheduled(cron = "${app.scheduler.nightly-streak-cron}")
     @Transactional
     public void evaluateNightlyStreaks() {
         LocalDate yesterday = LocalDate.now(clock).minusDays(1);
@@ -82,25 +80,25 @@ public class StreakServiceImpl implements StreakService {
         log.info("Starting nightly streak evaluation for date: {}", yesterdayStr);
 
         List<UserStats> allStats = userStatsRepository.findAllWithUser();
-        int minStudyMinutes = streakProperties.getMinStudyMinutes();
+        int minimumStudyMinutes = streakProperties.getMinimumStudyMinutes();
 
         int processed = 0;
         int updated = 0;
+
+        String studyKey = STUDY_MINUTES_HASH_PREFIX + yesterdayStr;
+        String goalsKey = GOALS_HASH_PREFIX + yesterdayStr;
 
         for (UserStats stats : allStats) {
             UUID userId = stats.getUser().getId();
             processed++;
 
-            String studyKey = STUDY_MINUTES_KEY_PREFIX + userId + ":" + yesterdayStr;
-            String goalsKey = GOALS_KEY_PREFIX + userId + ":" + yesterdayStr;
+            Object studyVal = redisTemplate.opsForHash().get(studyKey, userId.toString());
+            Object goalsVal = redisTemplate.opsForHash().get(goalsKey, userId.toString());
 
-            String studyVal = redisTemplate.opsForValue().get(studyKey);
-            String goalsVal = redisTemplate.opsForValue().get(goalsKey);
+            int studyMinutes = studyVal != null ? Integer.parseInt(studyVal.toString()) : 0;
+            int goalsCompleted = goalsVal != null ? Integer.parseInt(goalsVal.toString()) : 0;
 
-            int studyMinutes = studyVal != null ? Integer.parseInt(studyVal) : 0;
-            int goalsCompleted = goalsVal != null ? Integer.parseInt(goalsVal) : 0;
-
-            boolean metThreshold = (studyMinutes >= minStudyMinutes) || (goalsCompleted > 0);
+            boolean metThreshold = (studyMinutes >= minimumStudyMinutes) || (goalsCompleted > 0);
 
             int oldStreak = stats.getCurrentStreak();
             int newStreak = metThreshold ? oldStreak + 1 : 0;
@@ -114,14 +112,26 @@ public class StreakServiceImpl implements StreakService {
                 }
                 userStatsRepository.save(stats);
 
-                // Update global streak leaderboard score
-                leaderboardService.updateScore(userId, null, "streak", newStreak);
+                // Publish event to update global streak leaderboard score
+                eventPublisher.publishEvent(new LeaderboardUpdatedEvent(
+                        this,
+                        userId,
+                        null,
+                        LeaderboardType.STREAK,
+                        newStreak
+                ));
 
-                // Update group-scoped streak leaderboard scores
+                // Publish events to update group-scoped streak leaderboard scores
                 List<GroupMember> memberships = groupMemberRepository.findByUserId(userId);
                 for (GroupMember membership : memberships) {
                     if (membership.getStatus() == GroupMembershipStatus.ACTIVE) {
-                        leaderboardService.updateScore(userId, membership.getGroup().getId(), "streak", newStreak);
+                        eventPublisher.publishEvent(new LeaderboardUpdatedEvent(
+                                this,
+                                userId,
+                                membership.getGroup().getId(),
+                                LeaderboardType.STREAK,
+                                newStreak
+                        ));
                     }
                 }
 

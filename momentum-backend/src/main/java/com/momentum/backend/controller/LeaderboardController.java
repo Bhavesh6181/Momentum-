@@ -1,6 +1,8 @@
 package com.momentum.backend.controller;
 
 import com.momentum.backend.dto.response.LeaderboardEntryResponse;
+import com.momentum.backend.enums.LeaderboardRange;
+import com.momentum.backend.enums.LeaderboardType;
 import com.momentum.backend.service.LeaderboardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,8 @@ public class LeaderboardController {
     @GetMapping("/{groupId}/leaderboard")
     public ResponseEntity<List<LeaderboardEntryResponse>> getLeaderboard(
             @PathVariable String groupId,
-            @RequestParam String type,
-            @RequestParam(defaultValue = "all-time") String range,
+            @RequestParam LeaderboardType type,
+            @RequestParam(defaultValue = "ALL_TIME") LeaderboardRange range,
             @RequestParam(defaultValue = "10") int limit
     ) {
         log.info("Leaderboard request received: group={}, type={}, range={}, limit={}", groupId, type, range, limit);

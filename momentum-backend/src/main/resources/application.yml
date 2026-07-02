@@ -35,4 +35,5 @@ app:
     lockout-duration-minutes: 15
   scheduler:
     group-analytics-cron: ${GROUP_ANALYTICS_CRON:0 0 2 * * *}
+    nightly-streak-cron: ${NIGHTLY_STREAK_CRON:0 1 0 * * *}
 
