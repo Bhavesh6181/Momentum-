@@ -32,7 +32,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     "spring.datasource.password=",
     "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
     "spring.jpa.hibernate.ddl-auto=update",
-    "spring.flyway.enabled=false"
+    "spring.flyway.enabled=false",
+    "spring.jpa.properties.hibernate.type.preferred_enum_jdbc_type=VARCHAR",
+    "management.health.redis.enabled=false",
+    "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration"
 })
 @AutoConfigureMockMvc
 public class UserProfileControllerH2Test {
@@ -51,6 +54,9 @@ public class UserProfileControllerH2Test {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @org.springframework.boot.test.mock.mockito.MockBean
+    private org.springframework.data.redis.core.StringRedisTemplate redisTemplate;
 
     @BeforeEach
     void setup() {

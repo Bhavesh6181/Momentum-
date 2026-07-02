@@ -59,6 +59,9 @@ dependencies {
     
     // AOP aspect processing
     implementation("org.springframework.boot:spring-boot-starter-aop")
+
+    // Redis (presence system)
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
     
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")

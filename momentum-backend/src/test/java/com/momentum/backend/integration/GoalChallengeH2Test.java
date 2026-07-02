@@ -33,7 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
         "spring.jpa.hibernate.ddl-auto=update",
         "spring.flyway.enabled=false",
-        "spring.jpa.properties.hibernate.type.preferred_enum_jdbc_type=VARCHAR"
+        "spring.jpa.properties.hibernate.type.preferred_enum_jdbc_type=VARCHAR",
+        "management.health.redis.enabled=false",
+        "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration"
 })
 @AutoConfigureMockMvc
 public class GoalChallengeH2Test {
@@ -49,6 +51,9 @@ public class GoalChallengeH2Test {
     @Autowired private ChallengeParticipantRepository challengeParticipantRepository;
     @Autowired private GoalRepository goalRepository;
     @Autowired private PasswordEncoder passwordEncoder;
+
+    @org.springframework.boot.test.mock.mockito.MockBean
+    private org.springframework.data.redis.core.StringRedisTemplate redisTemplate;
 
     private User adminUser;
     private User memberUser;

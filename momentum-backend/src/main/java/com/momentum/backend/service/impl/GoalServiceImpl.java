@@ -30,17 +30,20 @@ public class GoalServiceImpl implements GoalService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
     private final GoalMapper goalMapper;
+    private final org.springframework.context.ApplicationEventPublisher eventPublisher;
 
     public GoalServiceImpl(
             GoalRepository goalRepository,
             UserRepository userRepository,
             GroupRepository groupRepository,
-            GoalMapper goalMapper
+            GoalMapper goalMapper,
+            org.springframework.context.ApplicationEventPublisher eventPublisher
     ) {
         this.goalRepository = goalRepository;
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
         this.goalMapper = goalMapper;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -97,11 +100,25 @@ public class GoalServiceImpl implements GoalService {
         goal.setCurrentValue(request.getValue());
 
         // Auto-complete when target is reached
+        boolean completedNow = false;
         if (goal.getCurrentValue() >= goal.getTargetValue()) {
             goal.setStatus(GoalStatus.COMPLETED);
+            completedNow = true;
         }
 
-        return goalMapper.toResponse(goalRepository.save(goal));
+        Goal saved = goalRepository.save(goal);
+
+        if (completedNow) {
+            eventPublisher.publishEvent(new com.momentum.backend.event.GoalCompletedEvent(
+                    this,
+                    saved.getUser().getId(),
+                    saved.getId(),
+                    saved.getTitle(),
+                    saved.getGroup() != null ? saved.getGroup().getId() : null
+            ));
+        }
+
+        return goalMapper.toResponse(saved);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.momentum.backend.dto.response.StudySessionResponse;
 import com.momentum.backend.entity.*;
 import com.momentum.backend.enums.SessionStatus;
 import com.momentum.backend.event.StudySessionEndedEvent;
+import com.momentum.backend.event.StudySessionStartedEvent;
 import com.momentum.backend.exception.ConflictException;
 import com.momentum.backend.exception.ResourceNotFoundException;
 import com.momentum.backend.mapper.StudySessionMapper;
@@ -78,6 +79,13 @@ public class StudySessionServiceImpl implements StudySessionService {
                 .build();
 
         StudySession saved = studySessionRepository.save(session);
+        eventPublisher.publishEvent(new StudySessionStartedEvent(
+                this,
+                user.getId(),
+                saved.getId(),
+                saved.getSubject(),
+                saved.getGroup() != null ? saved.getGroup().getId() : null
+        ));
         return studySessionMapper.toResponse(saved);
     }
 
@@ -117,7 +125,13 @@ public class StudySessionServiceImpl implements StudySessionService {
         }
 
         // Publish session end domain event
-        eventPublisher.publishEvent(new StudySessionEndedEvent(this, saved.getId(), user.getId(), durationMinutes));
+        eventPublisher.publishEvent(new StudySessionEndedEvent(
+                this,
+                saved.getId(),
+                user.getId(),
+                durationMinutes,
+                saved.getGroup() != null ? saved.getGroup().getId() : null
+        ));
 
         return studySessionMapper.toResponse(saved);
     }
