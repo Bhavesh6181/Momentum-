@@ -1,0 +1,26 @@
+# Root Git Ignore for Momentum Workspace
+
+# Ignore Gradle and build artifacts in any subproject
+**/.gradle/
+**/build/
+**/out/
+
+# Ignore IDE configurations
+**/.idea/
+**/*.iml
+**/*.iws
+**/*.ipr
+**/.vscode/
+**/bin/
+
+# Ignore OS-specific files
+**/.DS_Store
+**/Thumbs.db
+
+# Ignore logs
+/**/*.log
+**/logs/
+
+# Ignore environment/secret files
+**/.env
+**/.env.*

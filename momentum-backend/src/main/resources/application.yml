@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: momentum-backend
+  profiles:
+    active: local
+
+  # Common Mail Settings (secrets overridden by env vars)
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  # Serialization configurations
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+    time-zone: UTC
+
+# JWT Configurations (strictly use environment variables, never hardcode secret keys)
+jwt:
+  secret: ${JWT_SECRET:dGhpcy1pcy1hLXZlcnktc2VjdXJlLWJhc2U2NC1lbmNvZGVkLXNlY3JldC1rZXktZm9yLW1vbWVudHVtLWJhY2tlbmQtZGV2ZWxvcG1lbnQ=}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000} # Default 24 hours

@@ -1,0 +1,38 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# Gradle wrapper
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDEs and Editors
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated/
+bin/
+dependency-reduced-pom.xml
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Local Configuration & Secrets
+.env
+.env.local
+.env.*.local
+
+# Temp/Crash reports
+core
+*.stackdump
