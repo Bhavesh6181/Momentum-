@@ -84,4 +84,24 @@ public class AuthenticationEventListener {
                 .userAgent(event.getUserAgent())
                 .build());
     }
+
+    @EventListener
+    public void handleProfileUpdated(UserProfileUpdatedEvent event) {
+        auditLogRepository.save(AuditLog.builder()
+                .username(event.getUsername())
+                .eventType("PROFILE_UPDATED")
+                .ipAddress("N/A")
+                .userAgent("N/A")
+                .build());
+    }
+
+    @EventListener
+    public void handleProfilePictureChanged(UserProfilePictureChangedEvent event) {
+        auditLogRepository.save(AuditLog.builder()
+                .username(event.getUsername())
+                .eventType("PROFILE_PICTURE_CHANGED")
+                .ipAddress("N/A")
+                .userAgent("N/A")
+                .build());
+    }
 }

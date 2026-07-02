@@ -18,4 +18,5 @@ public class UserMeResponse {
     private String role;
     private UserProfileResponse profile;
     private UserStatsResponse stats;
+    private int profileCompletion;
 }

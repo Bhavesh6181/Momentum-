@@ -29,7 +29,7 @@ public class UserProfileController {
         return ResponseEntity.ok(ApiResponse.success(response, "Fetched profile successfully"));
     }
 
-    @PutMapping("/me")
+    @PatchMapping("/me")
     public ResponseEntity<ApiResponse<UserMeResponse>> updateMyProfile(
             @Valid @RequestBody UserProfileUpdateRequest request,
             Principal principal

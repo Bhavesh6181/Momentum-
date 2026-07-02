@@ -26,7 +26,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.ArrayList;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -90,7 +90,8 @@ public class UserProfileControllerIntegrationTest {
                 .andExpect(jsonPath("$.data.username").value("testuser"))
                 .andExpect(jsonPath("$.data.email").value("testuser@example.com"))
                 .andExpect(jsonPath("$.data.profile.college").value("Initial College"))
-                .andExpect(jsonPath("$.data.stats.studyHours").value(5.5));
+                .andExpect(jsonPath("$.data.stats.studyHours").value(5.5))
+                .andExpect(jsonPath("$.data.profileCompletion").value(9));
     }
 
     @Test
@@ -105,7 +106,7 @@ public class UserProfileControllerIntegrationTest {
                 .githubLink("https://github.com/testuser")
                 .build();
 
-        mockMvc.perform(put("/api/v1/users/me")
+        mockMvc.perform(patch("/api/v1/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -126,7 +127,7 @@ public class UserProfileControllerIntegrationTest {
                 .githubLink("invalid-url")
                 .build();
 
-        mockMvc.perform(put("/api/v1/users/me")
+        mockMvc.perform(patch("/api/v1/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -159,5 +160,35 @@ public class UserProfileControllerIntegrationTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.status").value(401));
+    }
+
+    @Test
+    @WithMockUser(username = "testuser")
+    void test6_OptimisticLockingConflict() throws Exception {
+        createMockUser("testuser", "testuser@example.com");
+
+        UserProfileUpdateRequest request1 = UserProfileUpdateRequest.builder()
+                .name("First Edit")
+                .version(0L)
+                .build();
+
+        mockMvc.perform(patch("/api/v1/users/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.profile.name").value("First Edit"));
+
+        UserProfileUpdateRequest request2 = UserProfileUpdateRequest.builder()
+                .name("Stale Edit")
+                .version(0L)
+                .build();
+
+        mockMvc.perform(patch("/api/v1/users/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request2)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.message").value("The resource has been updated by another transaction. Please reload and try again."));
     }
 }

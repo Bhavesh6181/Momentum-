@@ -75,4 +75,9 @@ public class UserProfile {
 
     @Column(columnDefinition = "text")
     private String bio;
+
+    @Version
+    @Column(nullable = false)
+    @Builder.Default
+    private Long version = 0L;
 }

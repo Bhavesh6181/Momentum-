@@ -1,9 +1,10 @@
 package com.momentum.backend.dto.request;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.validator.constraints.URL;
 
 import java.util.List;
 
@@ -30,14 +31,16 @@ public class UserProfileUpdateRequest {
     @Size(max = 100, message = "Target company cannot exceed 100 characters")
     private String targetCompany;
 
-    @Pattern(regexp = "^(0*[1-9]\\d*(\\.\\d+)?|0+\\.\\d*[1-9]\\d*)$", message = "Target package must be a positive numeric value")
+    @DecimalMin(value = "0.0", message = "Target package must be a positive numeric value")
     private String targetPackage;
 
-    @Pattern(regexp = "^(https?://)?(www\\.)?github\\.com/[A-Za-z0-9_.-]+/?$", message = "Invalid GitHub profile link")
+    @URL(message = "GitHub link must be a valid URL")
     private String githubLink;
 
-    @Pattern(regexp = "^(https?://)?(www\\.)?linkedin\\.com/in/[A-Za-z0-9_.-]+/?$", message = "Invalid LinkedIn profile link")
+    @URL(message = "LinkedIn link must be a valid URL")
     private String linkedinLink;
 
     private String bio;
+
+    private Long version;
 }
