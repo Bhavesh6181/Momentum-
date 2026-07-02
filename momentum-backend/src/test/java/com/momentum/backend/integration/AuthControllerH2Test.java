@@ -56,6 +56,8 @@ public class AuthControllerH2Test {
         jdbcTemplate.execute("DELETE FROM audit_logs");
         jdbcTemplate.execute("DELETE FROM user_profiles");
         jdbcTemplate.execute("DELETE FROM user_stats");
+        jdbcTemplate.execute("DELETE FROM user_verification_tokens");
+        jdbcTemplate.execute("DELETE FROM password_reset_tokens");
         jdbcTemplate.execute("DELETE FROM users");
     }
 

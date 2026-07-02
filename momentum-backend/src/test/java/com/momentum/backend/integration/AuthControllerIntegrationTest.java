@@ -7,6 +7,7 @@ import com.momentum.backend.entity.User;
 import com.momentum.backend.enums.Role;
 import com.momentum.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,18 @@ public class AuthControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @BeforeEach
     void setup() {
-        userRepository.deleteAll();
+        jdbcTemplate.execute("DELETE FROM refresh_tokens");
+        jdbcTemplate.execute("DELETE FROM audit_logs");
+        jdbcTemplate.execute("DELETE FROM user_profiles");
+        jdbcTemplate.execute("DELETE FROM user_stats");
+        jdbcTemplate.execute("DELETE FROM user_verification_tokens");
+        jdbcTemplate.execute("DELETE FROM password_reset_tokens");
+        jdbcTemplate.execute("DELETE FROM users");
     }
 
     @Test

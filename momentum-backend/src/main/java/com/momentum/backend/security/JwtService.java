@@ -1,10 +1,10 @@
 package com.momentum.backend.security;
 
+import com.momentum.backend.config.SecurityProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +17,10 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private final String secret;
-    private final long jwtExpirationMs;
+    private final SecurityProperties securityProperties;
 
-    public JwtService(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration-ms:900000}") long jwtExpirationMs
-    ) {
-        this.secret = secret;
-        this.jwtExpirationMs = jwtExpirationMs;
+    public JwtService(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
     }
 
     public String extractUsername(String token) {
@@ -42,12 +37,11 @@ public class JwtService {
     }
 
     public String generateAccessToken(Map<String, Object> extraClaims, String username) {
-        return buildToken(extraClaims, username, jwtExpirationMs);
+        return buildToken(extraClaims, username, securityProperties.getAccessTokenExpirationMs());
     }
 
     public String generateRefreshToken(String username) {
-        // Refresh token duration 7 days = 604800000 ms
-        return buildToken(new HashMap<>(), username, 604800000L);
+        return buildToken(new HashMap<>(), username, securityProperties.getRefreshTokenExpirationMs());
     }
 
     private String buildToken(Map<String, Object> extraClaims, String username, long expirationMs) {
@@ -82,7 +76,7 @@ public class JwtService {
     }
 
     private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        byte[] keyBytes = Decoders.BASE64.decode(securityProperties.getJwtSecret());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

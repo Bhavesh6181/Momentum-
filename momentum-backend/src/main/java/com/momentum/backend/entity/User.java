@@ -72,18 +72,6 @@ public class User extends BaseEntity {
     @Column(name = "lockout_until")
     private OffsetDateTime lockoutUntil;
 
-    @Column(name = "verification_token")
-    private String verificationToken;
-
-    @Column(name = "verification_token_expiry")
-    private OffsetDateTime verificationTokenExpiry;
-
-    @Column(name = "password_reset_token")
-    private String passwordResetToken;
-
-    @Column(name = "password_reset_token_expiry")
-    private OffsetDateTime passwordResetTokenExpiry;
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private UserProfile profile;
 
