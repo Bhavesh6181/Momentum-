@@ -30,13 +30,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:h2:mem:sessiondb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL",
+        "spring.datasource.url=jdbc:h2:mem:sessiondb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;NON_KEYWORDS=value",
         "spring.datasource.driver-class-name=org.h2.Driver",
         "spring.datasource.username=sa",
         "spring.datasource.password=",
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
         "spring.jpa.hibernate.ddl-auto=update",
-        "spring.flyway.enabled=false"
+        "spring.flyway.enabled=false",
+        "spring.jpa.properties.hibernate.type.preferred_enum_jdbc_type=VARCHAR"
 })
 @AutoConfigureMockMvc
 public class SessionControllerH2Test {
@@ -53,17 +54,22 @@ public class SessionControllerH2Test {
 
     @BeforeEach
     void setup() {
-        jdbcTemplate.execute("DELETE FROM study_sessions");
-        jdbcTemplate.execute("DELETE FROM pomodoro_sessions");
-        jdbcTemplate.execute("DELETE FROM refresh_tokens");
-        jdbcTemplate.execute("DELETE FROM audit_logs");
-        jdbcTemplate.execute("DELETE FROM group_members");
-        jdbcTemplate.execute("DELETE FROM groups");
-        jdbcTemplate.execute("DELETE FROM user_profiles");
-        jdbcTemplate.execute("DELETE FROM user_stats");
-        jdbcTemplate.execute("DELETE FROM user_verification_tokens");
-        jdbcTemplate.execute("DELETE FROM password_reset_tokens");
-        jdbcTemplate.execute("DELETE FROM users");
+        jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY FALSE");
+        jdbcTemplate.execute("TRUNCATE TABLE study_sessions");
+        jdbcTemplate.execute("TRUNCATE TABLE pomodoro_sessions");
+        jdbcTemplate.execute("TRUNCATE TABLE challenge_participants");
+        jdbcTemplate.execute("TRUNCATE TABLE challenges");
+        jdbcTemplate.execute("TRUNCATE TABLE goals");
+        jdbcTemplate.execute("TRUNCATE TABLE group_members");
+        jdbcTemplate.execute("TRUNCATE TABLE groups");
+        jdbcTemplate.execute("TRUNCATE TABLE refresh_tokens");
+        jdbcTemplate.execute("TRUNCATE TABLE audit_logs");
+        jdbcTemplate.execute("TRUNCATE TABLE user_verification_tokens");
+        jdbcTemplate.execute("TRUNCATE TABLE password_reset_tokens");
+        jdbcTemplate.execute("TRUNCATE TABLE user_profiles");
+        jdbcTemplate.execute("TRUNCATE TABLE user_stats");
+        jdbcTemplate.execute("TRUNCATE TABLE users");
+        jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY TRUE");
 
         testUser = User.builder()
                 .username("testuser")
