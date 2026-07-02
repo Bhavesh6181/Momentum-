@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
-    Optional<UserProfile> findByUserId(Long userId);
+public interface UserProfileRepository extends JpaRepository<UserProfile, UUID> {
+    Optional<UserProfile> findByUserId(UUID userId);
     List<UserProfile> findByTargetCompanyIgnoreCase(String targetCompany);
     List<UserProfile> findByCollegeIgnoreCase(String college);
 }

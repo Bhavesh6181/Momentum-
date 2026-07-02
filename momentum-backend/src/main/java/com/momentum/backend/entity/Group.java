@@ -1,12 +1,15 @@
 package com.momentum.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.SQLDelete;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(
@@ -14,7 +17,8 @@ import java.time.OffsetDateTime;
     indexes = {
         @Index(name = "idx_groups_created_by", columnList = "created_by"),
         @Index(name = "idx_groups_invite_code_active", columnList = "invite_code"),
-        @Index(name = "idx_groups_deleted_at", columnList = "deleted_at")
+        @Index(name = "idx_groups_deleted_at", columnList = "deleted_at"),
+        @Index(name = "idx_groups_created_at", columnList = "created_at")
     }
 )
 @SQLDelete(sql = "UPDATE groups SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
@@ -29,9 +33,11 @@ import java.time.OffsetDateTime;
 public class Group extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
+    @NotBlank
+    @Size(min = 3, max = 100)
     @Column(nullable = false, length = 100)
     private String name;
 
@@ -46,6 +52,8 @@ public class Group extends BaseEntity {
     @Builder.Default
     private boolean isPrivate = false;
 
+    @NotBlank
+    @Size(max = 50)
     @Column(name = "invite_code", nullable = false, unique = true, length = 50)
     private String inviteCode;
 
