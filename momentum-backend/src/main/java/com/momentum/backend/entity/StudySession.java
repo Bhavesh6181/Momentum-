@@ -3,8 +3,6 @@ package com.momentum.backend.entity;
 import com.momentum.backend.enums.SessionStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -17,12 +15,12 @@ import java.time.OffsetDateTime;
     }
 )
 @Data
+@EqualsAndHashCode(callSuper = true, exclude = {"user", "group"})
+@ToString(exclude = {"user", "group"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"user", "group"})
-@EqualsAndHashCode(exclude = {"user", "group"})
-public class StudySession {
+public class StudySession extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,12 +52,4 @@ public class StudySession {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private SessionStatus status;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private OffsetDateTime updatedAt;
 }

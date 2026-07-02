@@ -3,10 +3,9 @@ package com.momentum.backend.entity;
 import com.momentum.backend.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -20,14 +19,15 @@ import java.time.OffsetDateTime;
     }
 )
 @SQLDelete(sql = "UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at IS NULL")
+@FilterDef(name = "excludeDeletedUser", defaultCondition = "deleted_at IS NULL")
+@Filter(name = "excludeDeletedUser")
 @Data
+@EqualsAndHashCode(callSuper = true, exclude = {"profile", "stats"})
+@ToString(exclude = {"profile", "stats"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"profile", "stats"})
-@EqualsAndHashCode(exclude = {"profile", "stats"})
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,14 +49,6 @@ public class User {
     @Column(name = "email_verified", nullable = false)
     @Builder.Default
     private boolean emailVerified = false;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private OffsetDateTime updatedAt;
 
     @Column(name = "deleted_at")
     private OffsetDateTime deletedAt;

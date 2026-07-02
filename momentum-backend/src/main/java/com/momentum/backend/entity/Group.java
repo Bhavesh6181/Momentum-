@@ -2,10 +2,9 @@ package com.momentum.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -19,14 +18,15 @@ import java.time.OffsetDateTime;
     }
 )
 @SQLDelete(sql = "UPDATE groups SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at IS NULL")
+@FilterDef(name = "excludeDeletedGroup", defaultCondition = "deleted_at IS NULL")
+@Filter(name = "excludeDeletedGroup")
 @Data
+@EqualsAndHashCode(callSuper = true, exclude = "createdBy")
+@ToString(exclude = "createdBy")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = "createdBy")
-@EqualsAndHashCode(exclude = "createdBy")
-public class Group {
+public class Group extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,14 +48,6 @@ public class Group {
 
     @Column(name = "invite_code", nullable = false, unique = true, length = 50)
     private String inviteCode;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private OffsetDateTime updatedAt;
 
     @Column(name = "deleted_at")
     private OffsetDateTime deletedAt;

@@ -15,14 +15,15 @@ import java.time.OffsetDateTime;
     }
 )
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = {"group", "user"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"group", "user"})
-@EqualsAndHashCode(exclude = {"group", "user"})
 public class GroupMember {
 
     @EmbeddedId
+    @EqualsAndHashCode.Include
     private GroupMemberId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
