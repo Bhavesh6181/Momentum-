@@ -5,6 +5,7 @@ import com.momentum.backend.enums.SessionStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,4 +14,5 @@ public interface StudySessionRepository extends JpaRepository<StudySession, UUID
     List<StudySession> findByUserId(UUID userId);
     List<StudySession> findByGroupId(UUID groupId);
     List<StudySession> findByUserIdAndStatus(UUID userId, SessionStatus status);
+    List<StudySession> findByGroupIdAndStatusAndStartTimeAfter(UUID groupId, SessionStatus status, OffsetDateTime time);
 }
