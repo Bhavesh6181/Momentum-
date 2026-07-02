@@ -2,6 +2,8 @@ package com.momentum.backend.service;
 
 import com.momentum.backend.dto.request.RegisterRequest;
 import com.momentum.backend.entity.User;
+import com.momentum.backend.entity.UserProfile;
+import com.momentum.backend.entity.UserStats;
 import com.momentum.backend.entity.UserVerificationToken;
 import com.momentum.backend.enums.Role;
 import com.momentum.backend.event.UserRegisteredEvent;
@@ -52,6 +54,9 @@ public class RegistrationService {
                 .role(Role.STUDENT)
                 .emailVerified(false)
                 .build();
+
+        user.setProfile(UserProfile.builder().user(user).build());
+        user.setStats(UserStats.builder().user(user).build());
 
         User savedUser = userRepository.save(user);
 
