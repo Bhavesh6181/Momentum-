@@ -7,7 +7,9 @@ import com.momentum.backend.dto.response.ApiResponse;
 import com.momentum.backend.dto.response.GroupDetailsResponse;
 import com.momentum.backend.dto.response.GroupResponse;
 import com.momentum.backend.security.GroupAdminOnly;
-import com.momentum.backend.service.GroupService;
+import com.momentum.backend.service.GroupLifecycleService;
+import com.momentum.backend.service.GroupMembershipService;
+import com.momentum.backend.service.GroupQueryService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +23,18 @@ import java.util.UUID;
 @RequestMapping("/api/v1/groups")
 public class GroupController {
 
-    private final GroupService groupService;
+    private final GroupLifecycleService groupLifecycleService;
+    private final GroupQueryService groupQueryService;
+    private final GroupMembershipService groupMembershipService;
 
-    public GroupController(GroupService groupService) {
-        this.groupService = groupService;
+    public GroupController(
+            GroupLifecycleService groupLifecycleService,
+            GroupQueryService groupQueryService,
+            GroupMembershipService groupMembershipService
+    ) {
+        this.groupLifecycleService = groupLifecycleService;
+        this.groupQueryService = groupQueryService;
+        this.groupMembershipService = groupMembershipService;
     }
 
     @PostMapping
@@ -32,7 +42,7 @@ public class GroupController {
             @Valid @RequestBody GroupCreateRequest request,
             Principal principal
     ) {
-        GroupResponse response = groupService.createGroup(principal.getName(), request);
+        GroupResponse response = groupLifecycleService.createGroup(principal.getName(), request);
         return ResponseEntity.ok(ApiResponse.success(response, "Group created successfully"));
     }
 
@@ -41,7 +51,7 @@ public class GroupController {
             Principal principal,
             Pageable pageable
     ) {
-        Page<GroupResponse> response = groupService.getMyGroups(principal.getName(), pageable);
+        Page<GroupResponse> response = groupQueryService.getMyGroups(principal.getName(), pageable);
         return ResponseEntity.ok(ApiResponse.success(response, "My groups retrieved successfully"));
     }
 
@@ -50,7 +60,7 @@ public class GroupController {
             @PathVariable("groupId") UUID groupId,
             Principal principal
     ) {
-        GroupDetailsResponse response = groupService.getGroupDetails(groupId, principal.getName());
+        GroupDetailsResponse response = groupQueryService.getGroupDetails(groupId, principal.getName());
         return ResponseEntity.ok(ApiResponse.success(response, "Group details retrieved successfully"));
     }
 
@@ -61,7 +71,7 @@ public class GroupController {
             Principal principal
     ) {
         String inviteCode = request != null ? request.getInviteCode() : null;
-        groupService.joinGroup(groupId, principal.getName(), inviteCode);
+        groupMembershipService.joinGroup(groupId, principal.getName(), inviteCode);
         return ResponseEntity.ok(ApiResponse.success(null, "Join operation processed"));
     }
 
@@ -71,7 +81,7 @@ public class GroupController {
             @PathVariable("groupId") UUID groupId,
             @PathVariable("userId") UUID userId
     ) {
-        groupService.approveMember(groupId, userId);
+        groupMembershipService.approveMember(groupId, userId);
         return ResponseEntity.ok(ApiResponse.success(null, "Member request approved"));
     }
 
@@ -81,7 +91,7 @@ public class GroupController {
             @PathVariable("groupId") UUID groupId,
             @PathVariable("userId") UUID userId
     ) {
-        groupService.removeMember(groupId, userId);
+        groupMembershipService.removeMember(groupId, userId);
         return ResponseEntity.ok(ApiResponse.success(null, "Member removed from group"));
     }
 
@@ -91,14 +101,14 @@ public class GroupController {
             @PathVariable("groupId") UUID groupId,
             @Valid @RequestBody GroupSettingsUpdateRequest request
     ) {
-        GroupResponse response = groupService.updateSettings(groupId, request);
+        GroupResponse response = groupLifecycleService.updateSettings(groupId, request);
         return ResponseEntity.ok(ApiResponse.success(response, "Group settings updated successfully"));
     }
 
     @DeleteMapping("/{groupId}")
     @GroupAdminOnly
     public ResponseEntity<ApiResponse<Void>> deleteGroup(@PathVariable("groupId") UUID groupId) {
-        groupService.deleteGroup(groupId);
+        groupLifecycleService.deleteGroup(groupId);
         return ResponseEntity.ok(ApiResponse.success(null, "Group deleted successfully"));
     }
 }

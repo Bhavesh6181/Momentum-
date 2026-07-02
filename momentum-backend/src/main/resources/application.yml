@@ -33,4 +33,6 @@ app:
     refresh-token-expiration-ms: ${REFRESH_TOKEN_EXPIRATION_MS:604800000} # 7 days
     max-failed-login-attempts: 5
     lockout-duration-minutes: 15
+  scheduler:
+    group-analytics-cron: ${GROUP_ANALYTICS_CRON:0 0 2 * * *}
 

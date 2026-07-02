@@ -18,6 +18,6 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
     List<Group> findByNameContainingIgnoreCaseAndIsPrivateFalse(String name);
 
     @Query("SELECT g FROM Group g JOIN GroupMember gm ON g.id = gm.id.groupId " +
-           "WHERE gm.id.userId = :userId AND gm.role IN (com.momentum.backend.enums.GroupRole.ADMIN, com.momentum.backend.enums.GroupRole.MEMBER)")
+           "WHERE gm.id.userId = :userId AND gm.status = com.momentum.backend.enums.GroupMembershipStatus.ACTIVE")
     Page<Group> findJoinedGroups(UUID userId, Pageable pageable);
 }

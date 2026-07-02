@@ -1,5 +1,6 @@
 package com.momentum.backend.entity;
 
+import com.momentum.backend.enums.GroupStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -21,8 +22,8 @@ import java.util.UUID;
         @Index(name = "idx_groups_created_at", columnList = "created_at")
     }
 )
-@SQLDelete(sql = "UPDATE groups SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@FilterDef(name = "excludeDeletedGroup", defaultCondition = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE groups SET status = 'DELETED', deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@FilterDef(name = "excludeDeletedGroup", defaultCondition = "status = 'ACTIVE'")
 @Filter(name = "excludeDeletedGroup")
 @Data
 @EqualsAndHashCode(callSuper = true, exclude = "createdBy")
@@ -56,6 +57,11 @@ public class Group extends BaseEntity {
     @Size(max = 50)
     @Column(name = "invite_code", nullable = false, unique = true, length = 50)
     private String inviteCode;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private GroupStatus status = GroupStatus.ACTIVE;
 
     @Column(name = "deleted_at")
     private OffsetDateTime deletedAt;

@@ -2,6 +2,7 @@ package com.momentum.backend.security;
 
 import com.momentum.backend.entity.GroupMember;
 import com.momentum.backend.entity.GroupMemberId;
+import com.momentum.backend.enums.GroupMembershipStatus;
 import com.momentum.backend.enums.GroupRole;
 import com.momentum.backend.repository.GroupMemberRepository;
 import com.momentum.backend.repository.UserRepository;
@@ -60,7 +61,7 @@ public class GroupSecurityAspect {
         GroupMember member = groupMemberRepository.findById(new GroupMemberId(groupId, userId))
                 .orElseThrow(() -> new AccessDeniedException("You are not a member of this group"));
 
-        if (member.getRole() != GroupRole.ADMIN) {
+        if (member.getStatus() != GroupMembershipStatus.ACTIVE || member.getRole() != GroupRole.ADMIN) {
             throw new AccessDeniedException("Only group administrators can perform this action");
         }
     }
