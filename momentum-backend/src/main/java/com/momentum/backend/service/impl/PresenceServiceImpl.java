@@ -55,12 +55,15 @@ public class PresenceServiceImpl implements PresenceService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
 
-        PresenceInfo info = PresenceInfo.builder()
-                .status(status)
-                .lastActive(Instant.now())
-                .build();
-
         try {
+            PresenceInfo currentPresence = getPresence(user.getId());
+            boolean statusChanged = (currentPresence == null || currentPresence.getStatus() != status);
+
+            PresenceInfo info = PresenceInfo.builder()
+                    .status(status)
+                    .lastActive(Instant.now())
+                    .build();
+
             String json = objectMapper.writeValueAsString(info);
             redisTemplate.opsForValue().set(
                     PRESENCE_KEY_PREFIX + user.getId(),
@@ -71,7 +74,10 @@ public class PresenceServiceImpl implements PresenceService {
             // Cancel any pending disconnect
             redisTemplate.delete(DISCONNECT_KEY_PREFIX + user.getId());
 
-            broadcastStatus(user, info);
+            if (statusChanged) {
+                broadcastStatus(user, info);
+                log.info("Presence status for user {} changed to {}. Broadcasted to groups.", username, status);
+            }
         } catch (Exception e) {
             log.error("Failed to update presence in Redis for user {}", username, e);
         }

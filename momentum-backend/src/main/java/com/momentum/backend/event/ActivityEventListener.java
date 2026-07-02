@@ -3,8 +3,9 @@ package com.momentum.backend.event;
 import com.momentum.backend.enums.ActivityType;
 import com.momentum.backend.service.ActivityService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @Slf4j
@@ -16,7 +17,7 @@ public class ActivityEventListener {
         this.activityService = activityService;
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleStudySessionStarted(StudySessionStartedEvent event) {
         log.info("Handling StudySessionStartedEvent for session: {}", event.getSessionId());
         String description = "started a study session focusing on " + event.getSubject();
@@ -30,7 +31,7 @@ public class ActivityEventListener {
         );
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleStudySessionEnded(StudySessionEndedEvent event) {
         log.info("Handling StudySessionEndedEvent for session: {}", event.getStudySessionId());
         String description = "completed a study session of " + event.getDurationMinutes() + " minutes";
@@ -44,7 +45,7 @@ public class ActivityEventListener {
         );
     }
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleGoalCompleted(GoalCompletedEvent event) {
         log.info("Handling GoalCompletedEvent for goal: {}", event.getGoalId());
         String description = "completed the goal: " + event.getTitle();
