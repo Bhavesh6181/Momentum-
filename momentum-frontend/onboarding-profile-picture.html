@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum | Set Profile Picture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            background-color: #0A0A0D;
+            color: #e3e1ea;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .ease-out-expo {
+            transition-timing-function: var(--ease-out-expo);
+        }
+
+        .dropzone-glow {
+            box-shadow: 0 0 0px 0px rgba(108, 92, 231, 0);
+            transition: box-shadow 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
+        }
+
+        .drag-active .dropzone-glow {
+            border-style: solid !important;
+            border-color: #c6bfff !important;
+            box-shadow: 0 0 30px 2px rgba(108, 92, 231, 0.3);
+        }
+
+        .slide-in {
+            animation: slideIn 0.8s var(--ease-out-expo) forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .progress-fill {
+            width: 0%;
+            animation: fillProgress 1s var(--ease-out-expo) forwards;
+        }
+
+        @keyframes fillProgress {
+            to { width: 100%; }
+        }
+
+        /* Material Symbol Weight Customization */
+        .material-symbols-outlined {
+            font-variation-settings: 'WHT' 100, 'FILL' 0;
+            font-size: 48px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#c6bfff",
+                        "on-primary-fixed": "#160066",
+                        "background": "#121319",
+                        "surface-variant": "#33343b",
+                        "surface-bright": "#383940",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#e3e1ea",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-background": "#e3e1ea",
+                        "on-tertiary-fixed": "#2f1500",
+                        "primary": "#c6bfff",
+                        "surface": "#121319",
+                        "outline-variant": "#474554",
+                        "surface-container-lowest": "#0d0e14",
+                        "surface-container-highest": "#33343b",
+                        "surface-container-low": "#1a1b21",
+                        "surface-container": "#1e1f26",
+                        "tertiary": "#ffb77d",
+                        "on-primary-fixed-variant": "#4029ba",
+                        "inverse-on-surface": "#2f3037",
+                        "tertiary-fixed": "#ffdcc3",
+                        "primary-fixed-dim": "#c6bfff",
+                        "surface-container-high": "#292a30",
+                        "on-secondary": "#003918",
+                        "outline": "#928ea0",
+                        "on-error": "#690005",
+                        "on-surface-variant": "#c8c4d7",
+                        "on-secondary-container": "#00622e",
+                        "primary-container": "#6c5ce7",
+                        "surface-dim": "#121319",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "secondary-container": "#05e777",
+                        "on-tertiary": "#4d2600",
+                        "on-secondary-fixed-variant": "#005226",
+                        "inverse-primary": "#5847d2",
+                        "error": "#ffb4ab",
+                        "on-tertiary-container": "#fff5f1",
+                        "secondary-fixed-dim": "#00e475",
+                        "secondary": "#7dffa2",
+                        "tertiary-container": "#ac5d00",
+                        "secondary-fixed": "#62ff96",
+                        "on-primary-container": "#faf6ff",
+                        "on-primary": "#2900a0",
+                        "primary-fixed": "#e4dfff",
+                        "on-secondary-fixed": "#00210b",
+                        "on-surface": "#e3e1ea",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-gap-v": "80px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "stats-md": ["JetBrains Mono"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background min-h-screen flex flex-col relative overflow-hidden">
+<!-- Step Progress Indicator -->
+<div class="fixed top-0 left-0 w-full h-[2px] bg-white/5 z-50">
+<div class="progress-fill h-full bg-primary-container shadow-[0_0_10px_rgba(108,92,231,0.5)]"></div>
+</div>
+<!-- Background Atmospheric Effect -->
+
+<!-- Header / Branding Anchor -->
+<header class="w-full px-margin-desktop py-8 flex justify-between items-center z-10">
+<div class="text-headline-md font-headline-md font-bold text-on-surface">Momentum</div>
+<div class="text-label-caps font-label-caps text-on-surface-variant tracking-[0.2em]">STEP 05 / 05</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex items-center justify-center slide-in px-margin-mobile">
+<div class="max-w-2xl w-full flex flex-col items-center text-center">
+<!-- Headline -->
+<h1 class="font-display-lg text-display-lg text-on-surface mb-12 tracking-tight">
+                Let them see the focus.
+            </h1>
+<!-- Upload Dropzone Area -->
+<div class="relative group cursor-pointer" id="drop-zone">
+<!-- Outer Ring Glow Container -->
+<div class="dropzone-glow w-64 h-64 md:w-80 md:h-80 rounded-full border border-dashed border-outline-variant flex items-center justify-center bg-surface-container-low transition-all duration-500 ease-out-expo relative overflow-hidden">
+<!-- Inner Visuals -->
+<div class="flex flex-col items-center justify-center space-y-4 z-10 transition-transform duration-500 group-hover:scale-110">
+<span class="material-symbols-outlined text-primary" data-icon="add_a_photo">add_a_photo</span>
+<p class="text-label-caps font-label-caps text-on-surface-variant opacity-60">Drag or Click</p>
+</div>
+<!-- Subtle Inner Gradient for Depth -->
+<div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+<!-- Hidden Input -->
+<input accept="image/*" class="hidden" id="file-input" type="file"/>
+</div>
+<!-- Hover Decoration -->
+<div class="absolute -inset-4 border border-primary/10 rounded-full scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-700 pointer-events-none"></div>
+</div>
+<!-- Footer Actions -->
+<div class="mt-16 flex flex-col md:flex-row gap-6 items-center">
+<button class="text-label-caps font-label-caps text-on-surface-variant hover:text-on-surface transition-colors duration-300 py-3 px-8" onclick="handleSkip()">
+                    SKIP FOR NOW
+                </button>
+<button class="bg-primary-container text-on-primary-container font-headline-md text-headline-md py-4 px-12 rounded-full shadow-lg hover:shadow-primary-container/20 active:scale-95 transition-all duration-300 ease-out-expo flex items-center gap-3" id="next-btn">
+                    Finish Profile
+                    <span class="material-symbols-outlined !text-xl" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Support Footer -->
+<footer class="w-full px-margin-desktop py-8 flex justify-between items-center z-10 opacity-50">
+<div class="text-label-caps font-label-caps text-on-surface-variant">
+            © 2024 Momentum Productivity
+        </div>
+<div class="flex gap-8">
+<span class="text-label-caps font-label-caps text-on-surface-variant cursor-help hover:text-on-surface transition-colors">Need Help?</span>
+</div>
+</footer>
+<script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Drag and Drop Logic
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.add('drag-active');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {</script></body></html>

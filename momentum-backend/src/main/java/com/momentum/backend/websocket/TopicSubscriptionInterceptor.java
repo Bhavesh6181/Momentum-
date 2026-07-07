@@ -87,6 +87,27 @@ public class TopicSubscriptionInterceptor implements ChannelInterceptor {
                         }
                     }
                 }
+
+                // Check user topic permissions
+                if (destination != null && destination.startsWith("/topic/user/")) {
+                    String[] parts = destination.split("/");
+                    if (parts.length >= 4) {
+                        try {
+                            UUID targetUserId = UUID.fromString(parts[3]);
+                            User user = userRepository.findByUsername(username)
+                                    .orElseThrow(() -> new MessageDeliveryException("User not found"));
+                            
+                            if (!user.getId().equals(targetUserId)) {
+                                log.warn("Subscription to {} rejected for user {}: Cannot subscribe to another user's notifications", destination, username);
+                                throw new MessageDeliveryException("Unauthorized: Cannot subscribe to another user's notifications");
+                            }
+                            
+                            log.info("Subscription to {} approved for user {}", destination, username);
+                        } catch (IllegalArgumentException e) {
+                            throw new MessageDeliveryException("Invalid user ID in subscription destination");
+                        }
+                    }
+                }
             }
         }
         

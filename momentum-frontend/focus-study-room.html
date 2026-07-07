@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum | Collaborative Study Room</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .ease-out-expo { transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        .flash-settle {
+            animation: flash-settle 2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes flash-settle {
+            0% { background-color: rgba(5, 231, 119, 0.3); transform: scale(1.02); }
+            100% { background-color: transparent; transform: scale(1); }
+        }
+
+        .pulse-signal {
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(5, 231, 119, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(5, 231, 119, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(5, 231, 119, 0); }
+        }
+
+        .hairline-border {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .primary-card-gradient {
+            border: 1px solid transparent;
+            background: linear-gradient(#131318, #131318) padding-box,
+                        linear-gradient(to bottom right, rgba(255, 255, 255, 0.12), transparent) border-box;
+        }
+
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#c6bfff",
+                        "on-primary-container": "#faf6ff",
+                        "on-secondary-fixed": "#00210b",
+                        "on-secondary": "#003918",
+                        "secondary-fixed-dim": "#00e475",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-background": "#e3e1ea",
+                        "on-surface-variant": "#c8c4d7",
+                        "surface-bright": "#383940",
+                        "on-tertiary-container": "#fff5f1",
+                        "on-primary-fixed-variant": "#4029ba",
+                        "error": "#ffb4ab",
+                        "background": "#121319",
+                        "surface-container-low": "#1a1b21",
+                        "tertiary-fixed": "#ffdcc3",
+                        "surface-container-high": "#292a30",
+                        "secondary-container": "#05e777",
+                        "tertiary": "#ffb77d",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "surface": "#121319",
+                        "outline": "#928ea0",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#0d0e14",
+                        "surface-container-highest": "#33343b",
+                        "surface-variant": "#33343b",
+                        "on-primary-fixed": "#160066",
+                        "on-surface": "#e3e1ea",
+                        "inverse-surface": "#e3e1ea",
+                        "on-tertiary-fixed": "#2f1500",
+                        "primary-fixed": "#e4dfff",
+                        "outline-variant": "#474554",
+                        "on-secondary-fixed-variant": "#005226",
+                        "primary-container": "#6c5ce7",
+                        "primary-fixed-dim": "#c6bfff",
+                        "inverse-on-surface": "#2f3037",
+                        "surface-container": "#1e1f26",
+                        "on-primary": "#2900a0",
+                        "primary": "#c6bfff",
+                        "on-secondary-container": "#00622e",
+                        "error-container": "#93000a",
+                        "secondary-fixed": "#62ff96",
+                        "secondary": "#7dffa2",
+                        "tertiary-container": "#ac5d00",
+                        "inverse-primary": "#5847d2",
+                        "on-tertiary": "#4d2600",
+                        "on-error": "#690005",
+                        "surface-dim": "#121319"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-gap-v": "80px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "stats-md": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-lg selection:bg-primary-container selection:text-on-primary-container overflow-hidden h-screen flex">
+<!-- SideNavBar Shell -->
+<aside class="hidden lg:flex flex-col h-full py-8 px-4 bg-surface-container border-r border-white/10 w-64 shrink-0">
+<div class="flex items-center gap-3 px-4 mb-10">
+<div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h2 class="text-headline-md font-headline-md text-primary leading-none">Momentum</h2>
+<p class="text-[10px] font-label-caps uppercase tracking-wider text-on-surface-variant">High-Performance Study</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-lg transition-all duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-label-caps font-label-caps uppercase">Home</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-lg transition-all duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined">timer</span>
+<span class="text-label-caps font-label-caps uppercase">Focus</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-primary font-bold bg-surface-container-highest rounded-lg transition-all duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-label-caps font-label-caps uppercase">Collaboration</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-lg transition-all duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-label-caps font-label-caps uppercase">Performance</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<button class="w-full py-4 bg-primary-container text-on-primary-container rounded-lg font-headline-md text-headline-md hover:opacity-90 active:scale-95 transition-all duration-200">
+                Start Session
+            </button>
+<div class="mt-8 space-y-4">
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-body-sm font-body-sm">Support</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-body-sm font-body-sm">Sign Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Workspace Canvas -->
+<main class="flex-1 flex flex-col min-w-0 relative bg-background overflow-hidden">
+<!-- TopNavBar Shell -->
+<header class="flex justify-between items-center w-full px-margin-desktop py-4 bg-surface border-b border-white/10 shrink-0">
+<div class="flex items-center gap-8">
+<h1 class="text-headline-md font-headline-md font-bold text-on-surface">Study Room: CS-402 Alpha</h1>
+<div class="flex items-center gap-3 bg-surface-container-low px-3 py-1.5 rounded-full hairline-border">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+</span>
+<span class="text-body-sm font-body-sm text-secondary-fixed-dim tabular-nums">1,248 students studying now</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a focused female student with minimalist glasses, soft studio lighting from the side, hyper-realistic detail, cinematic background blur with deep obsidian and indigo tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPNt5Gwj45svNEdTuz6gG1mhzYcsCzROus2Y-mELAy8M8Gu808RfinCXM8J-0kiciKCGWwVVh3GAhHwkiNOrEUuQje_w--zv_sTrdiaOROCln8JivZalmBgbe0I46g6uXV_ehUvW68qtjeOofEHs3Nc2IZRfwSYk1jZsRbiF8Z-nzv0HOGMzxAGvNwD4t5gt9Ku1An7cxsI_hpGGOxWz0i9TNqz4G9EaWQ8awbgxLZX9vew1sUU_OV"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male student wearing a dark turtleneck, concentrated expression, dramatic professional lighting, high contrast, minimalist tech-inspired background with subtle purple accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBa57J_PHKgnxeGuQBqBpauSuFmeXUfNjVI8yAwHxQcSIlygF1Ocm6AMklbSMrU7hAhaXAH3BxX6Oq-USsM80So0EgAQMlgYJmCbzUvjigI9XzhESk_c0Nn4F0NvvYQ7aq6MxELefzk8E-I2Q-uy80910KJg2YYpf4tzpqjhCNJcIUGows5rFrcmUiSDy1H7vo1QZqCBAdlDqxK_Qz0u3TOBDtoZqkYPezO3p9-o7vf56urWBRgTU1M"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center text-[10px] font-bold text-primary">
+                        +12
+                    </div>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-fixed transition-colors active:scale-95 ease-out-expo">
+                    Join Session
+                </button>
+<div class="flex gap-2">
+<button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Dynamic Grid Content -->
+<div class="flex-1 p-8 grid grid-cols-12 grid-rows-6 gap-6 overflow-hidden">
+<!-- Central Workspace: Shared Focus Session -->
+<section class="col-span-8 row-span-4 primary-card-gradient rounded-xl p-8 flex flex-col items-center justify-center relative overflow-hidden">
+
+<div class="relative z-10 text-center">
+<span class="text-label-caps font-label-caps text-on-surface-variant tracking-[0.2em] mb-4 block">ACTIVE DEEP FOCUS</span>
+<h2 class="text-display-lg font-display-lg tabular-nums text-white mb-2" id="timer">42:18</h2>
+<div class="flex justify-center gap-1 mb-8">
+<div class="h-1 w-8 bg-secondary rounded-full"></div>
+<div class="h-1 w-8 bg-secondary rounded-full"></div>
+<div class="h-1 w-8 bg-secondary/30 rounded-full"></div>
+<div class="h-1 w-8 bg-secondary/30 rounded-full"></div>
+</div>
+<div class="flex gap-4 justify-center">
+<button class="hairline-border px-8 py-3 rounded-lg hover:bg-white/5 transition-colors flex items-center gap-2 group">
+<span class="material-symbols-outlined text-secondary group-hover:scale-110 transition-transform">coffee</span>
+<span class="text-label-caps font-label-caps">Take Break</span>
+</button>
+<button class="bg-primary px-8 py-3 rounded-lg text-on-primary font-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">pause</span>
+<span class="text-label-caps font-label-caps">Pause Session</span>
+</button>
+</div>
+</div>
+<!-- Ambient Participant Grid -->
+<div class="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+<div class="flex flex-col gap-2">
+<p class="text-label-caps font-label-caps text-on-surface-variant opacity-60">Focusing Now</p>
+<div class="flex gap-3">
+<div class="w-10 h-10 rounded-lg hairline-border bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">laptop_mac</span>
+</div>
+<div class="w-10 h-10 rounded-lg hairline-border bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">book</span>
+</div>
+<div class="w-10 h-10 rounded-lg hairline-border bg-surface-container-high border-secondary/30 border flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm">code</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="text-label-caps font-label-caps text-on-surface-variant opacity-60">Session Goal</p>
+<p class="text-body-lg font-body-lg text-white font-medium">Neural Networks Architecture Exam Prep</p>
+</div>
+</div>
+</section>
+<!-- Leaderboard Section -->
+<section class="col-span-4 row-span-4 bg-surface-container hairline-border rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-headline-md font-headline-md">Session Streak</h3>
+<span class="material-symbols-outlined text-on-surface-variant">leaderboard</span>
+</div>
+<div class="space-y-2 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors group">
+<div class="flex items-center gap-4">
+<span class="text-stats-md font-stats-md tabular-nums w-6 text-on-surface-variant">01</span>
+<div class="w-8 h-8 rounded-full bg-tertiary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male student with a sharp jawline, cinematic lighting focusing on half the face, deep obsidian aesthetic, high-end editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsJ7qLc2BNcUl2vnOXCy9QcQKSCiKy-GiF8mQm-PiVpezCeF8fKF1cXE_t9dSM097MwDrLen030wUQVTS2G8BZx1SYHMck8kxcT9clr44F0ojwQvQt3wRgl365m7Hr3IvvrKa64mFIJLxb888Es1tPy9O9Huqyl_uwr2KewzPgovWpTomUQpUrII4Eo71hN313AEXQEj3jQ3FDG1wL1diiuSEDtZJ_tQtKSKRwMmsTDZakd-dzOK_o"/>
+</div>
+<span class="text-body-lg font-medium group-hover:text-primary transition-colors">Alex Rivera</span>
+</div>
+<span class="text-stats-md font-stats-md tabular-nums text-secondary">324m</span>
+</div>
+<!-- User Active State -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-primary-container/20 border border-primary/30">
+<div class="flex items-center gap-4">
+<span class="text-stats-md font-stats-md tabular-nums w-6 text-primary">02</span>
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="text-on-primary font-bold text-xs">ME</span>
+</div>
+<span class="text-body-lg font-bold text-primary">You</span>
+</div>
+<span class="text-stats-md font-stats-md tabular-nums text-primary">288m</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors group">
+<div class="flex items-center gap-4">
+<span class="text-stats-md font-stats-md tabular-nums w-6 text-on-surface-variant">03</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a creative female student with artistic lighting, teal and orange highlights on a dark background, modern minimalist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLnK-GcvCKgp_TGXX7-fIM9Op_nzEIruRUm-i5pxtmXBJYUBwl8_le9fFf3DW36LQqr5Ff6QNT6JPmA-xwn0W-LSRqaTieW0by7TbcNK5qduy_YC2QFdl3K9FDs70TKDpruVzkRwSdlwX1_mqrjbnInbO8PeDVUnbodC-h9Kbaw8FpklfnP3v48nEKzn0tMs30ZFA_06xzCqnI_t12QMQrN4HvjjprIqoQbPxuJBj3ir3aVDMDBY3p"/>
+</div>
+<span class="text-body-lg font-medium group-hover:text-primary transition-colors">Sarah Chen</span>
+</div>
+<span class="text-stats-md font-stats-md tabular-nums text-on-surface-variant">245m</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors group">
+<div class="flex items-center gap-4">
+<span class="text-stats-md font-stats-md tabular-nums w-6 text-on-surface-variant">04</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young male student in a futuristic library, blue ambient glow, technical and clean look, shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdwrwuti6UETelZLPtu8kZ-Iq-OxbMxP44wyjDAYOGRILp8pgzC2ylruf0KGQv7IgpNXdo7RABqmUztk64SeZtK_sKUI-76jFbaggmb2QjS73K5GW4uDQLscxR1Vyqw9ZgpkS4fFWoTIKp4IEkuTLujYE78yjVp0JzlMV7skjbESO0y6TDkAbi_m-dIoWPrIChJrMkep9IScGAcVh-uxeT6GLk8MQ8SNqkozq6vJIvvDcRmygf2VSG"/>
+</div>
+<span class="text-body-lg font-medium group-hover:text-primary transition-colors">James Wilson</span>
+</div>
+<span class="text-stats-md font-stats-md tabular-nums text-on-surface-variant">192m</span>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-white/10">
+<button class="w-full py-3 text-label-caps font-label-caps uppercase text-on-surface-variant hover:text-white transition-colors flex items-center justify-center gap-2">
+                        View Global Ranking <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Activity Log: Real-time Updates -->
+<section class="col-span-4 row-span-2 bg-surface hairline-border rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-label-caps font-label-caps uppercase tracking-wider text-on-surface-variant">Live Activity</h3>
+<div class="h-2 w-2 rounded-full bg-secondary pulse-signal"></div>
+</div>
+<div class="space-y-3 flex-1 overflow-hidden" id="activity-container">
+<div class="flex items-start gap-3 p-2 rounded-lg transition-all duration-500 hover:bg-white/5">
+<span class="material-symbols-outlined text-secondary mt-1" style="font-size: 18px;">bolt</span>
+<div>
+<p class="text-body-sm text-on-surface leading-tight"><span class="font-bold">Jordan</span> just hit a 4-hour streak!</p>
+<span class="text-[10px] text-on-surface-variant/60 font-stats-md">JUST NOW</span>
+</div>
+</div>
+<div class="flex items-start gap-3 p-2 rounded-lg transition-all duration-500 hover:bg-white/5">
+<span class="material-symbols-outlined text-primary mt-1" style="font-size: 18px;">group_add</span>
+<div>
+<p class="text-body-sm text-on-surface leading-tight"><span class="font-bold">Elena M.</span> joined the CS-402 Alpha</p>
+<span class="text-[10px] text-on-surface-variant/60 font-stats-md">2M AGO</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Performance Analytics: Mini Bento -->
+<section class="col-span-8 row-span-2 grid grid-cols-3 gap-6">
+<div class="bg-surface-container-low hairline-border rounded-xl p-6 flex flex-col justify-between hover:bg-surface-container transition-colors duration-300">
+<span class="text-label-caps font-label-caps text-on-surface-variant opacity-60">EFFICIENCY</span>
+<div class="mt-2">
+<h4 class="text-headline-lg font-headline-lg text-secondary tabular-nums">94%</h4>
+<p class="text-body-sm text-on-surface-variant">Target met (+2%)</p>
+</div>
+</div>
+<div class="bg-surface-container-low hairline-border rounded-xl p-6 flex flex-col justify-between hover:bg-surface-container transition-colors duration-300">
+<span class="text-label-caps font-label-caps text-on-surface-variant opacity-60">TASKS COMPLETED</span>
+<div class="mt-2">
+<h4 class="text-headline-lg font-headline-lg text-white tabular-nums">12 / 15</h4>
+<div class="w-full bg-surface-container-highest h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[80%] rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low hairline-border rounded-xl p-6 flex flex-col justify-between border-primary/20 border hover:bg-surface-container transition-colors duration-300">
+<span class="text-label-caps font-label-caps text-primary">SESSION PEAK</span>
+<div class="mt-2">
+<h4 class="text-headline-lg font-headline-lg text-primary tabular-nums">03:45 PM</h4>
+<p class="text-body-sm text-on-surface-variant">Max concentration</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Shell -->
+<footer class="bg-background border-t border-white/5 px-margin-desktop py-4 flex flex-col md:flex-row justify-between items-center shrink-0">
+<span class="text-label-caps font-label-caps text-on-surface opacity-80">© 2024 Momentum Productivity. Engineered for Performance.</span>
+<div class="flex gap-6">
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Privacy Policy</a>
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Terms of Service</a>
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Changelog</a>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interactions and real-time simulations
+        
+        // 1. Timer Logic
+        let seconds = 2538; // 42:18
+        const timerElement = document.getElementById('timer');
+        
+        setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // 2. Flash then settle activity log simulation
+        const activityContainer = document.getElementById('activity-container');
+        const events = [
+            { icon: 'military_tech', text: '<b>Sarah Chen</b> earned "Deep Diver" badge', color: 'text-tertiary' },
+            { icon: 'edit', text: '<b>James W.</b> updated task: "Review Layer 2"', color: 'text-on-surface-variant' },
+            { icon: 'favorite', text: '<b>Alex R.</b> sent motivation to the group', color: 'text-error' }
+        ];
+
+        function addActivity() {
+            const event = events[Math.floor(Math.random() * events.length)];
+            const div = document.createElement('div');
+            div.className = 'flex items-start gap-3 p-2 rounded-lg flash-settle';
+            div.innerHTML = `
+                <span class="material-symbols-outlined ${event.color} mt-1" style="font-size: 18px;">${event.icon}</span>
+                <div>
+                    <p class="text-body-sm text-on-surface leading-tight">${event.text}</p>
+                    <span class="text-[10px] text-on-surface-variant/60 font-stats-md">JUST NOW</span>
+                </div>
+            `;
+            
+            activityContainer.prepend(div);
+            
+            // Limit items
+            if (activityContainer.children.length > 5) {
+                activityContainer.removeChild(activityContainer.lastChild);
+            }
+        }
+
+        // Randomly add activity every 5-10 seconds
+        setTimeout(function run() {
+            addActivity();
+            setTimeout(run, 5000 + Math.random() * 5000);
+        }, 3000);
+
+        // 3. Counter increment simulation for live students
+        const liveCounter = document.querySelector('.tabular-nums');
+        let count = 1248;
+        setInterval(() => {
+            count += Math.floor(Math.random() * 3) - 1;
+            liveCounter.textContent = `${count.toLocaleString()} students studying now`;
+        }, 3000);
+    </script>
+</body></html>

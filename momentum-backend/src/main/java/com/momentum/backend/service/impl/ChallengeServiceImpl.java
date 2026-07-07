@@ -6,6 +6,7 @@ import com.momentum.backend.dto.response.ChallengeParticipantResponse;
 import com.momentum.backend.dto.response.ChallengeResponse;
 import com.momentum.backend.entity.*;
 import com.momentum.backend.enums.ChallengeStatus;
+import com.momentum.backend.event.ChallengeCreatedEvent;
 import com.momentum.backend.exception.ResourceNotFoundException;
 import com.momentum.backend.exception.ValidationException;
 import com.momentum.backend.mapper.ChallengeMapper;
@@ -15,6 +16,7 @@ import com.momentum.backend.repository.GroupRepository;
 import com.momentum.backend.repository.UserRepository;
 import com.momentum.backend.service.ChallengeService;
 import com.momentum.backend.util.GroupAdminGuard;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final UserRepository userRepository;
     private final GroupAdminGuard groupAdminGuard;
     private final ChallengeMapper challengeMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ChallengeServiceImpl(
             ChallengeRepository challengeRepository,
@@ -38,7 +41,8 @@ public class ChallengeServiceImpl implements ChallengeService {
             GroupRepository groupRepository,
             UserRepository userRepository,
             GroupAdminGuard groupAdminGuard,
-            ChallengeMapper challengeMapper
+            ChallengeMapper challengeMapper,
+            ApplicationEventPublisher eventPublisher
     ) {
         this.challengeRepository = challengeRepository;
         this.participantRepository = participantRepository;
@@ -46,6 +50,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         this.userRepository = userRepository;
         this.groupAdminGuard = groupAdminGuard;
         this.challengeMapper = challengeMapper;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -76,7 +81,17 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .status(ChallengeStatus.OPEN)
                 .build();
 
-        return challengeMapper.toResponse(challengeRepository.save(challenge));
+        Challenge saved = challengeRepository.save(challenge);
+        ChallengeResponse response = challengeMapper.toResponse(saved);
+
+        eventPublisher.publishEvent(new ChallengeCreatedEvent(
+                saved.getId(),
+                group.getId(),
+                saved.getTitle(),
+                group.getName()
+        ));
+
+        return response;
     }
 
     @Override

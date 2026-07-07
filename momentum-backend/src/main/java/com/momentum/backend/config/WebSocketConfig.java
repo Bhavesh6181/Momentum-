@@ -15,13 +15,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final JwtHandshakeInterceptor jwtHandshakeInterceptor;
     private final TopicSubscriptionInterceptor topicSubscriptionInterceptor;
+    private final com.momentum.backend.config.SecurityProperties securityProperties;
 
     public WebSocketConfig(
             JwtHandshakeInterceptor jwtHandshakeInterceptor,
-            TopicSubscriptionInterceptor topicSubscriptionInterceptor
+            TopicSubscriptionInterceptor topicSubscriptionInterceptor,
+            com.momentum.backend.config.SecurityProperties securityProperties
     ) {
         this.jwtHandshakeInterceptor = jwtHandshakeInterceptor;
         this.topicSubscriptionInterceptor = topicSubscriptionInterceptor;
+        this.securityProperties = securityProperties;
     }
 
     @Override
@@ -32,12 +35,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        String[] origins = securityProperties.getAllowedOrigins().toArray(new String[0]);
+        
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:5173")
+                .setAllowedOriginPatterns(origins)
                 .addInterceptors(jwtHandshakeInterceptor);
                 
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:5173")
+                .setAllowedOriginPatterns(origins)
                 .addInterceptors(jwtHandshakeInterceptor)
                 .withSockJS();
     }

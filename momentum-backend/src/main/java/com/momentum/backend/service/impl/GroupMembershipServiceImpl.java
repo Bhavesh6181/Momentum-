@@ -3,6 +3,7 @@ package com.momentum.backend.service.impl;
 import com.momentum.backend.entity.*;
 import com.momentum.backend.enums.GroupMembershipStatus;
 import com.momentum.backend.enums.GroupRole;
+import com.momentum.backend.event.GroupJoinedEvent;
 import com.momentum.backend.exception.ResourceNotFoundException;
 import com.momentum.backend.exception.ValidationException;
 import com.momentum.backend.repository.GroupMemberRepository;
@@ -10,6 +11,7 @@ import com.momentum.backend.repository.GroupRepository;
 import com.momentum.backend.repository.UserRepository;
 import com.momentum.backend.service.GroupMembershipService;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,20 +23,22 @@ public class GroupMembershipServiceImpl implements GroupMembershipService {
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public GroupMembershipServiceImpl(
             GroupRepository groupRepository,
             GroupMemberRepository groupMemberRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            ApplicationEventPublisher eventPublisher
     ) {
         this.groupRepository = groupRepository;
         this.groupMemberRepository = groupMemberRepository;
         this.userRepository = userRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = "groupDetails", key = "#groupId")
     public void joinGroup(UUID groupId, String username, String inviteCode) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new ResourceNotFoundException("Group not found with ID: " + groupId));
@@ -64,11 +68,14 @@ public class GroupMembershipServiceImpl implements GroupMembershipService {
                 .status(statusToAssign)
                 .build();
         groupMemberRepository.save(newMember);
+
+        if (statusToAssign == GroupMembershipStatus.ACTIVE) {
+            eventPublisher.publishEvent(new GroupJoinedEvent(user.getId(), group.getId(), group.getName()));
+        }
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = "groupDetails", key = "#groupId")
     public void approveMember(UUID groupId, UUID userId) {
         GroupMemberId id = new GroupMemberId(groupId, userId);
         GroupMember member = groupMemberRepository.findById(id)
@@ -80,11 +87,12 @@ public class GroupMembershipServiceImpl implements GroupMembershipService {
 
         member.setStatus(GroupMembershipStatus.ACTIVE);
         groupMemberRepository.save(member);
+
+        eventPublisher.publishEvent(new GroupJoinedEvent(userId, groupId, member.getGroup().getName()));
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = "groupDetails", key = "#groupId")
     public void removeMember(UUID groupId, UUID userId) {
         GroupMemberId id = new GroupMemberId(groupId, userId);
         GroupMember member = groupMemberRepository.findById(id)

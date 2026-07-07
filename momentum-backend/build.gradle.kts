@@ -62,6 +62,9 @@ dependencies {
 
     // Redis (presence system)
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    // OpenAPI / Swagger UI
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
     
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")

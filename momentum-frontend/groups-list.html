@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Groups | Momentum</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#00210b",
+                        "secondary-container": "#05e777",
+                        "surface-bright": "#383940",
+                        "on-tertiary": "#4d2600",
+                        "tertiary-fixed": "#ffdcc3",
+                        "on-secondary-fixed-variant": "#005226",
+                        "on-error": "#690005",
+                        "tertiary": "#ffb77d",
+                        "surface-container-lowest": "#0d0e14",
+                        "on-primary-container": "#faf6ff",
+                        "tertiary-container": "#ac5d00",
+                        "on-tertiary-fixed": "#2f1500",
+                        "surface-dim": "#121319",
+                        "secondary": "#7dffa2",
+                        "surface-container-highest": "#33343b",
+                        "primary-fixed-dim": "#c6bfff",
+                        "surface-container-high": "#292a30",
+                        "background": "#121319",
+                        "on-background": "#e3e1ea",
+                        "outline-variant": "#474554",
+                        "surface": "#121319",
+                        "on-surface-variant": "#c8c4d7",
+                        "primary": "#c6bfff",
+                        "primary-container": "#6c5ce7",
+                        "secondary-fixed-dim": "#00e475",
+                        "on-surface": "#e3e1ea"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "stats-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .ease-out-expo { transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+        .sparkline-path {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .group-card:hover .sparkline-path {
+            stroke-dashoffset: 0;
+        }
+        .glass-card {
+            background: #131318;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 1px solid transparent;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 50%) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body class="bg-[#0A0A0D] text-on-surface font-body-lg overflow-x-hidden selection:bg-primary-container/30">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-white/10 bg-surface-container-lowest flex flex-col py-8 px-4 z-50">
+<div class="mb-12 px-2">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">Momentum</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold opacity-50">High Performance</p>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Nav Item: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high/50 hover:text-primary transition-all duration-300 ease-out-expo group" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<!-- Nav Item: Focus -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high/50 hover:text-primary transition-all duration-300 ease-out-expo group" href="#">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<span class="font-body-sm text-body-sm">Focus</span>
+</a>
+<!-- Nav Item: Groups (ACTIVE) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-high/30 transition-all duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-body-sm text-body-sm">Groups</span>
+</a>
+<!-- Nav Item: Vault -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high/50 hover:text-primary transition-all duration-300 ease-out-expo group" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-body-sm text-body-sm">Vault</span>
+</a>
+<!-- Nav Item: Settings -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high/50 hover:text-primary transition-all duration-300 ease-out-expo group" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-white/5 px-2 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">JD</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-on-surface">John Doe</span>
+<span class="text-[10px] text-on-surface-variant">Pro Member</span>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-gutter w-auto z-40 bg-surface-container-lowest/80 backdrop-blur-md border-b border-white/10">
+<div class="flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-white/5 w-96">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full placeholder:text-on-surface-variant/50" placeholder="Search groups, files, or peers..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full border-2 border-surface-container-lowest"></span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A professional close-up studio portrait of a high-achieving student looking confident. The lighting is dramatic with cool blue and deep shadow tones, reflecting a focused academic command center aesthetic. The background is a clean, dark minimalist space, ensuring the subject stands out with a premium, technical feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDjihYDbwkvTALOoNMcTPd3OMseRcNlATa0KjXAWqrIl8E0WEnEA4q-1SoOryOimQG89SekwyFCWwsz5FQAYW990L4qLKiBL3_ObHFcLbCJzzRc9BB3oqjid6z0cYg2zU5yzt9Nu2fEw65LYsiEdtHDIVhc8ghby5byVA-DuJ0IBJ3fS4JEbtDZA_VhcrEBIVARNl8rk8m1k4WYWsc4Tih8mAsfIYXQQjLUjRdyWTo9PcMngWm_x9s"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 pb-16 px-gutter min-h-screen">
+<!-- Header Actions -->
+<section class="flex flex-col md:flex-row justify-between items-end md:items-center gap-6 mb-12">
+<div>
+<h2 class="font-headline-lg text-headline-lg font-extrabold tracking-tight">Your Groups</h2>
+<p class="text-on-surface-variant mt-1">Manage your academic circles and collaborative streaks.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-6 py-2.5 bg-surface-container-high text-on-surface font-semibold rounded-lg border border-white/5 hover:bg-surface-container-highest transition-all ease-out-expo active:scale-95">
+                    Join with code
+                </button>
+<button class="px-6 py-2.5 bg-primary-container text-on-primary-container font-semibold rounded-lg shadow-lg shadow-primary-container/20 hover:brightness-110 transition-all ease-out-expo active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">add</span>
+                    Create Group
+                </button>
+</div>
+</section>
+<!-- Asymmetric Masonry Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+<!-- Group Card 1: Admin -->
+<div class="group-card glass-card rounded-xl p-6 flex flex-col gap-6 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(108,92,231,0.15)] transition-all duration-500 ease-out-expo group">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-2">
+<span class="px-2 py-0.5 border border-primary/40 text-[10px] font-bold text-primary rounded-full w-fit uppercase tracking-wider">Admin</span>
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Quantum Physics II</h3>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A professional close-up of a diverse female student with glasses, smiling subtly. The lighting is sophisticated, using cool cyan highlights and deep navy shadows, fitting a modern productivity tool aesthetic. The focus is sharp on her expression, conveying a sense of academic brilliance and community." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdADi4-GYi5hTsE4NvtGdzuivEmTYO9SGQWiQGDnrZGi0MD7B7WHmpzC-hYm7XZHRn6Y7xmlyD2_HSj7LmI1592N1CJ08fqW7ufaHDxIeUP507UOEo9SM4ktMDS5qWyl11jt8g7uGrRvQdPcBv0lQA2i1J6cFyX3K52Kh4QJH_upf3yEMtc7oP9OFBPG_CkIQJVUNox1-WC5-cyHFroUn7F1w16xlEchv9ObypaWgikjMXgSAtaJLr"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A focused male student with sharp features in a dark minimalist setting. Soft volumetric lighting highlights his face, creating a high-performance, command center atmosphere. The overall color palette is monochromatic with deep blacks and subtle gray gradients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUyMcueVSIAZT0mG4g2DBiuvahQq8FhcpQUS4PMmEzsXSIrYoy3wat0JXSauAxJtSTBt-Vj1qk4-ptb775Sf6RTz3P9WKo682Mk7RwJmb8Mswi2bdX9WsF-u9TkSEi_D0ndM75DPurqWhLJRDtv6vIf0bGRrNCEmhTnHf5iLzUlpoxUeTM4FlqT0O2hKlWgGYuOKX1rKmENEcc8SR4KyBxHFi85kbL0qPmfHHr8qcN4HJWJ7mQkYUY"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A profile shot of a student in a dark-mode workspace environment. Minimalist lighting accents their face against a deep background. The image is crisp and professional, using a technical, tool-like visual style consistent with a high-end educational platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_TlNTa6W2Nfd5VQAsDciqymtf_WKeuNaKhvOKjp2UcQIqax4GZGDYjdV-t3kugMwzFz_L7yUVoGKds9v7j29Q3ufyAR3NfwS3uBq9UwnS4w-v_Uz44KEk9P3gjvwFuXdOxg0xJlsHYEn7xTnHvj5U3XZ4IuREg4aeuqWT4qL7QwZOL9kpZ1E4ASZQzRbFz5e7a9VQJqWsIoZSMC-5wrw2ghPlLOemsi56og-tPXqBiD5aNM0nYBX7"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background bg-primary-container/20 flex items-center justify-center">
+<span class="text-[10px] font-bold text-primary">+12</span>
+</div>
+</div>
+<span class="text-body-sm text-on-surface-variant tabular-nums">15 Active Members</span>
+</div>
+<div class="pt-4 border-t border-white/5">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70">7D Activity</span>
+<span class="text-[10px] font-bold text-secondary-fixed-dim">+24% Spike</span>
+</div>
+<svg class="w-full h-12 overflow-visible" preserveaspectratio="none" viewbox="0 0 100 20">
+<path class="sparkline-path" d="M0,15 L10,18 L20,12 L30,16 L40,8 L50,14 L60,10 L70,12 L80,5 L90,8 L100,2" fill="none" stroke="#00E676" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Group Card 2 -->
+<div class="group-card glass-card rounded-xl p-6 flex flex-col gap-6 h-[280px] justify-between hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(108,92,231,0.15)] transition-all duration-500 ease-out-expo group">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors pr-8 leading-tight">Advanced Algorithms Study Collective</h3>
+<button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a student illuminated by a soft, directional light in a dark studio. The color palette consists of deep indigo and graphite tones. The subject is calm and focused, embodying a high-performance mindset suitable for a technical productivity app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQE-uJjp7dlB-YMmFSFT3_NqfwjkDerk4MXubDL7c47qCNRIkbtpi8fNHOM3xPegIOE1j-P9TEgBCXA39mbg5jS4cVfx0k8TTofouKEhJp7rokA7r8Tm7ZjWvgZsevURGeoIh-fw9OcaYXKrFEW817_3kW0O3tl6aFwYrtMBD1S0SiMmzCD2-GwIXD_eBPA3iM04s9l68EvnrNjXW_af4NUxMKE0_2ZfANnHxN0kldHboAaKqb2Vyi"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A sleek profile portrait of a modern university student against a dark, minimalist backdrop. The lighting is crisp and cool, casting soft shadows. The style is sophisticated and professional, avoiding playful tropes for a more tool-like, serious academic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDUqsV7h_8KTbuskzdPIVb6NUwQwzxnXyHkZnJjjmFDI6U2BQhpAejmWxEeXu6ckTh76YHKcto-69TsdCfRsYpbVlMA-kyOuAnSbdxOt_HyXK5SbJTkO3ttcgynV7StdNgo8wvjMebPRe6bFwGVZT5SeI3RX-SFp-Z3ivqW705pfDtgx0hcCA8osdaAPmb2D8O5l1b4ABsHv0Jy6zSJ4altafTMJ_LiIHnmWTu1T-ghGIuOuyKaz2w"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background bg-secondary/10 flex items-center justify-center">
+<span class="text-[10px] font-bold text-secondary">+8</span>
+</div>
+</div>
+<span class="text-body-sm text-on-surface-variant tabular-nums">10 Active Members</span>
+</div>
+<div class="pt-4 border-t border-white/5">
+<svg class="w-full h-12 overflow-visible" preserveaspectratio="none" viewbox="0 0 100 20">
+<path class="sparkline-path" d="M0,10 L15,12 L30,5 L45,15 L60,8 L75,18 L90,12 L100,5" fill="none" stroke="#00E676" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Group Card 3 -->
+<div class="group-card glass-card rounded-xl p-6 flex flex-col gap-6 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(108,92,231,0.15)] transition-all duration-500 ease-out-expo group">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-tight">Dissertation Deep Focus</h3>
+<button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A portrait of a student with a serious, determined expression, softly lit by a single source in a darkened room. The aesthetic is monochromatic and refined, emphasizing concentration and high achievement. The style is cinematic and high-end, matching a command-center interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUfleKkg3T1FzKsJ9j8NI8YfniOPV1iZXGh12sNjp4vIvn0Vp7n6t4sZ3Fp9JKF_PRnNUSJ7KeSPaRf_SpD-gC6kJgiDOvKTrBf9lx5jQiVotHrxW6RvGhJ4oG3soLS5nK9HDYGKbdElEwOhUuzbW-CqAaG0wHnNor6IUC-c_gFdVgR3JUczHj2WWzoOktUl1FczprF7rdkUy41SMd4sBOhnyGb5gEF87eCee7fpiPpfeTrfOg70Sx"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A professional-grade avatar of a female student in a minimalist, tech-focused environment. Dark tones dominate the scene, punctuated by cool white light on the subject's face. The overall vibe is calm, expert, and academic, avoiding any bright or playful colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWcenQOjxFtM52KzJI2FvhUYljKAjCnYxDZcm-AmLTwqdLuVZQQ_jhJyn-oYGElQQETir5u7st71Xq1smyPueEG37B5whqzoGentIE4DaHgaqiGxzx_g9F9qlKONpJTMtirCwigvdLehdNUXmIDRQnCx0eB1lSzQALDqy0hcaZqv6hi4vBZbVWBhNfxurQF1w4pT8Q-Tgck_-AVeIwyH6Z0HAO_OYfn67B0UxoiqUO4vP5Nz4fQ72U"/>
+</div>
+</div>
+<span class="text-body-sm text-on-surface-variant tabular-nums">2 Active Members</span>
+</div>
+<div class="pt-4 border-t border-white/5">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70">Consistency</span>
+<span class="text-[10px] font-bold text-secondary-fixed-dim">High</span>
+</div>
+<svg class="w-full h-12 overflow-visible" preserveaspectratio="none" viewbox="0 0 100 20">
+<path class="sparkline-path" d="M0,5 L20,5 L40,6 L60,5 L80,5 L100,4" fill="none" stroke="#00E676" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Group Card 4: Admin -->
+<div class="group-card glass-card rounded-xl p-6 flex flex-col gap-6 h-[220px] justify-between hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(108,92,231,0.15)] transition-all duration-500 ease-out-expo group">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-2">
+<span class="px-2 py-0.5 border border-primary/40 text-[10px] font-bold text-primary rounded-full w-fit uppercase tracking-wider">Admin</span>
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Neuroscience Lab</h3>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male student with a calm and intellectual gaze. He is set against a dark background with subtle blue-toned lighting. The image style is professional and sophisticated, emphasizing technical expertise and high-performance academic focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz1IqQ4PTCBQkcPMTsJShOoPUqopjvyqSeihgESaFpb8ZqUyeNZr0BRPqQr3Tw2iZ6DpYwVbNiMVSeyGPIB4h86-29iUQTvGT1MtjwH7RW-iRf-8YaAoNmCewXxtoPq3is-ZZKT59JkzRxe6_UWoud4uH3QLdMkpqFn6C-d9H7EgXFp0oaZAxiEP03w95GhFXgAOUra8ZO-AQYXekijF4CME3KDR9iGbG4rTxEjsmL_CYJz66qt_W9"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A student avatar with focused, intense lighting. The face is highlighted while the surrounding space is deep black. The visual tone is technical and premium, using a dark mode aesthetic that commands concentration and feels like an expert tool for high achievers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBixM7NZXXapot0z8SRyP_bg4Hx8J7kpkrhOYrTH86-8uHjaeV26i0wWKFgyj-tjeJOUlmjy3YqXfdb6al79MHqTpeaF9nVWpa5AmYBhN-8H817R687saadNJjHnHsR3EGpkLicKNQ8oxuoYMQQjG0BfUltHr7_jw7S6w-o_upkjJ5_YoYW0vEkcE6lXRediaCiBRvCJ-Ktfky0YNvlPfD5uSLhNpupfr84EWwmanAMrI8O688z3Grp"/>
+</div>
+</div>
+<div class="w-24">
+<svg class="w-full h-8 overflow-visible" preserveaspectratio="none" viewbox="0 0 100 20">
+<path class="sparkline-path" d="M0,18 L20,15 L40,19 L60,10 L80,12 L100,5" fill="none" stroke="#00E676" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Group Card 5 -->
+<div class="group-card glass-card rounded-xl p-6 flex flex-col gap-6 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(108,92,231,0.15)] transition-all duration-500 ease-out-expo group">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-tight">Greco-Roman History Prep</h3>
+<button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a female student in a dark environment with sharp, professional lighting. Her expression is thoughtful and intelligent. The overall aesthetic is monochromatic with a focus on high-fidelity, sophisticated visual details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMUUxhM0stExFXnYNlmkwUunHlId4wcYs5hl_JhFKqKUg0V9PcDeJ_VVC9g1QUYdesW1jRlH86HaZbbUe15B3rfNo2IRllLIkqAj0Zduct4zydOfWZp-E2CNlrGS4mo5t1edFqVfwWzhtLNIQLXL1GVPqfaTpvceV-47kO_E1rijQ579tN_MPK35gglWm7NbmSgi4Aeya-Quqj2bq_KbMZjWfF7Kw0RR4prUWCErEcjLx1CLKL0zM1"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A student with a serious, academic expression in a dark-themed space. The lighting is moody and cool, with cyan-tinted rim lights. The image conveys high achievement and deep focus, designed for a premium educational software platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm1Dz_1wAu-sYQJN5v9SkG_RJ8ILqxrwgP4YffA7NeA6C08dl-DzRGZuEGqgueZ_HgVRhi2dGdIzSxdDsDeccr5dhEhDh-bNCaWnMIWYtc00th0DLQ6Cp4yFPx0gmXHavKdu_hMHE_hzCkpYucVwvlizT4rfCUr63maNQx3j5iCtjvA0AKJX2VfisAraUcwY0Qj7RxKkjC4T5LJ11LhKHRzfmpZAIGGCXE92VGr6UO4gThq5ZHJiqw"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male student with a sharp, intelligent look. He is lit with cold studio light against a deep graphite background. The visual language is that of a modern command center, prioritizing data and concentration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrW4Czj7z4Ml5ZHWMAuw92vrnVujf_DRY3yy2pFUPSi4Rb-Np-ecdVE79xTDVr2rVJHdWvB_-2tv2AHtGQVs1p411Mn-z6RmO_IrKTeJfMkx8mgMSpE9qEiFpBSzKuyZkLa21D45bL9qPbpsCqbDyRIJQF-JrtbVwU8tbUvKJ2Acw-La0joYqqQqSMJBiqJZ7cJsNdyk-sBuBWstsifBi67evlRZBfdBXn6Cfz56YMEkaEZrdcAcgk"/>
+</div>
+</div>
+<span class="text-body-sm text-on-surface-variant tabular-nums">4 Active Members</span>
+</div>
+<div class="pt-4 border-t border-white/5">
+<svg class="w-full h-12 overflow-visible" preserveaspectratio="none" viewbox="0 0 100 20">
+<path class="sparkline-path" d="M0,15 L25,12 L50,18 L75,10 L100,12" fill="none" stroke="#00E676" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- "Discover" Card (Empty State Trigger) -->
+<div class="glass-card rounded-xl border-dashed border-white/10 bg-transparent p-6 flex flex-col items-center justify-center gap-4 group cursor-pointer hover:border-primary/50 transition-all duration-300 min-h-[220px]" id="discover-card">
+<div class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">explore</span>
+</div>
+<div class="text-center">
+<h4 class="font-bold text-on-surface">Discover more groups</h4>
+<p class="text-body-sm text-on-surface-variant">Find peers studying your subjects</p>
+</div>
+</div>
+</section>
+<!-- Hidden Empty State Illustration Section (for reference or if list is cleared) -->
+<section class="hidden flex-col items-center justify-center py-24 px-gutter" id="empty-state">
+<div class="relative w-64 h-64 mb-8">
+<!-- Abstract constellation animation placeholder -->
+<div class="absolute inset-0 flex items-center justify-center">
+<svg class="w-48 h-48 opacity-20" viewbox="0 0 100 100">
+<circle class="animate-pulse" cx="20" cy="30" fill="white" r="1.5"></circle>
+<circle class="animate-pulse" cx="80" cy="20" fill="white" r="1.5" style="animation-delay: 0.5s"></circle>
+<circle class="animate-pulse" cx="50" cy="50" fill="#c6bfff" r="2" style="animation-delay: 1s"></circle>
+<circle class="animate-pulse" cx="30" cy="80" fill="white" r="1.5" style="animation-delay: 1.5s"></circle>
+<circle class="animate-pulse" cx="70" cy="70" fill="white" r="1.5" style="animation-delay: 2s"></circle>
+<path class="opacity-30" d="M20,30 L50,50 L80,20 M50,50 L30,80 M50,50 L70,70" fill="none" stroke="white" stroke-dasharray="2 2" stroke-width="0.5"></path>
+</svg>
+</div>
+
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">No active groups found</h3>
+<p class="text-on-surface-variant mb-8 max-w-sm text-center">It looks like you haven't joined any academic circles yet. Start by creating your own or exploring public communities.</p>
+<div class="flex gap-4">
+<button class="px-6 py-2.5 bg-primary-container text-on-primary-container font-semibold rounded-lg hover:brightness-110 transition-all">Create Group</button>
+<button class="px-6 py-2.5 border border-white/10 text-on-surface font-semibold rounded-lg hover:bg-white/5 transition-all">Join Group</button>
+</div>
+</section>
+</main>
+<!-- FAB for quick action -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all ease-out-expo z-50">
+<span class="material-symbols-outlined text-2xl">chat_bubble</span>
+</button>
+<script>
+        // Micro-interactions and hover effects
+        document.querySelectorAll('.group-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Potential JS logic for complex hover states if CSS isn't enough
+            });
+        });
+
+        // Toggle Empty State for Demo
+        function toggleEmptyState() {
+            const grid = document.querySelector('section.grid');
+            const empty = document.getElementById('empty-state');
+            grid.classList.toggle('hidden');
+            empty.classList.toggle('hidden');
+            empty.classList.toggle('flex');
+        }
+
+        // Simulating some activity pulse
+        setInterval(() => {
+            const dots = document.querySelectorAll('.animate-pulse');
+            dots.forEach(dot => {
+                dot.style.opacity = Math.random() * 0.5 + 0.2;
+            });
+        }, 1000);
+    </script>
+</body></html>

@@ -20,4 +20,12 @@ public class SecurityProperties {
     
     private int forgotPasswordRateLimit = 5;
     private long forgotPasswordRatePeriodMs = 60000L; // 1 min
+
+    private java.util.List<String> allowedOrigins = java.util.Arrays.asList(
+            "http://localhost:5173",
+            "http://localhost:5174",
+            "http://localhost:5175",
+            "http://localhost:4173"
+    );
 }
+

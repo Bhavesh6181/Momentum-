@@ -41,4 +41,32 @@ public interface StudySessionRepository extends JpaRepository<StudySession, UUID
             @Param("subject") String subject,
             Pageable pageable
     );
+
+    @Query("SELECT CAST(s.startTime AS date) as date, SUM(s.durationMinutes) / 60.0 as hours " +
+           "FROM StudySession s " +
+           "WHERE s.user.id = :userId AND s.startTime >= :since AND s.status = com.momentum.backend.enums.SessionStatus.COMPLETED " +
+           "GROUP BY CAST(s.startTime AS date) " +
+           "ORDER BY CAST(s.startTime AS date) ASC")
+    List<Object[]> findWeeklyHoursGroupedByDate(@Param("userId") UUID userId, @Param("since") OffsetDateTime since);
+
+    @Query("SELECT s.subject, SUM(s.durationMinutes) / 60.0 " +
+           "FROM StudySession s " +
+           "WHERE s.user.id = :userId AND s.status = com.momentum.backend.enums.SessionStatus.COMPLETED " +
+           "GROUP BY s.subject " +
+           "ORDER BY SUM(s.durationMinutes) DESC")
+    List<Object[]> findHoursGroupedBySubject(@Param("userId") UUID userId);
+
+    @Query("SELECT s.user.id, s.user.username, SUM(s.durationMinutes) / 60.0 " +
+           "FROM StudySession s " +
+           "WHERE s.group.id = :groupId AND s.startTime >= :since AND s.status = com.momentum.backend.enums.SessionStatus.COMPLETED " +
+           "GROUP BY s.user.id, s.user.username " +
+           "ORDER BY SUM(s.durationMinutes) DESC")
+    List<Object[]> findMostActiveGroupMember(@Param("groupId") UUID groupId, @Param("since") OffsetDateTime since);
+
+    @Query("SELECT EXTRACT(HOUR FROM s.startTime) as hour, COUNT(s) as sessionCount " +
+           "FROM StudySession s " +
+           "WHERE s.group.id = :groupId AND s.status = com.momentum.backend.enums.SessionStatus.COMPLETED " +
+           "GROUP BY EXTRACT(HOUR FROM s.startTime) " +
+           "ORDER BY EXTRACT(HOUR FROM s.startTime) ASC")
+    List<Object[]> findProductiveHours(@Param("groupId") UUID groupId);
 }

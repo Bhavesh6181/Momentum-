@@ -42,5 +42,9 @@ public class UserProfileUpdateRequest {
 
     private String bio;
 
+    private Boolean onboardingCompleted;
+
+    private Integer onboardingStep;
+
     private Long version;
 }

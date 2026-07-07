@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum | Command Palette</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .ease-out-expo { transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+        .light-leak-border {
+            position: relative;
+            background: #131318;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light-leak-border::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            padding: 1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 40%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .indigo-glow-shadow {
+            box-shadow: 0 24px 48px -12px rgba(108, 92, 231, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "surface-variant": "#33343b",
+                        "outline-variant": "#474554",
+                        "on-secondary": "#003918",
+                        "inverse-on-surface": "#2f3037",
+                        "on-secondary-fixed": "#00210b",
+                        "on-primary-container": "#faf6ff",
+                        "error": "#ffb4ab",
+                        "on-surface": "#e3e1ea",
+                        "on-tertiary": "#4d2600",
+                        "surface-tint": "#c6bfff",
+                        "surface-container-lowest": "#0d0e14",
+                        "primary-fixed-dim": "#c6bfff",
+                        "on-primary-fixed-variant": "#4029ba",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdcc3",
+                        "secondary-fixed": "#62ff96",
+                        "on-secondary-container": "#00622e",
+                        "primary-fixed": "#e4dfff",
+                        "on-surface-variant": "#c8c4d7",
+                        "surface-dim": "#121319",
+                        "on-primary-fixed": "#160066",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-background": "#e3e1ea",
+                        "tertiary-container": "#ac5d00",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "surface-container": "#1e1f26",
+                        "primary": "#c6bfff",
+                        "inverse-surface": "#e3e1ea",
+                        "secondary": "#7dffa2",
+                        "outline": "#928ea0",
+                        "primary-container": "#6c5ce7",
+                        "on-tertiary-container": "#fff5f1",
+                        "surface-bright": "#383940",
+                        "inverse-primary": "#5847d2",
+                        "on-secondary-fixed-variant": "#005226",
+                        "background": "#121319",
+                        "on-tertiary-fixed": "#2f1500",
+                        "on-primary": "#2900a0",
+                        "surface-container-high": "#292a30",
+                        "secondary-fixed-dim": "#00e475",
+                        "secondary-container": "#05e777",
+                        "surface-container-low": "#1a1b21",
+                        "tertiary": "#ffb77d",
+                        "surface-container-highest": "#33343b",
+                        "surface": "#121319"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "section-gap-v": "80px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "stats-md": ["JetBrains Mono", "monospace"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "label-caps": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-sm selection:bg-primary/30 antialiased overflow-hidden">
+<!-- DASHBOARD CONTEXT (Blurred Background Layer) -->
+<div class="flex h-screen w-full overflow-hidden blur-md grayscale-[0.2] opacity-40 pointer-events-none">
+<!-- Predicted SideNavBar -->
+<aside class="flex flex-col h-full py-unit space-y-2 h-screen w-64 border-r border-white/10 bg-surface">
+<div class="px-gutter py-6">
+<span class="font-headline-md text-headline-md text-primary tracking-tighter">Momentum</span>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<div class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-r-2 border-primary bg-primary/5">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">group</span>
+<span>Groups</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">leaderboard</span>
+<span>Leaderboard</span>
+</div>
+</nav>
+</aside>
+<main class="flex-1 p-gutter bg-background overflow-hidden">
+<header class="flex justify-between items-center mb-10">
+<div class="h-8 w-48 bg-surface-container rounded-full shimmer"></div>
+<div class="flex gap-4">
+<div class="h-10 w-10 bg-surface-container rounded-lg shimmer"></div>
+<div class="h-10 w-10 bg-surface-container rounded-lg shimmer"></div>
+</div>
+</header>
+<div class="grid grid-cols-12 gap-gutter">
+<div class="col-span-8 space-y-gutter">
+<div class="h-64 bg-surface-container border border-white/10 rounded-xl shimmer"></div>
+<div class="grid grid-cols-2 gap-gutter">
+<div class="h-40 bg-surface-container border border-white/10 rounded-xl shimmer"></div>
+<div class="h-40 bg-surface-container border border-white/10 rounded-xl shimmer"></div>
+</div>
+</div>
+<div class="col-span-4 h-full bg-surface-container border border-white/10 rounded-xl shimmer"></div>
+</div>
+</main>
+</div>
+<!-- COMMAND PALETTE OVERLAY -->
+<div class="fixed inset-0 z-[100] flex items-start justify-center pt-[153px] px-4">
+<!-- Backdrop Blur -->
+<div class="absolute inset-0 bg-background/60 backdrop-blur-xl transition-all duration-500 ease-out-expo" id="paletteBackdrop"></div>
+<!-- Palette Card -->
+<div class="relative w-full max-w-[640px] light-leak-border rounded-xl indigo-glow-shadow flex flex-col overflow-hidden animate-in fade-in zoom-in duration-300 ease-out-expo" id="commandPalette">
+<!-- Top Input Area -->
+<div class="relative flex items-center px-6 border-b border-white/10">
+<span class="material-symbols-outlined text-outline absolute left-6 pointer-events-none">search</span>
+<input autofocus="" class="w-full h-16 bg-transparent border-none focus:ring-0 text-body-lg font-body-lg text-on-surface placeholder:text-outline-variant pl-10" id="paletteInput" placeholder="Search groups, people, activities, challenges..." type="text"/>
+<div class="flex items-center gap-1.5 px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-stats-md text-outline tracking-wider">
+                    ESC
+                </div>
+</div>
+<!-- Scrollable Results -->
+<div class="max-h-[440px] overflow-y-auto scrollbar-hide py-4 space-y-6" id="resultsArea">
+<!-- Category: PEOPLE -->
+<section>
+<div class="px-6 mb-2">
+<span class="text-label-caps font-label-caps text-outline-variant tracking-[0.15em] uppercase">People</span>
+</div>
+<div class="space-y-0.5">
+<div class="flex items-center justify-between px-6 py-3 bg-primary/5 text-on-surface group cursor-pointer transition-all duration-200">
+<div class="flex items-center gap-4">
+<div class="w-9 h-9 rounded-full bg-cover bg-center border border-white/10" data-alt="A professional headshot of a high-achieving university student in a sleek studio setting. Minimalist dark background, soft side lighting highlighting sharp features. Modern, focused, and scholarly aesthetic. High-performance branding vibes." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAc_eyQHRKD1xyVs4e4NwfP20Yx9ky0AEvcbaVo_5TFEVLyCx4OtykKhfdlZnq9EAq5Q15OkbSiALDEn5h76TMoaPxQaxJKR9RGLNEsTF-Eja_krL34ck_EO2N4RXAjczKLRncnznB8L8qWJhS6nLqoFjUcTwkcRFq70r4s-WWJ0Hdehu-V63hANE0UXwq0zmVY4sKnjp888abHPV-uRQ5t_9h6RAWP31YBHZe_wWMTYxJRfXOXVzND')"></div>
+<div>
+<p class="font-medium text-body-sm"><span class="text-primary font-bold">Alex</span>andr Chen</p>
+<p class="text-[12px] text-outline-variant">Computer Science • Rank #3 Global</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-lg opacity-100 transition-opacity">keyboard_return</span>
+</div>
+<div class="flex items-center justify-between px-6 py-3 hover:bg-white/5 text-on-surface group cursor-pointer transition-all duration-200">
+<div class="flex items-center gap-4">
+<div class="w-9 h-9 rounded-full bg-cover bg-center border border-white/10" data-alt="A portrait of a young female academic wearing professional minimalist attire. She is in a high-tech library environment with blurred glass partitions. Cool blue-toned studio lighting, sleek and intellectual atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAz1AtICD9glTJse7sRgJTksOWamqjVUxAQV1JAQLSR3Teo1FfGv4TNvL0EiteORoT0B2K2Ih3-LN9itwmjU27bZGA8eqtjXDbm6YBWT99y2pGgtjr_o9s_0DEfLusGdK7NX3FHCIHh3LUUPGzYljRy_g5PWdpAyEwWVLgQXe9ue6Rt1MoMMDoJFf6fNMZau5qtXkkyJaRoxLfGC7MZ2mj8fX-rhBwBd9Ob8qxe7qnxC0xxqI8rXO55')"></div>
+<div>
+<p class="font-medium text-body-sm">Maya <span class="text-primary font-bold">Alex</span>is</p>
+<p class="text-[12px] text-outline-variant">Theoretical Physics • Study Partner</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-lg opacity-0 group-hover:opacity-100 transition-opacity">keyboard_return</span>
+</div>
+</div>
+</section>
+<!-- Category: GROUPS -->
+<section>
+<div class="px-6 mb-2">
+<span class="text-label-caps font-label-caps text-outline-variant tracking-[0.15em] uppercase">Groups</span>
+</div>
+<div class="space-y-0.5">
+<div class="flex items-center justify-between px-6 py-3 hover:bg-white/5 text-on-surface group cursor-pointer transition-all duration-200">
+<div class="flex items-center gap-4">
+<div class="w-9 h-9 rounded-lg flex items-center justify-center bg-surface-container-highest border border-white/10">
+<span class="material-symbols-outlined text-on-surface-variant text-xl">terminal</span>
+</div>
+<div>
+<p class="font-medium text-body-sm"><span class="text-primary font-bold">Algo</span>rithm Masters</p>
+<p class="text-[12px] text-outline-variant">42 Active Members • Focused Session Live</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-lg opacity-0 group-hover:opacity-100 transition-opacity">keyboard_return</span>
+</div>
+</div>
+</section>
+<!-- Loading State Skeletons (Hidden by default, shown during 'search') -->
+<section class="hidden" id="loadingState">
+<div class="px-6 mb-2">
+<div class="h-3 w-16 bg-surface-container-highest rounded shimmer"></div>
+</div>
+<div class="px-6 py-4 space-y-4">
+<div class="flex items-center gap-4">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest shimmer"></div>
+<div class="space-y-2">
+<div class="h-3 w-32 bg-surface-container-highest rounded shimmer"></div>
+<div class="h-2 w-24 bg-surface-container-highest rounded shimmer"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest shimmer"></div>
+<div class="space-y-2">
+<div class="h-3 w-40 bg-surface-container-highest rounded shimmer"></div>
+<div class="h-2 w-32 bg-surface-container-highest rounded shimmer"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- No Results State (Hidden) -->
+<div class="hidden flex flex-col items-center justify-center py-12 px-6 text-center" id="noResultsState">
+<span class="material-symbols-outlined text-outline-variant text-4xl mb-4">search_off</span>
+<p class="text-on-surface-variant text-body-sm">No matching commands found. Refine your search query.</p>
+</div>
+</div>
+<!-- Bottom Navigation Hints -->
+<div class="flex items-center gap-6 px-6 py-3 border-t border-white/5 bg-[#0D0D11]">
+<div class="flex items-center gap-1.5">
+<span class="px-1 py-0.5 rounded bg-white/10 text-[9px] font-stats-md text-on-surface-variant">↑↓</span>
+<span class="text-[11px] text-outline-variant font-medium">Navigate</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-1 py-0.5 rounded bg-white/10 text-[9px] font-stats-md text-on-surface-variant">ENTER</span>
+<span class="text-[11px] text-outline-variant font-medium">Select</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-1 py-0.5 rounded bg-white/10 text-[9px] font-stats-md text-on-surface-variant">ESC</span>
+<span class="text-[11px] text-outline-variant font-medium">Close</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+        const input = document.getElementById('paletteInput');
+        const resultsArea = document.getElementById('resultsArea');
+        const loadingState = document.getElementById('loadingState');
+        const noResultsState = document.getElementById('noResultsState');
+        const sections = resultsArea.querySelectorAll('section:not(#loadingState)');
+
+        let searchTimeout;
+
+        input.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            
+            // Show loading animation for effect
+            clearTimeout(searchTimeout);
+            
+            if (query.length > 0) {
+                loadingState.classList.remove('hidden');
+                sections.forEach(s => s.classList.add('hidden'));
+                noResultsState.classList.add('hidden');
+
+                searchTimeout = setTimeout(() => {
+                    loadingState.classList.add('hidden');
+                    
+                    // Simulate search results logic
+                    if (query === 'none') {
+                        noResultsState.classList.remove('hidden');
+                    } else {
+                        sections.forEach(s => s.classList.remove('hidden'));
+                        noResultsState.classList.add('hidden');
+                    }
+                }, 400);
+            } else {
+                loadingState.classList.add('hidden');
+                sections.forEach(s => s.classList.remove('hidden'));
+                noResultsState.classList.add('hidden');
+            }
+        });
+
+        // Close on escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('commandPalette').classList.add('scale-95', 'opacity-0');
+                document.getElementById('paletteBackdrop').classList.add('opacity-0');
+                setTimeout(() => {
+                    // Logic to actually hide the container in a real app
+                }, 300);
+            }
+        });
+
+        // Interactive row highlight
+        const rows = document.querySelectorAll('#resultsArea .group');
+        rows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                rows.forEach(r => r.classList.remove('bg-primary/5'));
+                row.classList.add('bg-primary/5');
+            });
+        });
+    </script>
+</body></html>

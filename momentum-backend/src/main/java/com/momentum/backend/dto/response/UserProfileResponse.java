@@ -23,4 +23,6 @@ public class UserProfileResponse {
     private String githubLink;
     private String linkedinLink;
     private String bio;
+    private boolean onboardingCompleted;
+    private int onboardingStep;
 }

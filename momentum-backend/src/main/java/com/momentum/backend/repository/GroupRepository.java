@@ -20,4 +20,9 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
     @Query("SELECT g FROM Group g JOIN GroupMember gm ON g.id = gm.id.groupId " +
            "WHERE gm.id.userId = :userId AND gm.status = com.momentum.backend.enums.GroupMembershipStatus.ACTIVE")
     Page<Group> findJoinedGroups(UUID userId, Pageable pageable);
+
+    @Query("SELECT g FROM Group g WHERE (LOWER(g.name) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND (g.isPrivate = false OR g.id IN " +
+           "(SELECT gm.id.groupId FROM GroupMember gm WHERE gm.id.userId = :userId AND gm.status = com.momentum.backend.enums.GroupMembershipStatus.ACTIVE))")
+    Page<Group> searchGroups(@org.springframework.data.repository.query.Param("query") String query, @org.springframework.data.repository.query.Param("userId") UUID userId, Pageable pageable);
 }

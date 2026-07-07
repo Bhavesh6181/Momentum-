@@ -24,4 +24,9 @@ public interface ChallengeRepository extends JpaRepository<Challenge, UUID> {
     @Query("UPDATE Challenge c SET c.status = 'CLOSED' " +
            "WHERE c.status = 'OPEN' AND c.endDate < :today")
     int closeExpiredChallenges(@Param("today") LocalDate today);
+
+    @Query("SELECT c FROM Challenge c WHERE (LOWER(c.title) LIKE LOWER(CONCAT('%', :query, '%'))) " +
+           "AND (c.group.isPrivate = false OR c.group.id IN " +
+           "(SELECT gm.id.groupId FROM GroupMember gm WHERE gm.id.userId = :userId AND gm.status = com.momentum.backend.enums.GroupMembershipStatus.ACTIVE))")
+    Page<Challenge> searchChallenges(@Param("query") String query, @Param("userId") UUID userId, Pageable pageable);
 }

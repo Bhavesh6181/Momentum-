@@ -33,7 +33,12 @@ app:
     refresh-token-expiration-ms: ${REFRESH_TOKEN_EXPIRATION_MS:604800000} # 7 days
     max-failed-login-attempts: 5
     lockout-duration-minutes: 15
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:4173}
+  upload:
+    dir: ${UPLOAD_DIR:uploads}
+    base-url: ${UPLOAD_BASE_URL:}
   scheduler:
     group-analytics-cron: ${GROUP_ANALYTICS_CRON:0 0 2 * * *}
     nightly-streak-cron: ${NIGHTLY_STREAK_CRON:0 1 0 * * *}
+
 

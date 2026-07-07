@@ -113,4 +113,19 @@ public class ActivityEventListener {
                 metadata
         );
     }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
+    public void handleGithubPush(GithubPushEvent event) {
+        log.info("Handling GithubPushEvent for user: {}, repo: {}", event.getUserId(), event.getRepoName());
+        String description = "pushed " + event.getCommitCount() + " commit(s) to GitHub repository " + event.getRepoName();
+        String metadata = String.format("{\"repoName\":\"%s\",\"lastCommitSha\":\"%s\",\"commitCount\":%d}",
+                event.getRepoName(), event.getLastCommitSha(), event.getCommitCount());
+        activityService.recordActivity(
+                event.getUserId(),
+                null,
+                ActivityType.GITHUB_PUSH,
+                description,
+                metadata
+        );
+    }
 }

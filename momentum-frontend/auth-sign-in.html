@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum | Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#2f3037",
+                        "tertiary-container": "#ac5d00",
+                        "tertiary": "#ffb77d",
+                        "on-secondary-fixed-variant": "#005226",
+                        "surface-bright": "#383940",
+                        "inverse-surface": "#e3e1ea",
+                        "surface-container-low": "#1a1b21",
+                        "on-secondary-container": "#00622e",
+                        "on-secondary": "#003918",
+                        "on-primary-fixed-variant": "#4029ba",
+                        "on-primary-fixed": "#160066",
+                        "on-secondary-fixed": "#00210b",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#0d0e14",
+                        "on-tertiary-container": "#fff5f1",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "background": "#0A0A0D",
+                        "surface-tint": "#c6bfff",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-tertiary": "#4d2600",
+                        "secondary-fixed-dim": "#00e475",
+                        "tertiary-fixed": "#ffdcc3",
+                        "surface-variant": "#33343b",
+                        "surface-container-highest": "#33343b",
+                        "secondary-fixed": "#62ff96",
+                        "primary-container": "#6c5ce7",
+                        "secondary": "#7dffa2",
+                        "on-tertiary-fixed": "#2f1500",
+                        "primary-fixed-dim": "#c6bfff",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-container": "#faf6ff",
+                        "outline": "#928ea0",
+                        "on-surface": "#e3e1ea",
+                        "surface-container-high": "#292a30",
+                        "surface-container": "#1e1f26",
+                        "surface": "#131318",
+                        "surface-dim": "#121319",
+                        "secondary-container": "#05e777",
+                        "primary": "#c6bfff",
+                        "on-background": "#e3e1ea",
+                        "outline-variant": "#474554",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#e4dfff",
+                        "on-primary": "#2900a0",
+                        "on-error": "#690005",
+                        "inverse-primary": "#5847d2",
+                        "on-surface-variant": "#c8c4d7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-desktop": "48px",
+                        "section-gap-v": "80px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "stats-md": ["JetBrains Mono"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>.ease-out-expo {
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1)
+    }
+.noise-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBvoRhL9Ho9AnCIjNfiRwWtxXQvFkcjqjBHLV-Tcx1NfSUUtYqirMExk1IJeyltjpJULiD1CGUVFB-XVzo9Q7z098EM08SNpGlESjAH86w4yOsDgx4LtZptbWvlJi15ytI5KkQDaqiHya6ncAjVLTJZe0wDjolMYJyzTeVsP-KJRnq0uIfuMrc9QiMfbSm3sgyIFUJjBL2ty3Mlk5kQH8Jb1EE2Q9wZoKcQun7vZZM94AYbK85z9V8d);
+    background-repeat: repeat;
+    opacity: 0.05;
+    pointer-events: none
+    }
+.floating-label-group {
+    position: relative
+    }
+.floating-label-group input:focus ~ label, .floating-label-group input:not(:placeholder-shown) ~ label {
+    transform: translatey(-20px) scale(0.85);
+    color: #c6bfff
+    }
+.floating-label-group label {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    transition: all 200ms ease-out-expo;
+    pointer-events: none;
+    color: #928ea0
+    }
+.activity-feed-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, #0A0A0D 0%, transparent 15%, transparent 85%, #0A0A0D 100%);
+    z-index: 10;
+    pointer-events: none
+    }
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+        } to {
+        transform: rotate(360deg);
+        }
+    }
+.animate-spin-fast {
+    animation: spin 0.6s linear infinite
+    }
+.flash-green {
+    animation: flashSettles 1s ease-out-expo forwards
+    }
+@keyframes flashSettles {
+    0% {
+        background-color: rgba(5, 231, 119, 0.2);
+        } 100% {
+        background-color: transparent;
+        }
+    }</style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary/30 min-h-screen flex overflow-hidden">
+<!-- Left Side: Login Form (55%) -->
+<main class="relative w-full lg:w-[55%] min-h-screen flex flex-col justify-center px-8 sm:px-16 lg:px-24 xl:px-32 bg-[#0A0A0D] z-20">
+<!-- Noise Texture Overlay -->
+<div class="absolute inset-0 noise-bg"></div>
+<!-- Header/Wordmark -->
+<header class="absolute top-12 left-8 sm:left-16 lg:left-24">
+<div class="flex items-center gap-2 group cursor-default">
+<div class="w-2 h-8 bg-primary-container rounded-full group-hover:scale-y-110 transition-transform duration-300"></div>
+<span class="font-headline-md text-headline-md font-bold tracking-tighter text-primary">Momentum</span>
+</div>
+</header>
+<!-- Form Container -->
+<div class="max-w-md w-full animate-fade-in">
+<div class="mb-10">
+<h1 class="text-[36px] font-bold font-headline-lg tracking-[-0.02em] leading-tight mb-3">Welcome back</h1>
+<p class="text-[#8B8B93] font-body-lg text-body-lg">Enter your credentials to access your command center.</p>
+</div>
+<form class="space-y-6" id="loginForm" onsubmit="return handleLogin(event)">
+<div class="space-y-4">
+<!-- Email Field -->
+<div class="floating-label-group">
+<input class="w-full bg-[#131318] border border-white/10 rounded-xl px-4 py-4 text-on-surface focus:outline-none focus:border-[#6C5CE7] transition-all duration-200 placeholder-transparent" id="email" name="email" placeholder=" " required="" type="email"/>
+<label class="font-body-sm text-body-sm" for="email">Email Address</label>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="floating-label-group">
+<input class="w-full bg-[#131318] border border-white/10 rounded-xl px-4 py-4 text-on-surface focus:outline-none focus:border-[#6C5CE7] transition-all duration-200 placeholder-transparent" id="password" name="password" placeholder=" " required="" type="password"/>
+<label class="font-body-sm text-body-sm" for="password">Password</label>
+</div>
+<div class="flex justify-end">
+<a class="text-primary hover:text-primary-fixed-dim text-body-sm font-medium transition-colors" href="#">Forgot password?</a>
+</div>
+</div>
+</div>
+<!-- Error State Placeholder -->
+<div class="hidden text-error bg-error-container/20 border border-error/20 px-4 py-3 rounded-lg text-body-sm flex items-center gap-2" id="error-message">
+<span class="material-symbols-outlined text-[18px]">error</span>
+<span>Invalid credentials. Please try again.</span>
+</div>
+<!-- Primary Button -->
+<button class="w-full py-4 bg-primary-container text-white font-semibold rounded-xl shadow-[0_0_20px_rgba(108,92,231,0.2)] hover:bg-primary-container/90 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2" id="submitBtn" type="submit">
+<span id="btnText">Sign In</span>
+<span class="hidden" id="loadingIcon">
+<svg class="animate-spin-fast h-5 w-5 text-white" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+</span>
+</button>
+<!-- Divider -->
+<div class="flex items-center gap-4 py-4">
+<div class="h-[1px] flex-1 bg-white/5"></div>
+<span class="text-on-surface-variant font-label-caps text-label-caps uppercase">or</span>
+<div class="h-[1px] flex-1 bg-white/5"></div>
+</div>
+<p class="text-center text-on-surface-variant text-body-sm">
+                    Don't have an account? 
+                    <a class="text-primary font-semibold hover:underline transition-all" href="#">Register</a>
+</p>
+</form>
+</div>
+<!-- Footer Meta -->
+<footer class="absolute bottom-12 left-8 sm:left-16 lg:left-24">
+<p class="text-on-surface-variant text-body-sm opacity-50">© 2024 Momentum Performance Systems.</p>
+</footer>
+</main>
+<!-- Right Side: Activity Feed (45%) -->
+<aside class="hidden lg:block w-[45%] relative min-h-screen bg-[#0A0A0D] border-l border-white/5 overflow-hidden">
+<div class="activity-feed-container relative h-full overflow-hidden p-12">
+<!-- Animated Content -->
+<!-- STITCH_THREEJS_START:ANIMATION_8 class="w-full h-full object-cover opacity-80 mix-blend-screen" -->
+<div class="w-full h-full object-cover opacity-80 mix-blend-screen" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_8" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_8');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  // Momentum Live Activity Feed - Vertical Auto-scroll with Flash-then-Settle Motif
+const container = document.querySelector('.activity-feed-container');
+const cardData = [
+  { user: 'Alex R.', action: 'started "Neural Networks"', time: 'Just now' },
+  { user: 'Sarah C.', action: 'reached 4h streak', time: '2m ago' },
+  { user: 'James W.', action: 'joined CS-402', time: '5m ago' },
+  { user: 'Maria G.', action: 'completed "AI Ethics"', time: '8m ago' },
+  { user: 'Elena V.', action: 'started "Discrete Math"', time: '12m ago' },
+  { user: 'Marcus K.', action: 'earned "Deep Diver"', time: '15m ago' }
+];
+
+function createCard(data) {
+  const card = document.createElement('div');
+  card.className = 'w-full p-4 mb-4 bg-[#131318] border border-white/10 rounded-sm opacity-0 transform translate-y-4 transition-all duration-700 ease-out-expo';
+  card.innerHTML = `
+    <div class="flex items-center gap-3">
+      <div class="w-2 h-2 rounded-full bg-[#00E676] animate-pulse"></div>
+      <div class="flex-1">
+        <p class="text-[13px] text-[#F5F5F7] font-medium leading-tight">${data.user} <span class="text-[#8B8B93] font-normal">${data.action}</span></p>
+        <p class="text-[11px] text-[#8B8B93] mt-1 uppercase tracking-wider">${data.time}</p>
+      </div>
+    </div>
+  `;
+  return card;
+}
+
+function initFeed() {
+  const feed = document.createElement('div');
+  feed.className = 'flex flex-col gap-4 animate-scroll-up';
+  container.appendChild(feed);
+
+  // Initial cards
+  cardData.forEach(data => feed.appendChild(createCard(data)));
+
+  // Animation logic for adding new cards
+  setInterval(() => {
+    const data = cardData[Math.floor(Math.random() * cardData.length)];
+    const card = createCard(data);
+    feed.prepend(card);
+
+    // Flash then settle effect
+    setTimeout(() => {
+      card.style.backgroundColor = '#00E676'; // Flash
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+      
+      setTimeout(() => {
+        card.style.transition = 'background-color 1.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease, transform 0.7s ease';
+        card.style.backgroundColor = '#131318'; // Settle
+      }, 100);
+    }, 50);
+
+    if (feed.children.length > 10) feed.lastElementChild.remove();
+  }, 3000);
+}
+
+// Add required CSS for the scroll animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes scroll-up {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
+  }
+  .animate-scroll-up {
+    animation: scroll-up 60s linear infinite;
+  }
+  .ease-out-expo {
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+`;
+document.head.appendChild(style);
+
+initFeed();
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_8 -->
+<!-- Contextual Overlay for High Performance Feel -->
+<div class="absolute inset-0 z-20 flex flex-col justify-end p-12 pointer-events-none">
+<div class="space-y-6 max-w-sm">
+<div class="bg-surface-container/60 backdrop-blur-md p-6 rounded-xl border border-white/5 shadow-2xl">
+<div class="flex items-center justify-between mb-4">
+<span class="text-secondary font-stats-md text-stats-md uppercase tracking-widest">Live Activity</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full animate-pulse"></span>
+<span class="text-on-surface-variant text-[10px] font-bold">REAL-TIME</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3 flash-green p-2 rounded">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary">psychology</span>
+</div>
+<div>
+<p class="text-on-surface text-body-sm font-medium">Session Optimized</p>
+<p class="text-on-surface-variant text-[11px]">Deep work protocol active for user_992</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 rounded">
+<div class="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-secondary">trending_up</span>
+</div>
+<div>
+<p class="text-on-surface text-body-sm font-medium">Global Momentum</p>
+<p class="text-on-surface-variant text-[11px]">4,291 students in high-focus state</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<script>
+        function handleLogin(event) {
+            event.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const loadingIcon = document.getElementById('loadingIcon');
+            const errorMsg = document.getElementById('error-message');
+            
+            // Loading State
+            btn.disabled = true;
+            btnText.classList.add('opacity-0');
+            loadingIcon.classList.remove('hidden');
+            errorMsg.classList.add('hidden');
+
+            // Simulate API Call
+            setTimeout(() => {
+                // For demo: show error state
+                btn.disabled = false;
+                btnText.classList.remove('opacity-0');
+                loadingIcon.classList.add('hidden');
+                
+                // Show error with slide effect
+                errorMsg.classList.remove('hidden');
+                errorMsg.classList.add('animate-slide-down');
+                
+                // Vibrate or Shake effect on input border
+                const inputs = document.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.classList.remove('border-white/10');
+                    input.classList.add('border-error/50');
+                    setTimeout(() => {
+                        input.classList.remove('border-error/50');
+                        input.classList.add('border-white/10');
+                    }, 2000);
+                });
+            }, 1800);
+
+            return false;
+        }
+
+        // Mouse trail effect for the left panel subtle background interacton
+        const mainPanel = document.querySelector('main');
+        mainPanel.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            mainPanel.style.backgroundImage = `radial-gradient(circle at ${x}% ${y}%, rgba(108, 92, 231, 0.05) 0%, transparent 40%)`;
+        });
+    </script>
+<style>
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-down {
+            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</body></html>

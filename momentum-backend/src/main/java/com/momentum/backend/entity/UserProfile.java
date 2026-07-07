@@ -76,6 +76,14 @@ public class UserProfile {
     @Column(columnDefinition = "text")
     private String bio;
 
+    @Column(name = "onboarding_completed", nullable = false)
+    @Builder.Default
+    private boolean onboardingCompleted = false;
+
+    @Column(name = "onboarding_step", nullable = false)
+    @Builder.Default
+    private int onboardingStep = 0;
+
     @Version
     @Column(nullable = false)
     @Builder.Default

@@ -18,6 +18,12 @@ public class LocalProfilePictureService implements ProfilePictureService {
 
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
+    @org.springframework.beans.factory.annotation.Value("${app.upload.dir:uploads}")
+    private String uploadDir;
+
+    @org.springframework.beans.factory.annotation.Value("${app.upload.base-url:}")
+    private String uploadBaseUrl;
+
     @Override
     public String uploadProfilePicture(MultipartFile file) {
         if (file == null || file.isEmpty()) {
@@ -40,13 +46,21 @@ public class LocalProfilePictureService implements ProfilePictureService {
         String filename = UUID.randomUUID().toString() + extension;
 
         try {
-            Path targetDir = Paths.get("uploads/profile-pictures").toAbsolutePath();
+            Path targetDir = Paths.get(uploadDir, "profile-pictures").toAbsolutePath();
             if (!Files.exists(targetDir)) {
                 Files.createDirectories(targetDir);
             }
 
             Path targetPath = targetDir.resolve(filename);
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+            if (uploadBaseUrl != null && !uploadBaseUrl.trim().isEmpty()) {
+                String base = uploadBaseUrl.trim();
+                if (!base.endsWith("/")) {
+                    base += "/";
+                }
+                return base + "uploads/profile-pictures/" + filename;
+            }
 
             return ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/uploads/profile-pictures/")

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum | Performance Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#c6bfff",
+                        "on-primary-container": "#faf6ff",
+                        "on-secondary-fixed": "#00210b",
+                        "on-secondary": "#003918",
+                        "secondary-fixed-dim": "#00e475",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-background": "#e3e1ea",
+                        "on-surface-variant": "#c8c4d7",
+                        "surface-bright": "#383940",
+                        "on-tertiary-container": "#fff5f1",
+                        "on-primary-fixed-variant": "#4029ba",
+                        "error": "#ffb4ab",
+                        "background": "#0A0A0D", /* Overridden per prompt */
+                        "surface-container-low": "#1a1b21",
+                        "tertiary-fixed": "#ffdcc3",
+                        "surface-container-high": "#292a30",
+                        "secondary-container": "#05e777",
+                        "tertiary": "#ffb77d",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "surface": "#121319",
+                        "outline": "#928ea0",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#0d0e14",
+                        "surface-container-highest": "#33343b",
+                        "surface-variant": "#33343b",
+                        "on-primary-fixed": "#160066",
+                        "on-surface": "#e3e1ea",
+                        "inverse-surface": "#e3e1ea",
+                        "on-tertiary-fixed": "#2f1500",
+                        "primary-fixed": "#e4dfff",
+                        "outline-variant": "#474554",
+                        "on-secondary-fixed-variant": "#005226",
+                        "primary-container": "#6c5ce7",
+                        "primary-fixed-dim": "#c6bfff",
+                        "inverse-on-surface": "#2f3037",
+                        "surface-container": "#131318",
+                        "on-primary": "#2900a0",
+                        "primary": "#c6bfff",
+                        "on-secondary-container": "#00622e",
+                        "error-container": "#93000a",
+                        "secondary-fixed": "#62ff96",
+                        "secondary": "#7dffa2",
+                        "tertiary-container": "#ac5d00",
+                        "inverse-primary": "#5847d2",
+                        "on-tertiary": "#4d2600",
+                        "on-error": "#690005",
+                        "surface-dim": "#0A0A0D"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-gap-v": "80px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "stats-md": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .ease-out-expo { transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+        .hairline-border { border: 1px solid rgba(255,255,255,0.08); }
+        .light-gradient-border {
+            position: relative;
+        }
+        .light-gradient-border::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 50%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen font-body-lg">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col h-screen w-64 bg-surface-container dark:bg-surface-container border-r border-white/10 sticky top-0 py-8 px-4">
+<div class="flex items-center gap-3 px-4 mb-10">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h1 class="text-headline-md font-headline-md text-primary tracking-tight">Momentum</h1>
+<p class="text-label-caps font-label-caps text-on-surface-variant/60">High-Performance Study</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-xl transition-all duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="text-label-caps font-label-caps">Home</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-xl transition-all duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+<span class="text-label-caps font-label-caps">Focus</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-xl transition-all duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-label-caps font-label-caps">Collaboration</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-primary font-bold bg-surface-container-high/50 rounded-xl transition-all duration-300 ease-out-expo" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="text-label-caps font-label-caps">Performance</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4 pt-8">
+<button class="w-full bg-primary-container text-on-primary-container py-3 rounded-xl font-label-caps text-label-caps hover:scale-[0.98] active:scale-95 transition-transform duration-200">
+                    Start Focus Session
+                </button>
+<div class="space-y-1">
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:text-on-surface text-label-caps font-label-caps transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+                        Support
+                    </a>
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:text-secondary text-label-caps font-label-caps transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+                        Sign Out
+                    </a>
+</div>
+</div>
+</aside>
+<main class="flex-1 w-full max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<!-- TopAppBar for Mobile/Desktop -->
+<header class="flex justify-between items-center mb-16">
+<div class="space-y-1">
+<h2 class="text-display-lg font-display-lg text-on-surface tracking-tighter">Your Momentum</h2>
+<p class="text-on-surface-variant text-body-lg">Tracking performance across 12 disciplines.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A close-up high-resolution profile portrait of a focused student in a dark academic setting with Kinetic Indigo rim lighting. The aesthetic is sophisticated and minimalist, consistent with the Momentum brand guidelines, focusing on high-performance study habits and calm concentration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTmLp0uEWIATsJ4wes5MdW-u4WyaXylHuT2IyQkcsezP6y-SLmXLDZfAlvwGXkq2oqUf1iNdJrP8xYUINdg_K3svxReDb7Uj-uYQqga25rg9Nu_nCJycWN0Bplkt22uw3fR0unNtg0Wuhif8eU10QhcA-aH4lbSDrg51bwHI_1Rgt35KKhDnEbe4GxF9pKskdZbRjxkfD2I66wOlo3b14edaoaqlvPBFr2-LmbnKANtGRtleIXMwT1"/>
+</div>
+</div>
+</header>
+<!-- Stats Overview Bento -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-section-gap-v">
+<!-- Large Active Chart -->
+<div class="md:col-span-3 h-[400px] bg-surface-container light-gradient-border rounded-xl p-8 flex flex-col">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="text-label-caps font-label-caps text-on-surface-variant mb-1 uppercase tracking-widest">Focus Velocity</h3>
+<p class="text-headline-lg font-headline-lg text-on-surface tabular-nums">42.8 <span class="text-primary text-body-lg">pts/hr</span></p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded bg-secondary-container/10 text-secondary text-label-caps font-label-caps border border-secondary/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> +12%
+                            </span>
+</div>
+</div>
+<div class="flex-1 relative mt-4">
+<!-- Simulated Chart Grid -->
+<div class="absolute inset-0 grid grid-rows-4 w-full h-full border-b border-white/5">
+<div class="border-t border-white/5"></div>
+<div class="border-t border-white/5"></div>
+<div class="border-t border-white/5"></div>
+<div class="border-t border-white/5"></div>
+</div>
+<!-- SVG Line Chart Path -->
+<svg class="absolute inset-0 w-full h-full overflow-visible" preserveaspectratio="none">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#c6bfff" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#c6bfff" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path class="w-full h-full" d="M0,80 Q50,60 100,75 T200,40 T300,55 T400,20 T500,45 T600,15 T700,30 T800,10 L800,100 L0,100 Z" fill="url(#chartGradient)"></path>
+<path class="w-full h-full" d="M0,80 Q50,60 100,75 T200,40 T300,55 T400,20 T500,45 T600,15 T700,30 T800,10" fill="none" stroke="#c6bfff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="flex justify-between text-label-caps font-label-caps text-on-surface-variant/40 mt-4 tabular-nums">
+<span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span><span>20:00</span>
+</div>
+</div>
+<!-- Vertical Quick Stats -->
+<div class="flex flex-col gap-gutter">
+<div class="flex-1 bg-surface-container light-gradient-border rounded-xl p-6 flex flex-col justify-between">
+<span class="material-symbols-outlined text-secondary" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<div>
+<p class="text-label-caps font-label-caps text-on-surface-variant mb-1">Global Rank</p>
+<p class="text-headline-lg font-headline-lg text-on-surface tabular-nums">#1,402</p>
+</div>
+</div>
+<div class="flex-1 bg-surface-container light-gradient-border rounded-xl p-6 flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<div>
+<p class="text-label-caps font-label-caps text-on-surface-variant mb-1">Current Streak</p>
+<p class="text-headline-lg font-headline-lg text-on-surface tabular-nums">24 <span class="text-body-lg text-on-surface-variant">days</span></p>
+</div>
+</div>
+</div>
+</section>
+<!-- Leaderboard Section -->
+<section class="space-y-8">
+<div class="flex justify-between items-end">
+<h3 class="text-headline-lg font-headline-lg text-on-surface">Momentum Leaderboard</h3>
+<div class="flex gap-4">
+<button class="px-4 py-2 text-label-caps font-label-caps text-primary border border-primary/20 rounded-lg hover:bg-primary/5 transition-colors">Weekly</button>
+<button class="px-4 py-2 text-label-caps font-label-caps text-on-surface-variant hover:text-on-surface transition-colors">Monthly</button>
+</div>
+</div>
+<div class="w-full bg-surface-container light-gradient-border rounded-xl overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-white/5">
+<th class="px-8 py-6 text-label-caps font-label-caps text-on-surface-variant/60 uppercase tracking-widest">Rank</th>
+<th class="px-8 py-6 text-label-caps font-label-caps text-on-surface-variant/60 uppercase tracking-widest">Candidate</th>
+<th class="px-8 py-6 text-label-caps font-label-caps text-on-surface-variant/60 uppercase tracking-widest text-right">Avg Focus</th>
+<th class="px-8 py-6 text-label-caps font-label-caps text-on-surface-variant/60 uppercase tracking-widest text-right">Momentum Pts</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<!-- User Row Highlighted -->
+<tr class="bg-primary/5 group hover:bg-primary/10 transition-colors">
+<td class="px-8 py-6 tabular-nums font-stats-md text-stats-md text-primary">1,402</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-end minimal avatar for a digital leader profile, professional photography style, lit with soft cool tones and kinetic indigo accents to match the momentum app branding. High focus, sleek composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw3yqPHCOGVCuVjYb2QJygddL0jONv1dHt7jY4Ert602Xt4dlUUvtYw592_WhuYW6IlWtsyl3JEHISSZMKTsfW-XqzwbIa7EMptSF5ncpv7xpviZ8adncH6ImywUckj6yNJ5xqxj17bfaNCUXQFK2aX25fzfzLGXnSELRCuCh7vtmPc7ldbChNPQMPQeIAqJmfvIwBYYLZuF_tSrkkMzDPkAr2eMHdp1WjjGhfhFAYbSAw4YYUsnVD"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Alex Rivera (You)</p>
+<p class="text-body-sm text-on-surface-variant/60">Tier 4 Achiever</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-right tabular-nums font-stats-md text-stats-md text-on-surface">4.8h</td>
+<td class="px-8 py-6 text-right tabular-nums font-stats-md text-stats-md text-primary">12,840</td>
+</tr>
+<!-- Competitor 1 -->
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-8 py-6 tabular-nums font-stats-md text-stats-md text-on-surface-variant/60">001</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border border-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a top-tier academic high-performer, professional cinematic lighting, sharp focus, indigo and deep charcoal color palette, minimalist tech-inspired background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqR16MdcS3m2SaTx2F85GTeRfoZWndn6ha0IacwQWdKnYQwPTAx5jGvyWiMRPcnnKS0zyqVxw77v8tOoMoBE5iDxlkFI3MUgjLCQW7_x_K8LOMLY5OqY4-hYKRIt8_BlRfxkgJaQd95sdiY6YLGuQ3W2aHj9bxQ20hSztoSx0QqfV94TrxaOjLgWzwDBD09JcFTDed3AiDsk9LJRDMCq0iH91TvFWM6lLYHi2fwE_3QtwME19FKSOm"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Elena Vostova</p>
+<p class="text-body-sm text-on-surface-variant/60">Grandmaster Focus</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-right tabular-nums font-stats-md text-stats-md text-on-surface">8.2h</td>
+<td class="px-8 py-6 text-right tabular-nums font-stats-md text-stats-md text-secondary">98,211</td>
+</tr>
+<!-- Competitor 2 -->
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-8 py-6 tabular-nums font-stats-md text-stats-md text-on-surface-variant/60">002</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border border-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-performance student avatar, professional portrait in a modern dark studio, indigo backlighting, crisp clean lines, sophisticated professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs6yO80gEfnqJPovwZo09vB2iM6SW1Rgm65dl4MrlwfEGSFg1w1KnlWXEKg1_h1S-P-jqSpoO1bQXgiE1NomVwQe-vutE0RmhTU1mXYHpBvfncievYfQr4VzkDYsIbnFZ_Ne_EcAMK0XjkgfATHNpGCYyOohkkPr4QYolaIgplRVk6Jskf3OzcebadLsdJsZvmRPMzRtME9h0UEwiyNIcclSbce7FOuP-Oas4QCZlMIUgESscGkt3r"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Marcus Chen</p>
+<p class="text-body-sm text-on-surface-variant/60">Elite Researcher</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-right tabular-nums font-stats-md text-stats-md text-on-surface">7.9h</td>
+<td class="px-8 py-6 text-right tabular-nums font-stats-md text-stats-md text-secondary">94,502</td>
+</tr>
+<!-- Competitor 3 -->
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-8 py-6 tabular-nums font-stats-md text-stats-md text-on-surface-variant/60">003</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border border-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Cinematic close-up of a young professional in a high-tech study environment, deep black and kinetic indigo color scheme, sharp focus, modern digital art style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWzc-DNXyH6VRtA0XR4bhgZ-401jNYersZcS1uhG3hoPqbwx5-VWSBz9t9u9sZwI67czQ2wR2edCz7lxa9yGGicssKCCH8BD7-oNb6Tp6erbIdTRwWy4nrs_POsIqET4mVCA4SiTkg-HyeMYwb9BZcl_cKKSjokk2TXsFtiY2hL4TmwscPmyMlf8iq-eZZwdSyj36pEd40Fl9vkdg4t5TzJNwR_hNmZ4vvK5CuaLlg6B5F64j8VRkq"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Sarah J. Miller</p>
+<p class="text-body-sm text-on-surface-variant/60">Deep Work Specialist</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-right tabular-nums font-stats-md text-stats-md text-on-surface">7.4h</td>
+<td class="px-8 py-6 text-right tabular-nums font-stats-md text-stats-md text-secondary">89,120</td>
+</tr>
+</tbody>
+</table>
+<div class="p-8 flex justify-center border-t border-white/5">
+<button class="text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2">
+                            View Full Global Rankings
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="mt-section-gap-v flex flex-col md:flex-row justify-between items-center w-full py-8 border-t border-white/5 opacity-80 hover:opacity-100 transition-opacity">
+<div class="text-label-caps font-label-caps text-on-surface mb-4 md:mb-0">MOMENTUM</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant text-center md:text-left">© 2024 Momentum Productivity. Engineered for Performance.</p>
+<div class="flex gap-6 mt-4 md:mt-0">
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Privacy Policy</a>
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Terms of Service</a>
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Changelog</a>
+</div>
+</footer>
+</main>
+</div>
+<!-- Background Atmospheric Effect -->
+<div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+<div class="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] left-[-5%] w-[30%] h-[30%] bg-secondary/5 blur-[100px] rounded-full"></div>
+</div>
+<script>
+        // Micro-interaction for number "counting up" feel
+        document.addEventListener('DOMContentLoaded', () => {
+            const stats = document.querySelectorAll('.tabular-nums');
+            stats.forEach(stat => {
+                stat.classList.add('opacity-0');
+                setTimeout(() => {
+                    stat.classList.remove('opacity-0');
+                    stat.classList.add('transition-opacity', 'duration-700', 'ease-out-expo');
+                }, 100);
+            });
+
+            // Pulse effect for live updates (simulated)
+            setInterval(() => {
+                const liveBadge = document.querySelector('.px-3.py-1.rounded');
+                if(liveBadge) {
+                    liveBadge.classList.add('bg-secondary/30');
+                    setTimeout(() => liveBadge.classList.remove('bg-secondary/30'), 300);
+                }
+            }, 5000);
+        });
+    </script>
+</body></html>
