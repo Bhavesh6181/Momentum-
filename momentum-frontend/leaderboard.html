@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum | Leaderboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#4d2600",
+                    "surface-container-low": "#1a1b21",
+                    "secondary": "#7dffa2",
+                    "surface-container-lowest": "#0d0e14",
+                    "outline": "#928ea0",
+                    "on-secondary-fixed-variant": "#005226",
+                    "on-primary-container": "#faf6ff",
+                    "on-background": "#e3e1ea",
+                    "secondary-fixed": "#62ff96",
+                    "secondary-fixed-dim": "#00e475",
+                    "surface-container-highest": "#33343b",
+                    "on-tertiary-container": "#fff5f1",
+                    "surface-variant": "#33343b",
+                    "on-surface": "#e3e1ea",
+                    "surface-dim": "#121319",
+                    "surface": "#121319",
+                    "tertiary-fixed": "#ffdcc3",
+                    "background": "#121319",
+                    "surface-tint": "#c6bfff",
+                    "inverse-on-surface": "#2f3037",
+                    "surface-bright": "#383940",
+                    "secondary-container": "#05e777",
+                    "primary": "#c6bfff",
+                    "on-secondary-container": "#00622e",
+                    "surface-container": "#1e1f26",
+                    "on-primary-fixed": "#160066",
+                    "surface-container-high": "#292a30",
+                    "on-secondary": "#003918",
+                    "error-container": "#93000a",
+                    "on-primary": "#2900a0",
+                    "inverse-surface": "#e3e1ea",
+                    "primary-fixed": "#e4dfff",
+                    "outline-variant": "#474554",
+                    "on-error": "#690005",
+                    "inverse-primary": "#5847d2",
+                    "on-secondary-fixed": "#00210b",
+                    "on-error-container": "#ffdad6",
+                    "tertiary": "#ffb77d",
+                    "error": "#ffb4ab",
+                    "tertiary-container": "#ac5d00",
+                    "on-surface-variant": "#c8c4d7",
+                    "on-primary-fixed-variant": "#4029ba",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "on-tertiary-fixed": "#2f1500",
+                    "primary-fixed-dim": "#c6bfff",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "primary-container": "#6c5ce7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-gap-v": "80px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "unit": "8px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"],
+                    "stats-md": ["JetBrains Mono"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0D0E14;
+            color: #e3e1ea;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .ease-out-expo {
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .rank-row {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .rank-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .top-tier-border {
+            position: relative;
+        }
+        .top-tier-border::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(198, 191, 255, 0.15);
+            pointer-events: none;
+            border-radius: inherit;
+        }
+
+        .segment-pill {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Tabular nums for alignment */
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0D0E14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #33343b;
+            border-radius: 10px;
+        }
+
+        .glow-hairline {
+            box-shadow: 0 0 15px -5px rgba(198, 191, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen py-8 px-4 fixed left-0 w-64 bg-surface dark:bg-surface border-r border-white/10 ease-out-expo duration-300 z-50">
+<div class="flex items-center gap-3 mb-10 px-2">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">Momentum</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold opacity-60">High Performance</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-300 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">dashboard</span>
+<span class="font-body-lg text-body-lg">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-r-2 border-primary bg-surface-container-high transition-all duration-300 rounded-l-lg group" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="font-body-lg text-body-lg">Leaderboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-300 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">school</span>
+<span class="font-body-lg text-body-lg">Courses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-300 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">check_circle</span>
+<span class="font-body-lg text-body-lg">Tasks</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-300 rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">insights</span>
+<span class="font-body-lg text-body-lg">Analytics</span>
+</a>
+</nav>
+<button class="mb-8 mx-2 py-3 px-4 bg-primary-container text-on-primary-container font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+            Start Focus Session
+        </button>
+<div class="pt-6 border-t border-white/5 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-300 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-body-sm font-body-sm">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant font-medium hover:bg-surface-container-high transition-all duration-300 rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-body-sm font-body-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-40 bg-background dark:bg-background border-b border-white/10 h-20 px-4 md:px-margin-desktop flex justify-between items-center w-full ease-out-expo duration-300">
+<div class="flex items-center gap-4">
+<div class="md:hidden w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl">bolt</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary font-bold hidden sm:block">Leaderboard</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+<input class="bg-surface-container border border-white/5 rounded-full py-2 pl-10 pr-4 text-body-sm focus:outline-none focus:border-primary/50 w-64 transition-all" placeholder="Search peers..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A sharp, cinematic portrait of a focused university student in a dark academic library, illuminated by the cool blue light of a high-end laptop screen. The aesthetic is professional, monochromatic, and sleek, featuring clean lines and a shallow depth of field that emphasizes the subject's determined expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXdhNU7wvBakvP-nBDbzs--a5MluJeKiFz3rDHfRO7G8Lc6-poDLFUbCdOahXqDMSXdTlSEAtip7DMV3yr2zANKYjuomQ8anAaklQPnuuZqYeDlyYJAx-_quLBCgzJoG41QUK-QLk8X_shF-GGCcmzoUyqdRkA-BqqS8XStKX-FF4UOBh1QZ1n0rvNSv_qzoHchpv0gNGYgpoBnbm0YtpH92eIqF-CzJ393uteknAjkGwCt2K5OUJg"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<main class="flex-1 p-4 md:p-margin-desktop pb-24">
+<!-- Controls Section -->
+<section class="mb-10 space-y-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="font-display-lg text-display-lg mb-2">Performance Ranking</h1>
+<p class="text-on-surface-variant font-body-lg max-w-xl">Competing with the top 1% of computer science students globally. Real-time metrics based on deep-work sessions.</p>
+</div>
+<!-- Segmented Controls -->
+<div class="flex flex-wrap gap-4">
+<!-- Scope Control -->
+<div class="bg-surface-container-low p-1 rounded-lg flex relative">
+<div class="absolute h-[calc(100%-8px)] top-1 left-1 bg-primary-container rounded-md segment-pill w-[80px]" id="scope-pill"></div>
+<button class="relative z-10 px-4 py-1.5 text-label-caps font-label-caps text-on-primary-container w-[80px]" onclick="movePill('scope-pill', 0, 80)">This Group</button>
+<button class="relative z-10 px-4 py-1.5 text-label-caps font-label-caps text-on-surface-variant w-[80px]" onclick="movePill('scope-pill', 1, 80)">Global</button>
+</div>
+<!-- Metric Control -->
+<div class="bg-surface-container-low p-1 rounded-lg flex relative">
+<div class="absolute h-[calc(100%-8px)] top-1 left-1 bg-primary-container rounded-md segment-pill w-[100px]" id="metric-pill"></div>
+<button class="relative z-10 px-4 py-1.5 text-label-caps font-label-caps text-on-primary-container w-[100px]" onclick="movePill('metric-pill', 0, 100)">Study Hours</button>
+<button class="relative z-10 px-4 py-1.5 text-label-caps font-label-caps text-on-surface-variant w-[100px]" onclick="movePill('metric-pill', 1, 100)">Streak</button>
+<button class="relative z-10 px-4 py-1.5 text-label-caps font-label-caps text-on-surface-variant w-[100px]" onclick="movePill('metric-pill', 2, 100)">Tasks</button>
+<button class="relative z-10 px-4 py-1.5 text-label-caps font-label-caps text-on-surface-variant w-[100px]" onclick="movePill('metric-pill', 3, 100)">Consistency</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Leaderboard List -->
+<div class="space-y-3" id="leaderboard-list">
+<!-- Data will be injected here by JS for demo -->
+</div>
+</main>
+<!-- Sticky User Row -->
+<div class="fixed bottom-0 left-0 md:left-64 right-0 bg-surface-container-highest border-t border-primary/20 px-4 md:px-margin-desktop py-4 z-50 backdrop-blur-md bg-opacity-90">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-8">
+<span class="text-primary font-stats-md text-stats-md tabular-nums w-8">42</span>
+<div class="flex items-center gap-4">
+<div class="h-10 w-10 rounded-full border border-primary/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A sharp, cinematic portrait of a focused university student in a dark academic library, illuminated by the cool blue light of a high-end laptop screen. The aesthetic is professional, monochromatic, and sleek, featuring clean lines and a shallow depth of field that emphasizes the subject's determined expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq-Cx8RymAyvv-lKYfzyv2ixoTMFvXsTcnUelmpBLYI_bFqkTYxLUC6OgLFDIp8ti3ha2caQGVl_ZMI-pann4LIH7koc_g_MbPr0YAFtz9apCvx-BkU-qJhXd-6svr58lX1bqm0dOAfbcsM6CCPeWU2tDc-NqsI7FSZK--hylXWPoCDIUYJ0-4--Wc2lCGKF9IdFNLYklS01cxowFAEAxxnqbCj0fCr0v502W6QRKnjNUWBBP7VJ8R"/>
+</div>
+<div>
+<p class="font-headline-md text-headline-md text-on-surface leading-none">Alex Rivera (You)</p>
+<p class="text-body-sm text-on-surface-variant">Stanford University • CS</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="flex items-center gap-2">
+<span class="text-primary font-stats-md text-stats-md tabular-nums">142.5</span>
+<span class="material-symbols-outlined text-secondary text-sm">north_east</span>
+</div>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Hrs this week</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+        const leaderboardData = [
+            { rank: 1, name: "Jordan Smith", college: "MIT • Physics", value: 189.2, trend: "up", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100" },
+            { rank: 2, name: "Elena Volkov", college: "Oxford • Mathematics", value: 184.5, trend: "up", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100" },
+            { rank: 3, name: "Marcus Chen", college: "Stanford • CS", value: 178.9, trend: "down", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100" },
+            { rank: 4, name: "Sarah Jenkins", college: "Harvard • Biology", value: 165.4, trend: "up", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100" },
+            { rank: 5, name: "Liam O'Connor", college: "ETH Zurich • AI", value: 162.1, trend: "up", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100" },
+            { rank: 6, name: "Priya Sharma", college: "IIT Delhi • CSE", value: 158.3, trend: "up", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" },
+            { rank: 7, name: "David Kim", college: "SNU • Mechanical Eng", value: 155.0, trend: "down", img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=100" },
+            { rank: 8, name: "Isabella Rossi", college: "Bocconi • Economics", value: 149.8, trend: "up", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=100" },
+            { rank: 9, name: "Tomás Garcia", college: "UCM • Philosophy", value: 147.2, trend: "up", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=100" },
+            { rank: 10, name: "Yuki Tanaka", college: "UTokyo • Robotics", value: 145.6, trend: "down", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=100" }
+        ];
+
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboard-list');
+            container.innerHTML = '';
+
+            leaderboardData.forEach((user, index) => {
+                const isTop3 = user.rank <= 3;
+                const row = document.createElement('div');
+                row.className = `rank-row group flex items-center justify-between p-4 rounded-xl border border-white/5 bg-surface-container-low hover:bg-surface-container transition-all ease-out-expo ${isTop3 ? 'top-tier-border glow-hairline h-24' : 'h-20'}`;
+                
+                row.innerHTML = `
+                    <div class="flex items-center gap-8">
+                        <span class="text-on-surface-variant font-stats-md text-stats-md tabular-nums w-8 text-center ${isTop3 ? 'text-primary scale-110' : 'opacity-40'}">${user.rank}</span>
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <div class="h-12 w-12 rounded-full border border-white/10 overflow-hidden">
+                                    <img src="${user.img}" alt="${user.name}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                                </div>
+                                ${isTop3 ? '<div class="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full border-2 border-surface-container-low"></div>' : ''}
+                            </div>
+                            <div>
+                                <p class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">${user.name}</p>
+                                <p class="text-body-sm text-on-surface-variant">${user.college}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="flex flex-col items-end">
+                            <div class="flex items-center gap-2">
+                                <span class="font-stats-md text-stats-md tabular-nums count-value" data-value="${user.value}">0</span>
+                                <span class="material-symbols-outlined ${user.trend === 'up' ? 'text-secondary' : 'text-error opacity-50'} text-lg">
+                                    ${user.trend === 'up' ? 'north_east' : 'south_east'}
+                                </span>
+                            </div>
+                            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Total Hours</p>
+                        </div>
+                        <button class="opacity-0 group-hover:opacity-100 p-2 text-on-surface-variant hover:text-primary transition-all">
+                            <span class="material-symbols-outlined">more_vert</span>
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(row);
+
+                // Entrance animation trigger
+                setTimeout(() => {
+                    row.classList.add('visible');
+                }, index * 50);
+            });
+
+            startCounting();
+        }
+
+        function startCounting() {
+            const counters = document.querySelectorAll('.count-value');
+            counters.forEach(counter => {
+                const target = parseFloat(counter.getAttribute('data-value'));
+                const duration = 1500;
+                const startTime = performance.now();
+
+                function update(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easedProgress = 1 - Math.pow(1 - progress, 4); // easeOutQuart
+                    const currentVal = (easedProgress * target).toFixed(1);
+                    
+                    counter.innerText = currentVal;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+                requestAnimationFrame(update);
+            });
+        }
+
+        function movePill(pillId, index, width) {
+            const pill = document.getElementById(pillId);
+            const parent = pill.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            
+            // Move pill
+            pill.style.transform = `translateX(${index * width}px)`;
+            
+            // Update text styles
+            buttons.forEach((btn, i) => {
+                if(i === index) {
+                    btn.classList.replace('text-on-surface-variant', 'text-on-primary-container');
+                } else {
+                    btn.classList.replace('text-on-primary-container', 'text-on-surface-variant');
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', renderLeaderboard);
+    </script>
+</body></html>

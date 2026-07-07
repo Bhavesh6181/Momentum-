@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum | Focus Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#c6bfff",
+                    "on-primary-container": "#faf6ff",
+                    "on-secondary-fixed": "#00210b",
+                    "on-secondary": "#003918",
+                    "secondary-fixed-dim": "#00e475",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "on-background": "#e3e1ea",
+                    "on-surface-variant": "#c8c4d7",
+                    "surface-bright": "#383940",
+                    "on-tertiary-container": "#fff5f1",
+                    "on-primary-fixed-variant": "#4029ba",
+                    "error": "#ffb4ab",
+                    "background": "#121319",
+                    "surface-container-low": "#1a1b21",
+                    "tertiary-fixed": "#ffdcc3",
+                    "surface-container-high": "#292a30",
+                    "secondary-container": "#05e777",
+                    "tertiary": "#ffb77d",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "surface": "#121319",
+                    "outline": "#928ea0",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-lowest": "#0d0e14",
+                    "surface-container-highest": "#33343b",
+                    "surface-variant": "#33343b",
+                    "on-primary-fixed": "#160066",
+                    "on-surface": "#e3e1ea",
+                    "inverse-surface": "#e3e1ea",
+                    "on-tertiary-fixed": "#2f1500",
+                    "primary-fixed": "#e4dfff",
+                    "outline-variant": "#474554",
+                    "on-secondary-fixed-variant": "#005226",
+                    "primary-container": "#6c5ce7",
+                    "primary-fixed-dim": "#c6bfff",
+                    "inverse-on-surface": "#2f3037",
+                    "surface-container": "#1e1f26",
+                    "on-primary": "#2900a0",
+                    "primary": "#c6bfff",
+                    "on-secondary-container": "#00622e",
+                    "error-container": "#93000a",
+                    "secondary-fixed": "#62ff96",
+                    "secondary": "#7dffa2",
+                    "tertiary-container": "#ac5d00",
+                    "inverse-primary": "#5847d2",
+                    "on-tertiary": "#4d2600",
+                    "on-error": "#690005",
+                    "surface-dim": "#121319"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-gap-v": "80px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "stats-md": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0D;
+            color: #e3e1ea;
+            overflow-x: hidden;
+        }
+
+        .ease-out-expo {
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .momentum-card {
+            background-color: #131318;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .momentum-card::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 40%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .signal-green-pulse {
+            position: relative;
+        }
+        .signal-green-pulse::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #00e475;
+            opacity: 0.4;
+            animation: pulse 2s infinite cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .glass-overlay {
+            background: rgba(28, 28, 36, 0.5);
+            backdrop-filter: blur(24px);
+        }
+
+        .reveal-anim {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes reveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface border-b border-white/10 flex justify-between items-center w-full px-margin-desktop py-4 max-w-full sticky top-0 z-50">
+<div class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface">Momentum</div>
+<nav class="hidden md:flex items-center gap-gutter">
+<a class="text-primary dark:text-primary border-b-2 border-primary pb-1 font-body-lg" href="#">Dashboard</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-300 ease-out-expo font-body-lg" href="#">Study Rooms</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-300 ease-out-expo font-body-lg" href="#">Analytics</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all duration-200 active:scale-90" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all duration-200 active:scale-90" data-icon="settings">settings</button>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded font-semibold scale-95 active:scale-90 transition-transform duration-200">Join Session</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a young professional student in a high-tech study environment, softly lit by blue and purple ambient monitor glow, focused and determined. The background is a clean, dark minimalist office with sophisticated technical equipment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7RCQP_VxT9tful3Qf6vuFw1EaUwYMMbQ5_uvA0jkWT4HGJCmw_NiUqJp3nI1MHTkxXqPKqdMGm2l2Ng7vXoHHqOOGjtojUd-qNzfHfHimYJDXTzRrXLrcExsriWHbzexQWfiAC7D2LaHVNX0nQrWImOvYkp-JB5AmGEIIVlqj--_3WxeGxUjkdmtQ863HCwm7YqxhoivlJttqFe_VnFrqqp3m7Ti70Yk2wysyI5BG0d2Xip1jg6Np"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar / Presence List -->
+<aside class="hidden lg:flex flex-col h-full w-64 bg-surface-container dark:bg-surface-container border-r border-white/10 py-8 px-4 flex-shrink-0">
+<div class="mb-10 px-2">
+<h3 class="text-label-caps font-label-caps text-on-surface-variant mb-6 tracking-widest">PRESENCE</h3>
+<div class="space-y-5">
+<!-- Online Friend 1 -->
+<div class="flex items-center gap-3 group cursor-pointer hover:bg-surface-container-high p-2 -mx-2 rounded-lg transition-all ease-out-expo duration-300">
+<div class="relative w-10 h-10">
+<img class="w-full h-full rounded-full border border-white/5 object-cover" data-alt="A small circular profile avatar of a female student with glasses, smiling warmly. The lighting is crisp and modern with a slight teal tint to match the Momentum brand palette. High performance aesthetic, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB91NFWIaMCvbYUVPi4yplez-GVhd66nVM9DoWgKcfOr2CjbLl8PsvcfqudMkja0XA5rxTfX0KLjlGWgehy-d8QkcvYmgdHSuWwuz_S-qfMx-M0FxeGjNtUSP5SbyVWH-WO-M4PinIA5Me9OMQqqBbdVUvqnzLhEoHdrdDpI44mVEx0mSDSgTs9g8uxQdCbU3JofTbI9yLq6Q_wPtYqhPSiHgGwOSNGOfsaXk4QgERxDa6oWp7sJt1x"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-secondary-fixed-dim rounded-full border-2 border-surface-container signal-green-pulse"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-body-sm font-medium text-on-surface">Alex Rivera</span>
+<span class="text-xs text-secondary-fixed-dim font-stats-md">Focusing • 02:45:12</span>
+</div>
+</div>
+<!-- Online Friend 2 -->
+<div class="flex items-center gap-3 group cursor-pointer hover:bg-surface-container-high p-2 -mx-2 rounded-lg transition-all ease-out-expo duration-300">
+<div class="relative w-10 h-10">
+<img class="w-full h-full rounded-full border border-white/5 object-cover" data-alt="A small circular profile avatar of a male student in a dark hoodie, looking at a screen. Moody, low-light workspace atmosphere with soft kinetic indigo reflections. Professional and high-achieving look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8pyoVHTraHjAB8rv_V0i2NlL5tHEZFh7_OPDrUVqmo5R60xjiIzdNB2alX2H6chdVy3fhXSHeldEWamGyRwCaZkM4SYa1wmlZV0IrsORdtcFUTLW6fFAqwLxWWtD2at5whXigZlN2TV0g4jTrpmuMTI1HgLB8AT0fnphEbTwFDSrWGQBpcn-7r1MIcTIJXonrYZ5uvoEGi5uDjlhFli-K-djfK4Udn_7k3jsGlY62XTUQXND3O8qH"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-secondary-fixed-dim rounded-full border-2 border-surface-container signal-green-pulse"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-body-sm font-medium text-on-surface">Jordan Smith</span>
+<span class="text-xs text-secondary-fixed-dim font-stats-md">Focusing • 00:15:44</span>
+</div>
+</div>
+<!-- Online Friend 3 -->
+<div class="flex items-center gap-3 group cursor-pointer hover:bg-surface-container-high p-2 -mx-2 rounded-lg transition-all ease-out-expo duration-300">
+<div class="relative w-10 h-10">
+<img class="w-full h-full rounded-full border border-white/5 object-cover" data-alt="A small circular profile avatar of a student with a bright, energetic expression. Minimalist background, high-key lighting, modern aesthetic. The skin tones are warm and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBteODRgTKtkeLzQ6570oko5JYqwKxniF3V3KrR_RzPz-VWAzMqOrUF1eL0Nq2iJqW2ov75verDWmmtKzlphQt868NQ_coNWfsUkrEQWJ2lod4SJgvpVkS7P2-JsoXAjW_LTN-qd_JhQe8wAdoz-onEjHMs0eZn3IkZECwHXjPQved52MmQNkzPSKM08QlVRWMBUr1XdCAZQaziBLi5WG2HZaQtHzNem7tB5-zezkEo6dfJ0EK0XeUz"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-secondary-fixed-dim rounded-full border-2 border-surface-container signal-green-pulse"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-body-sm font-medium text-on-surface">Chen Wei</span>
+<span class="text-xs text-secondary-fixed-dim font-stats-md">Focusing • 01:22:09</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8 border-t border-white/5">
+<button class="w-full bg-surface-container-highest text-primary py-3 rounded-xl flex items-center justify-center gap-2 font-semibold hover:bg-primary hover:text-on-primary transition-all duration-300 ease-out-expo active:scale-95 mb-4">
+<span class="material-symbols-outlined text-lg" data-icon="timer">timer</span>
+                    Start Focus Session
+                </button>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-all duration-300 font-label-caps text-[11px] tracking-widest" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help">help</span> SUPPORT
+                    </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-all duration-300 font-label-caps text-[11px] tracking-widest" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="logout">logout</span> SIGN OUT
+                    </a>
+</nav>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto p-margin-desktop bg-background relative">
+<!-- Background Decorative Shader -->
+<div class="absolute top-0 right-0 w-1/2 h-1/2 opacity-20 pointer-events-none">
+
+</div>
+<div class="max-w-6xl mx-auto grid grid-cols-12 gap-gutter relative z-10">
+<!-- Header Section -->
+<div class="col-span-12 mb-unit reveal-anim" style="animation-delay: 0.1s;">
+<h1 class="text-display-lg font-display-lg text-on-surface">Focus Command</h1>
+<p class="text-on-surface-variant text-body-lg max-w-2xl mt-2">Optimize your academic performance. You are currently in the Top 5% of active students today.</p>
+</div>
+<!-- Central Focus Timer (Large) -->
+<div class="col-span-12 lg:col-span-8 reveal-anim" style="animation-delay: 0.2s;">
+<div class="momentum-card h-[400px] rounded-xl flex flex-col items-center justify-center overflow-hidden">
+<!-- Background pulse effect -->
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent"></div>
+<span class="text-label-caps font-label-caps text-primary tracking-[0.3em] mb-4">SESSION ACTIVE</span>
+<div class="text-[120px] font-stats-md leading-none tabular-nums text-on-surface tracking-tighter" id="timer-display">
+                            00:42:18
+                        </div>
+<div class="mt-12 flex gap-4">
+<button class="bg-primary text-on-primary px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:scale-105 active:scale-95 transition-all duration-300 ease-out-expo" id="timer-toggle">
+<span class="material-symbols-outlined" data-icon="pause">pause</span> PAUSE SESSION
+                            </button>
+<button class="border border-white/10 hover:border-white/20 px-10 py-4 rounded-xl font-bold text-on-surface-variant hover:text-on-surface transition-all duration-300">
+                                RESET
+                            </button>
+</div>
+<!-- Mini progress bar -->
+<div class="absolute bottom-0 left-0 h-1 bg-primary w-[68%] transition-all duration-1000 ease-out"></div>
+</div>
+</div>
+<!-- Stats Panel (Offset/Asymmetric) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter reveal-anim" style="animation-delay: 0.3s;">
+<div class="momentum-card flex-1 rounded-xl p-8 flex flex-col justify-between">
+<div>
+<span class="text-label-caps font-label-caps text-on-surface-variant tracking-widest">GLOBAL PERFORMANCE</span>
+<div class="mt-6">
+<div class="text-[56px] font-stats-md text-on-surface leading-none tabular-nums" id="total-focus-stat">42<span class="text-headline-md font-headline-md text-on-surface-variant ml-2">h</span></div>
+<div class="text-body-sm text-secondary-fixed-dim mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span> +4.2h from last week
+                                </div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-8 pt-8 border-t border-white/5">
+<div>
+<div class="text-label-caps font-label-caps text-on-surface-variant text-[10px]">STREAK</div>
+<div class="text-stats-md font-stats-md text-on-surface">14 DAYS</div>
+</div>
+<div>
+<div class="text-label-caps font-label-caps text-on-surface-variant text-[10px]">RANK</div>
+<div class="text-stats-md font-stats-md text-on-surface">PLATINUM</div>
+</div>
+</div>
+</div>
+<div class="momentum-card h-32 rounded-xl p-6 flex items-center justify-between group cursor-pointer hover:border-primary/40 transition-all duration-500">
+<div>
+<div class="text-label-caps font-label-caps text-on-surface-variant">NEXT MILESTONE</div>
+<div class="text-body-lg font-semibold mt-1">Advanced Algorithm Design</div>
+</div>
+<div class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Task Cards Section -->
+<div class="col-span-12 mt-unit">
+<div class="flex justify-between items-end mb-6 reveal-anim" style="animation-delay: 0.4s;">
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Deep Work Queue</h2>
+<button class="text-primary text-label-caps font-label-caps tracking-widest hover:underline">VIEW ALL TASKS</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Task Card 1 -->
+<div class="momentum-card p-6 rounded-xl reveal-anim" style="animation-delay: 0.5s;">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded text-[10px] font-bold tracking-widest">ACADEMIC</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-on-surface" data-icon="more_vert">more_vert</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Discrete Math Set #4</h3>
+<p class="text-on-surface-variant text-body-sm mb-6">Complexity Analysis &amp; Probability Theorems. Requires 3 Focus blocks.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-surface-variant"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-surface-container-high"></div>
+</div>
+<span class="text-label-caps font-label-caps text-on-surface-variant">EST: 2.5H</span>
+</div>
+</div>
+<!-- Task Card 2 -->
+<div class="momentum-card p-6 rounded-xl reveal-anim" style="animation-delay: 0.6s;">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-tertiary/10 text-tertiary px-3 py-1 rounded text-[10px] font-bold tracking-widest">RESEARCH</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-on-surface" data-icon="more_vert">more_vert</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">AI Ethics Case Study</h3>
+<p class="text-on-surface-variant text-body-sm mb-6">Reviewing foundational papers on bias in LLM architectures.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span>
+<span class="text-[10px] font-bold text-on-surface-variant">COMPLETED</span>
+</div>
+<span class="text-label-caps font-label-caps text-on-surface-variant">DONE</span>
+</div>
+</div>
+<!-- Task Card 3 -->
+<div class="momentum-card p-6 rounded-xl reveal-anim" style="animation-delay: 0.7s;">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-on-secondary-container/10 text-secondary px-3 py-1 rounded text-[10px] font-bold tracking-widest">PROJECT</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-on-surface" data-icon="more_vert">more_vert</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Momentum UI Kit</h3>
+<p class="text-on-surface-variant text-body-sm mb-6">Refining the 1px gradient borders and focus timer interaction patterns.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-primary/40"></div>
+</div>
+<span class="text-label-caps font-label-caps text-on-surface-variant">EST: 4.0H</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Area (Shared Logic) -->
+<footer class="mt-section-gap-v flex flex-col md:flex-row justify-between items-center w-full py-8 border-t border-white/5 reveal-anim" style="animation-delay: 0.8s;">
+<div class="text-label-caps font-label-caps text-on-surface mb-4 md:mb-0">MOMENTUM</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant text-center md:text-left opacity-80">© 2024 Momentum Productivity. Engineered for Performance.</div>
+<div class="flex gap-gutter mt-4 md:mt-0">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label-caps" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label-caps" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label-caps" href="#">Changelog</a>
+</div>
+</footer>
+</main>
+</div>
+<script>
+        // Micro-interactions and Timer logic
+        let seconds = 2538; // Initial state 00:42:18
+        let isRunning = true;
+        const timerDisplay = document.getElementById('timer-display');
+        const timerToggle = document.getElementById('timer-toggle');
+
+        function formatTime(sec) {
+            const h = Math.floor(sec / 3600);
+            const m = Math.floor((sec % 3600) / 60);
+            const s = sec % 60;
+            return [h, m, s].map(v => v < 10 ? "0" + v : v).join(":");
+        }
+
+        setInterval(() => {
+            if (isRunning) {
+                seconds++;
+                timerDisplay.textContent = formatTime(seconds);
+            }
+        }, 1000);
+
+        timerToggle.addEventListener('click', () => {
+            isRunning = !isRunning;
+            const icon = timerToggle.querySelector('.material-symbols-outlined');
+            icon.textContent = isRunning ? 'pause' : 'play_arrow';
+            timerToggle.innerHTML = `<span class="material-symbols-outlined" data-icon="${isRunning ? 'pause' : 'play_arrow'}">${isRunning ? 'pause' : 'play_arrow'}</span> ${isRunning ? 'PAUSE SESSION' : 'RESUME SESSION'}`;
+            
+            // Flash effect on state change
+            const timerCard = timerDisplay.parentElement;
+            timerCard.style.backgroundColor = 'rgba(0, 228, 117, 0.1)';
+            setTimeout(() => {
+                timerCard.style.backgroundColor = '#131318';
+                timerCard.style.transition = 'background-color 0.5s ease-out';
+            }, 300);
+        });
+
+        // Count-up stats animation simulation
+        function countUp(elementId, target, suffix) {
+            let current = 0;
+            const el = document.getElementById(elementId);
+            const interval = setInterval(() => {
+                if (current >= target) {
+                    clearInterval(interval);
+                } else {
+                    current++;
+                    el.innerHTML = `${current}<span class="text-headline-md font-headline-md text-on-surface-variant ml-2">${suffix}</span>`;
+                }
+            }, 20);
+        }
+
+        // Initialize animations on load
+        window.onload = () => {
+            countUp('total-focus-stat', 42, 'h');
+        };
+    </script>
+</body></html>

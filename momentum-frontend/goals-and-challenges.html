@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Goals | Momentum</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffdcc3",
+                    "surface-variant": "#33343b",
+                    "surface-container-low": "#1a1b21",
+                    "primary": "#c6bfff",
+                    "on-primary": "#2900a0",
+                    "error-container": "#93000a",
+                    "inverse-on-surface": "#2f3037",
+                    "on-tertiary-container": "#fff5f1",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "secondary-fixed-dim": "#00e475",
+                    "on-tertiary": "#4d2600",
+                    "secondary-container": "#05e777",
+                    "background": "#0D0E14",
+                    "on-background": "#e3e1ea",
+                    "tertiary-container": "#ac5d00",
+                    "on-surface-variant": "#c8c4d7",
+                    "on-secondary": "#003918",
+                    "surface-dim": "#121319",
+                    "surface-container-high": "#292a30",
+                    "primary-container": "#6c5ce7",
+                    "on-secondary-fixed-variant": "#005226",
+                    "outline-variant": "#474554",
+                    "surface-bright": "#383940",
+                    "on-primary-fixed-variant": "#4029ba",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-fixed": "#00210b",
+                    "surface-container-highest": "#33343b",
+                    "on-primary-container": "#faf6ff",
+                    "secondary": "#7dffa2",
+                    "on-secondary-container": "#00622e",
+                    "outline": "#928ea0",
+                    "inverse-surface": "#e3e1ea",
+                    "surface-container": "#1e1f26",
+                    "on-surface": "#e3e1ea",
+                    "inverse-primary": "#5847d2",
+                    "primary-fixed-dim": "#c6bfff",
+                    "surface-container-lowest": "#0d0e14",
+                    "on-tertiary-fixed": "#2f1500",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "on-error": "#690005",
+                    "surface": "#121319",
+                    "primary-fixed": "#e4dfff",
+                    "secondary-fixed": "#62ff96",
+                    "on-primary-fixed": "#160066",
+                    "tertiary": "#ffb77d",
+                    "surface-tint": "#c6bfff",
+                    "error": "#ffb4ab"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "section-gap-v": "80px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "stats-md": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0D0E14;
+            color: #e3e1ea;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .ease-out-expo {
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hairline-border {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-gradient-border {
+            position: relative;
+            background-clip: padding-box;
+            border: 1px solid transparent;
+        }
+        .card-gradient-border::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+            z-index: -1;
+            border-radius: inherit;
+        }
+
+        @keyframes count-up {
+            from { width: 0; }
+        }
+        .animate-progress {
+            animation: count-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .flash-success {
+            animation: flash 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes flash {
+            0% { border-color: transparent; box-shadow: 0 0 0 0 rgba(0, 228, 117, 0); }
+            30% { border-color: #00e475; box-shadow: 0 0 0 4px rgba(0, 228, 117, 0.2); }
+            100% { border-color: rgba(255, 255, 255, 0.08); box-shadow: 0 0 0 0 rgba(0, 228, 117, 0); }
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .checkmark-draw {
+            stroke-dasharray: 20;
+            stroke-dashoffset: 20;
+            animation: draw 0.4s ease-out forwards 0.2s;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+</head>
+<body class="font-body-lg text-body-lg selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shell: SideNav -->
+<aside class="flex flex-col fixed left-0 top-0 h-full py-8 px-4 h-screen w-64 border-r border-white/10 bg-surface dark:bg-surface z-40">
+<div class="mb-12 px-4">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface dark:text-on-surface block">Momentum</span>
+<span class="text-on-surface-variant font-label-caps text-label-caps opacity-60">HIGH PERFORMANCE</span>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:text-secondary hover:bg-surface-container-high transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-lg group" href="#">
+<span class="material-symbols-outlined group-active:scale-[0.98]">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:text-secondary hover:bg-surface-container-high transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-lg group" href="#">
+<span class="material-symbols-outlined group-active:scale-[0.98]">timer</span>
+<span>Focus</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:text-secondary hover:bg-surface-container-high transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-lg group" href="#">
+<span class="material-symbols-outlined group-active:scale-[0.98]">group</span>
+<span>Groups</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary font-bold border-r-2 border-secondary bg-surface-container-low transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group" href="#">
+<span class="material-symbols-outlined group-active:scale-[0.98]" style="font-variation-settings: 'FILL' 1;">ads_click</span>
+<span>Goals</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:text-secondary hover:bg-surface-container-high transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-lg group" href="#">
+<span class="material-symbols-outlined group-active:scale-[0.98]">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pt-8 border-t border-white/5">
+<button class="w-full py-3 bg-primary-container text-on-primary-container rounded-lg font-bold text-body-sm hover:opacity-90 active:scale-[0.98] transition-all ease-out-expo">
+                Start Focus Session
+            </button>
+</div>
+</aside>
+<!-- Shell: TopNav -->
+<header class="flex justify-between items-center h-16 px-margin-desktop sticky top-0 z-30 ml-64 w-[calc(100%-16rem)] bg-surface/80 backdrop-blur-md border-b border-white/10">
+<div class="flex items-center bg-surface-container rounded-full px-4 py-1.5 w-80 hairline-border">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm text-on-surface w-full placeholder:text-on-surface-variant/40" placeholder="Search targets..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors duration-200 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full border-2 border-background"></span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors duration-200">
+<span class="material-symbols-outlined">bolt</span>
+</button>
+<div class="flex items-center gap-3 pl-6 border-l border-white/10">
+<div class="text-right">
+<p class="text-label-caps font-bold leading-none">Level 42</p>
+<p class="text-[10px] text-secondary">Elite Student</p>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-highest hairline-border">
+<img class="w-full h-full object-cover" data-alt="A professional student profile avatar in a minimalist cinematic portrait style, with cool blue ambient lighting and a high-tech dark background. The lighting is precise, highlighting sharp features, fitting the Momentum high-performance productivity brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCK6tBG1twe9xil2FLtNVVH9EBCFINmyTGu6PHM6jG6HVe7DUmlJaT6t5zx1PfEMGwU0a-XmgtzMMzerGVmBtyImlFCOvgNSjdGW_9Es8DInZ1v7EapzBiOI3CafF55RBC9v---1Vv0fBcCIMcEGu_FwyWAEBJvun0PiJk1tkR4oHl7P72Jm-JYG-ZjCgkFnODQQ9drBLEyJ2GpLYMn8ex71jZAK-mCjuiCCx4Lmh72hCaZz9fyDxr6"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 p-margin-desktop min-h-screen">
+<!-- Header & Tabs -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Your Goals</h1>
+<p class="text-on-surface-variant opacity-60">Pushing the boundaries of academic velocity.</p>
+</div>
+<div class="flex bg-surface-container-lowest p-1 rounded-xl hairline-border">
+<button class="px-6 py-2 rounded-lg text-on-primary font-bold bg-primary-container text-body-sm ease-out-expo transition-all">All</button>
+<button class="px-6 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-medium text-body-sm ease-out-expo transition-all">Daily</button>
+<button class="px-6 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-medium text-body-sm ease-out-expo transition-all">Weekly</button>
+<button class="px-6 py-2 rounded-lg text-on-surface-variant hover:text-on-surface font-medium text-body-sm ease-out-expo transition-all">Monthly</button>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Goals List -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<!-- New Goal Placeholder -->
+<button class="w-full p-6 border-2 border-dashed border-white/10 rounded-2xl flex items-center justify-center gap-3 text-on-surface-variant hover:border-primary-container hover:text-primary-container transition-all ease-out-expo group">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-headline-md text-headline-md">New Goal</span>
+</button>
+<!-- Active Goal Rows -->
+<div class="space-y-4">
+<!-- Goal 1 -->
+<div class="hairline-border card-gradient-border bg-surface-container p-6 rounded-2xl hover:bg-surface-container-high transition-colors ease-out-expo group">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Study Quantum Mechanics</h3>
+<p class="text-body-sm text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                                    Due in 4 days • High Priority
+                                </p>
+</div>
+<div class="text-right">
+<span class="font-stats-md text-stats-md text-on-surface">20 <span class="text-on-surface-variant/40">/ 40 hours</span></span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex-1 h-3 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container animate-progress rounded-full" style="width: 50%;"></div>
+</div>
+<span class="font-stats-md text-stats-md text-secondary-fixed-dim">50%</span>
+</div>
+</div>
+<!-- Goal 2 -->
+<div class="hairline-border card-gradient-border bg-surface-container p-6 rounded-2xl hover:bg-surface-container-high transition-colors ease-out-expo group">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Neural Architecture Thesis</h3>
+<p class="text-body-sm text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[14px]">flag</span>
+                                    Monthly Goal • Chapter 3
+                                </p>
+</div>
+<div class="text-right">
+<span class="font-stats-md text-stats-md text-on-surface">12 <span class="text-on-surface-variant/40">/ 15 sections</span></span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex-1 h-3 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container animate-progress rounded-full" style="width: 80%;"></div>
+</div>
+<span class="font-stats-md text-stats-md text-secondary-fixed-dim">80%</span>
+</div>
+</div>
+<!-- Goal 3 -->
+<div class="hairline-border card-gradient-border bg-surface-container p-6 rounded-2xl hover:bg-surface-container-high transition-colors ease-out-expo group">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Mandarin Language Mastery</h3>
+<p class="text-body-sm text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[14px]">language</span>
+                                    HSK 4 Preparation
+                                </p>
+</div>
+<div class="text-right">
+<span class="font-stats-md text-stats-md text-on-surface">450 <span class="text-on-surface-variant/40">/ 1200 characters</span></span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex-1 h-3 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container animate-progress rounded-full" style="width: 37.5%;"></div>
+</div>
+<span class="font-stats-md text-stats-md text-secondary-fixed-dim">37.5%</span>
+</div>
+</div>
+</div>
+<!-- Completed Section -->
+<div class="pt-8 opacity-60">
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors mb-4" id="toggleCompleted">
+<span class="material-symbols-outlined transition-transform" id="chevronIcon">expand_more</span>
+<span class="font-label-caps">COMPLETED GOALS (14)</span>
+</button>
+<div class="hidden space-y-3" id="completedList">
+<div class="hairline-border bg-surface-container/50 p-4 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full border border-secondary flex items-center justify-center">
+<svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24">
+<path class="checkmark-draw" d="M20 6L9 17L4 12"></path>
+</svg>
+</div>
+<span class="font-medium text-on-surface-variant">Finish Advanced Calculus</span>
+</div>
+<span class="text-body-sm">Oct 12</span>
+</div>
+<div class="hairline-border bg-surface-container/50 p-4 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full border border-secondary flex items-center justify-center">
+<svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24">
+<path class="checkmark-draw" d="M20 6L9 17L4 12"></path>
+</svg>
+</div>
+<span class="font-medium text-on-surface-variant">Read 10 Research Papers</span>
+</div>
+<span class="text-body-sm">Oct 08</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Challenges Sidebar -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">military_tech</span>
+                        Active Challenges
+                    </h2>
+<div class="flex lg:flex-col overflow-x-auto lg:overflow-x-visible gap-gutter scrollbar-hide snap-x">
+<!-- Challenge Card 1 -->
+<div class="min-w-[300px] lg:min-w-0 snap-center hairline-border bg-surface-container p-6 rounded-2xl flex flex-col transition-all ease-out-expo challenge-card">
+<div class="flex justify-between items-start mb-6">
+<span class="bg-surface-container-highest text-secondary text-label-caps px-3 py-1 rounded-full border border-secondary/20">
+                                    2d remaining
+                                </span>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young male student in a dark room with green neon lighting, very focused face, 4k digital photography for a high-performance app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmjzVh8x79YOGU4g0w-VpuMN70tyGUMmQNXNfJspm-_RmgPsH7tui9vFqIPOIEYmYSBt8amL3VZ4k9QVV8h1GACHGBalrw87wmyNd2uvkhLupKOiLarHLrqhVUskOElX9Uxak5oz0DBKWk_A-xspI3If-16vzJlmsMxrKAFP7QZl5qNbR4d3x4rdKAdcXoGb5VSv7_Nfgps4e-wIriYTA-eRvffJxzD0S9J-oROdld519TCypycrbf"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young female student with glasses, backlit by a computer screen in a dimly lit minimalist studio, cinematic tech look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALfZhbclDnuxC7CP2vbVCKKVgjdhQSiuWcmUVMz48xqzvj1aKUExE-e72eufAXXIkHvXcifiHjO6t5PveJO0gEnbseatY6PkNq6aKqN2ztHLhWsaejkc7_SXOg96_GXU38A0QpYF7LAVdwVbej2zucB4HIL-jMkcLwFo5QFLh6bBgxc7xuhsvqoL1b-slixAxWXxGCHfHShj_XnsgLRVBdBiYsBklfkAODsGZGVDt9EwhNHj4KuRAV"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">
+                                        +42
+                                    </div>
+</div>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Neural Net Sprint</h4>
+<p class="text-body-sm text-on-surface-variant mb-6 flex-1">Complete 40 hours of Deep Learning studies this week.</p>
+<button class="join-challenge-btn w-full py-3 hairline-border hover:bg-white/5 rounded-xl text-on-surface font-bold text-body-sm transition-all ease-out-expo">
+                                Join Challenge
+                            </button>
+</div>
+<!-- Challenge Card 2 -->
+<div class="min-w-[300px] lg:min-w-0 snap-center hairline-border bg-surface-container p-6 rounded-2xl flex flex-col transition-all ease-out-expo challenge-card">
+<div class="flex justify-between items-start mb-6">
+<span class="bg-surface-container-highest text-primary text-label-caps px-3 py-1 rounded-full border border-primary/20">
+                                    5d remaining
+                                </span>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A futuristic student profile photo, minimalist lighting, dramatic shadows, glowing blue accents, high resolution studio portrait." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0gjgmfxZ7SSebx8x1LsDofYSodMvxah_-Elsfvz6Ddeg20WHQ-MXBmXQ16bexKlKaOPn20nVEnu9kf-s_3aqtnVvZ1D60iPHaKL9_aZij39f4z6QpKKmxuuNjgDw8m3XhkCvYPCLBsZm8qQyG_wPF0WxLji8VEWoG5sZNYRH-TV1q5-UkowgIBCzXWhkVbcqosiewo6V4i_nEEkeLIe_jBoDbaZ5McDqrwL5YPWx45us8DkZ4s1uT"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Cyberpunk aesthetic student portrait, orange and teal cinematic lighting, high-tech background with glowing data visualizations." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA31ATwat4KbAfeLr36wIpW1brMIWfXLe2U8bsO5WKnMa_oFTmz61rKAzh91pXhzXWVQIWfyGWWHFl6WPJG56lbBuAt5ZC8yoVjW1VchGJQrpvVFyWzuqxx1XXu_OTJ2U25Mx-F9CHY0m6JSJnAI28-H-GPIpqJuvo2z8GjUiY_suNeIJrf8frf9Zg6QCWkzJvpS5eGQ9bSlff7FI9MzUy5aEOKI0vPeU0swk--ELh98Lu4WNT3Z-HV"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">
+                                        +12
+                                    </div>
+</div>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Code Velocity</h4>
+<p class="text-body-sm text-on-surface-variant mb-6 flex-1">Reach 100 commits across your active projects.</p>
+<button class="join-challenge-btn w-full py-3 hairline-border hover:bg-white/5 rounded-xl text-on-surface font-bold text-body-sm transition-all ease-out-expo">
+                                Join Challenge
+                            </button>
+</div>
+</div>
+</div>
+<!-- Stats Summary -->
+<div class="hairline-border bg-surface-container-low p-6 rounded-2xl">
+<p class="text-label-caps text-on-surface-variant opacity-40 mb-4">SYSTEM UPTIME</p>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-surface-container rounded-xl hairline-border">
+<p class="text-secondary font-stats-md">84%</p>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-widest mt-1">Consistency</p>
+</div>
+<div class="p-4 bg-surface-container rounded-xl hairline-border">
+<p class="text-primary font-stats-md">12d</p>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-widest mt-1">Best Streak</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Toggle Completed Section
+        const toggleBtn = document.getElementById('toggleCompleted');
+        const completedList = document.getElementById('completedList');
+        const chevronIcon = document.getElementById('chevronIcon');
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = completedList.classList.contains('hidden');
+            if (isHidden) {
+                completedList.classList.remove('hidden');
+                chevronIcon.style.transform = 'rotate(180deg)';
+            } else {
+                completedList.classList.add('hidden');
+                chevronIcon.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Join Challenge Interaction
+        const joinButtons = document.querySelectorAll('.join-challenge-btn');
+        joinButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.challenge-card');
+                card.classList.add('flash-success');
+                this.innerHTML = '<span class="flex items-center justify-center gap-2"><span class="material-symbols-outlined text-secondary">check</span> Joined</span>';
+                this.classList.add('border-secondary', 'text-secondary');
+                
+                setTimeout(() => {
+                    card.classList.remove('flash-success');
+                }, 600);
+            });
+        });
+
+        // Micro-interaction for numbers (simulated)
+        document.querySelectorAll('.font-stats-md').forEach(stat => {
+            const finalVal = stat.innerText;
+            if (finalVal.includes('%') || finalVal.includes('h')) {
+                // Keep it simple for static feeling with CSS animations doing the heavy lifting
+            }
+        });
+    </script>
+</body></html>

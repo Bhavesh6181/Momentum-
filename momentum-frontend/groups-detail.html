@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quantum Physics II - Momentum</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ease-out-expo {
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .presence-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 230, 118, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
+        }
+        .glass-card {
+            background: #131318;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 50%);
+            pointer-events: none;
+        }
+        .tab-underline {
+            height: 2px;
+            bottom: -1px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .feed-flash {
+            animation: flash-settle 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes flash-settle {
+            0% { background-color: rgba(0, 230, 118, 0.2); }
+            100% { background-color: transparent; }
+        }
+        body {
+            background-color: #0A0A0D;
+            color: #e3e1ea;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline-variant": "#474554",
+                      "primary-fixed-dim": "#c6bfff",
+                      "error": "#ffb4ab",
+                      "on-secondary": "#003918",
+                      "on-surface-variant": "#c8c4d7",
+                      "on-secondary-container": "#00622e",
+                      "secondary-container": "#05e777",
+                      "on-surface": "#e3e1ea",
+                      "surface-tint": "#c6bfff",
+                      "on-secondary-fixed-variant": "#005226",
+                      "surface-variant": "#33343b",
+                      "surface-dim": "#121319",
+                      "tertiary": "#ffb77d",
+                      "primary-container": "#6c5ce7",
+                      "tertiary-fixed": "#ffdcc3",
+                      "primary": "#c6bfff",
+                      "surface-container-highest": "#33343b",
+                      "on-tertiary-fixed": "#2f1500",
+                      "on-primary-fixed-variant": "#4029ba",
+                      "on-tertiary-fixed-variant": "#6e3900",
+                      "surface-container": "#1e1f26",
+                      "surface-container-low": "#1a1b21",
+                      "on-error": "#690005",
+                      "secondary": "#7dffa2",
+                      "on-primary-container": "#faf6ff",
+                      "surface-container-lowest": "#0d0e14",
+                      "outline": "#928ea0",
+                      "inverse-surface": "#e3e1ea",
+                      "secondary-fixed": "#62ff96",
+                      "on-tertiary": "#4d2600",
+                      "tertiary-container": "#ac5d00",
+                      "primary-fixed": "#e4dfff",
+                      "background": "#121319",
+                      "on-primary-fixed": "#160066",
+                      "error-container": "#93000a",
+                      "surface": "#121319",
+                      "tertiary-fixed-dim": "#ffb77d",
+                      "surface-container-high": "#292a30",
+                      "on-secondary-fixed": "#00210b",
+                      "on-error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#00e475",
+                      "on-tertiary-container": "#fff5f1",
+                      "surface-bright": "#383940",
+                      "on-primary": "#2900a0",
+                      "on-background": "#e3e1ea",
+                      "inverse-primary": "#5847d2",
+                      "inverse-on-surface": "#2f3037",
+                      "signal-green": "#00E676"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "stats-md": ["JetBrains Mono"],
+                      "label-caps": ["Inter"],
+                      "body-lg": ["Inter"]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="min-h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-50 flex justify-between items-center px-gutter py-4 max-w-full border-b border-outline-variant bg-background/80 backdrop-blur-md">
+<div class="flex items-center gap-8">
+<span class="text-headline-md font-headline-md font-bold text-primary-fixed-dim">Momentum</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 ease-out-expo text-label-caps font-label-caps" href="#">OVERVIEW</a>
+<a class="text-primary border-b-2 border-primary pb-2 text-label-caps font-label-caps" href="#">ACTIVITY</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 ease-out-expo text-label-caps font-label-caps" href="#">LEADERBOARD</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300 ease-out-expo text-label-caps font-label-caps" href="#">CHALLENGES</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">settings</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a student for a high-end productivity app profile. Minimalist background, high-contrast lighting, monochromatic aesthetic with a subtle purple accent. The subject has a focused expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVZBmTHkl-GKTzna3Bq9OlnZ2yDKNKe1rdkLB9VbOzVavJINJ7EGl_7eIj-D42uCwipLFw85QKuqL4tURQI8r2gt0CfwKFB3jXngf9Lh2ZPHjF9FySCa_ioAM-4A3rLylqOAd4_X5aQfss4NGG7QtTL_5xTDNT8Y-K-9YSWR0_kjV1ziy6QOYQhlT4OVg8xSMRxV641lGWXxoPVqQ8XgNrIvFX9ZbMAjstWiD2J-Fjm4ifI6usG0zR"/>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-gutter py-section-gap-v">
+<!-- Group Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-0.5 bg-surface-container text-secondary text-[10px] font-bold tracking-widest uppercase border border-secondary/20 rounded">Private</span>
+<span class="text-on-surface-variant text-body-sm font-body-sm">15 Members</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Quantum Physics II</h1>
+<!-- Member Avatars Row -->
+<div class="flex items-center mt-6">
+<div class="flex -space-x-3 overflow-hidden">
+<!-- Active (Green) -->
+<div class="inline-block h-10 w-10 rounded-full ring-2 ring-signal-green presence-pulse bg-surface-container-low border-2 border-background">
+<img class="h-full w-full object-cover rounded-full" data-alt="Close up face of a male physics student with glasses, sharp lighting, moody dark background, momentum branding colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYGxhjoC3T4SeMkZu-r77trIMP-STtfp0oNkwUosbe5eWzIfiZvkZdjhEMh77E8y7qItMBXnILSvd98MNFudq60H6v59uind9ZomAn4fxYpFO7WI3vEeyn_oyh_YQif6YmCt5Et2ceZ8Ceqk69gn7pnNzjBlCU1aZhIxpjL8_yGOoSkpYeQxn6SYf4BzfmSB_e6fK92M2l0wQAW8JXVOhPyE_nP6S86CybGkc-Ph8wtPBMZK_MQdoR"/>
+</div>
+<div class="inline-block h-10 w-10 rounded-full ring-2 ring-signal-green presence-pulse bg-surface-container-low border-2 border-background">
+<img class="h-full w-full object-cover rounded-full" data-alt="Female researcher headshot, futuristic minimalist aesthetic, dark environment, soft green light reflecting on face." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkUkNrIdIwRetJP_Ch_4A5jGV2mXni_BIN5NeLEfeLJ0DMThmA6N8wp6OARbmWHih9j57yEorKSh6E8IR8Lr9m-veRC_wfDWDl9QtFo43rui3qHK7_UNsCH8mESc9tWKjY7_Zwr7Wm-ugo6eyoi4x2TdOP3CjlLlZZPnwIkH5cVRfoMpqS_sQ6yOna2FFegQL2r1UNCK-6kWZCX1on4UaDOXQ8-eDvXesRqO1F067Wu07LA8Nzbneb"/>
+</div>
+<div class="inline-block h-10 w-10 rounded-full ring-2 ring-signal-green presence-pulse bg-surface-container-low border-2 border-background">
+<img class="h-full w-full object-cover rounded-full" data-alt="Asian student portrait, high performance look, technical lighting, monochromatic indigo and black theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMtvg63M4kiTwYowSG_F7_6ORnp4VlXaBFxf-fK8yL5I4-Ipwdc3cX7ukAZRs-bI_yFI_C4EnSbELOTpcTEYTmBQM-39UqnzuoBh94079iLd-Zj5D-4GGKm92d2GuL21ef-z6muBxzpxjBojCUKzvM_-9dxS9y6_lU9Ae3CYR8pI-aCgJBwohNLQ6-Sag96p71dQl-vfCH9vuwSBzbQHeMSX29NQ6rbMev0gJcda-UIPm8vl43o92q"/>
+</div>
+<div class="inline-block h-10 w-10 rounded-full ring-2 ring-signal-green presence-pulse bg-surface-container-low border-2 border-background">
+<img class="h-full w-full object-cover rounded-full" data-alt="Young professional student, sharp features, dramatic dark studio lighting, kinetic indigo accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvA9a9qyKMjoxjnQAAg1PqRtCYbQkcOPJrck8pfDGD9Zr3gt5zov-JinZWAW7CGV3ctpjiew2apNRNK0noEeT9BfqaearrgFxHFmKcpr9AjQzptWTJzxJGBra_il4AGE4UChuwrTEy3LsxBHV5q00s4QOibA6NZSxxqtW0Eiqyih5BCyQu2UsUgVSXll1AMfrvIEdS8dawIigsMNbM42MbWGXx5M8Cdos7lUN6BzFqca-S1ks17vVY"/>
+</div>
+<!-- Away (Amber) -->
+<div class="inline-block h-10 w-10 rounded-full ring-2 ring-tertiary bg-surface-container-low border-2 border-background">
+<img class="h-full w-full object-cover rounded-full" data-alt="Portrait of a student in a dark library, cinematic lighting, amber highlights on skin." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBplj9-ni2zz2i2SsaNBcqFnc0h_iCaF79gH9zdK0NFqtx1TqG-NW-4mWJ1W2I6yKCo1BZH7VdKJiY6aaiIsyhOS-6Wkj-2Y_wsEenvk4gaY4Noo_54PJZ49E_-N6rv8hR1ChoPk1rvXL_epQle2P6FwN7jDRb0FVoFQe5sPLXiJEoL2OsY404s3UxjEsIA6yq-kKE-sXHePpF1DNsZy5tgCZKglWmtS-r_N_gkfqbNF_2a2ZPsUdlT"/>
+</div>
+<div class="inline-block h-10 w-10 rounded-full ring-2 ring-tertiary bg-surface-container-low border-2 border-background">
+<img class="h-full w-full object-cover rounded-full" data-alt="Student looking away, focused yet tired, high precision digital art style, deep shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa7zFVt7-OS1WDRILner0EA8sJne5XTAPjOu_2mHoQueEKO0ij5dpjDBl4FlSdy3YNc3WorW0WucplDEyomeqwG3fK2aL9uzWcO8Wss1zqeh9ramgOad38USn-GI3-7UT-V19S4R2HlKktGBcpVjyGiK6i04WKyus0OePypXgORKhQvrXSSNLnsnFx38PR8j5bOG-te9wnP5EDxvcCLltfA-70xhZshjLB-u3Jq1AUCyukmZ6Y8OB_"/>
+</div>
+<!-- Offline (Gray) -->
+<div class="inline-block h-10 w-10 rounded-full ring-2 ring-outline-variant bg-surface-container-low border-2 border-background">
+<img class="h-full w-full object-cover rounded-full" data-alt="Minimalist avatar of a person, grayscale with deep black shadows, modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIEPa2SK8n4VKIscgwYuOFVSasdVS6D2DyZTWoOTYa6_95u_Ogebwb_Gzmum7m9gZhznWkp89guXAl7BzYsmKwTxaHZNwEZOomhXX4IqxbP73d7lyyEoQewOv6YfUJAFUnQPHkyjMwqt6ImJWqLnB3cCs1lr7I-EgLH0jN4REDHZX6AiUJwgCj_KtOJ_5hDs0v1tN7UBo6iCaI_GBRzxP0lt1LpdBWayISAiuDp37DmJcoQg7gjuEP"/>
+</div>
+<div class="inline-block h-10 w-10 rounded-full ring-2 ring-outline-variant bg-surface-container-low border-2 border-background">
+<img class="h-full w-full object-cover rounded-full" data-alt="Student silhouette against a dark monitor glow, technical atmosphere, minimalist composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0QlzcHuM5kmZrTqTg3WW8I4UP2QEJJjej3xZxY7O-KzRaqgBRlJH0rxcXUY8znsvkNgmYU2eUKcCNIDOEcA2ZsMJ6BKKmKKLRozZyQdMiqfnR9GJUq_WmLlsXuu00p29nP5WG8D4l2dJ-o23-0F_lWU2f6dzSAAnqbKvB28lb09-ijeq_hu5bNYDds0MstWizqW-hHkEhdw_jnLH_lYWlgDHw_6xTJE19QP_TO4HxCgjxbF1ymntG"/>
+</div>
+</div>
+<button class="ml-6 flex items-center gap-2 px-4 py-2 border border-primary-container text-primary-container hover:bg-primary-container/10 rounded-lg transition-all active:scale-95 text-label-caps font-label-caps">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+                        INVITE
+                    </button>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="text-right">
+<p class="text-label-caps font-label-caps text-on-surface-variant mb-1">CURRENTLY STUDYING</p>
+<p class="text-stats-md font-stats-md text-secondary">04</p>
+</div>
+</div>
+</div>
+<!-- Custom Tabs -->
+<div class="relative border-b border-outline-variant mb-10 overflow-x-auto scrollbar-hide">
+<div class="flex gap-10 min-w-max" id="tab-container">
+<button class="tab-trigger relative py-4 text-label-caps font-label-caps text-on-surface transition-colors" data-tab="overview">OVERVIEW</button>
+<button class="tab-trigger relative py-4 text-label-caps font-label-caps text-on-surface-variant hover:text-on-surface transition-colors" data-tab="activity">ACTIVITY</button>
+<button class="tab-trigger relative py-4 text-label-caps font-label-caps text-on-surface-variant hover:text-on-surface transition-colors" data-tab="leaderboard">LEADERBOARD</button>
+<button class="tab-trigger relative py-4 text-label-caps font-label-caps text-on-surface-variant hover:text-on-surface transition-colors" data-tab="challenges">CHALLENGES</button>
+<button class="tab-trigger relative py-4 text-label-caps font-label-caps text-on-surface-variant hover:text-on-surface transition-colors" data-tab="settings">SETTINGS</button>
+</div>
+<div class="absolute bottom-0 h-[2px] bg-primary tab-underline" id="tab-indicator"></div>
+</div>
+<!-- Content Sections -->
+<div id="tab-content-container">
+<!-- OVERVIEW CONTENT -->
+<section class="tab-panel grid grid-cols-1 md:grid-cols-12 gap-6" id="content-overview">
+<!-- Card 1: Leaderboard Preview -->
+<div class="md:col-span-4 glass-card p-6 rounded-xl">
+<h3 class="text-label-caps font-label-caps text-on-surface-variant mb-6">TOP PERFORMERS</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-stats-md font-stats-md text-on-surface-variant">01</span>
+<div class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a top-performing physics student, intense focus, dramatic lighting, momentum brand colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCY5zhOsnmi54OLNq2J36mcCN-STyYZQ2KOH1Ptcm3By3gY_ogM4nmMYfI02RY8EBj0IVBoLhKrDROtbJE00xg0zDyogtxKtMk-CVBydhfOghLqWjQiFcebbKTrDBv7HJYyfAPiaAesW8jQzBZLW41a2hcphXtzx0Mk8OtHn6ykqs-0r25dUZt5MEKcfHGQvivE-9NHNCxsU7suc2kmsyu3bHw5jFbUDXX88O85AHpnfKvfW3VQzro"/>
+</div>
+<span class="text-body-lg font-body-lg text-on-surface">Alex R.</span>
+</div>
+<span class="text-stats-md font-stats-md text-primary">42.5h</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-stats-md font-stats-md text-on-surface-variant">02</span>
+<div class="w-10 h-10 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up face of a female science student, dark studio lighting, high precision technical aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClgEUpvHR-onBxE3JAF8Y74GL8O-e8I5ucKCJvNKOBQyB27Ek3Nudd1gRxMj6EiAcI9I4e7GdsqY65wAY9HuzdBKnD0uFqwq7JUz3qqyi29B9u15VUfJaeT-_fyJgucEU3Uvgx1QFFLZ60piyKWVbD3qUJitrqUgSybN3bcP_to5d1LIzm3WeQbd0UUzun_CcjaoxBk1ajquWpDkP2XeFUjkB1wNRJ0SccsFIjiKdi5RoxqXcWe_Ka"/>
+</div>
+<span class="text-body-lg font-body-lg text-on-surface">Sarah K.</span>
+</div>
+<span class="text-stats-md font-stats-md text-primary">38.2h</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-stats-md font-stats-md text-on-surface-variant">03</span>
+<div class="w-10 h-10 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Minimalist headshot of a focused male student, cold lighting, modern productivity app style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiNJqEfsyqHD95RGX4gaecSQR2e3XQd717Jp4ZT_GueRsX8aYGf8KNQhbfV5dND0CS4viWg02BvWOrlyWCpB4tAZjvWoXPkyRBOQ6aoA8utvxFW1ZU5fqyRFMwGt9VDhh-BYJAkWpnntsRySTB0qtkqVrr6Y-LEzXm-2hOKQhBksy8eX7gXcf3aZGjhDr5gSup031SNkTER-ZxkHgz0_k9iXXk7iTPePsMF9s09GsmR3KCBSq-eyVi"/>
+</div>
+<span class="text-body-lg font-body-lg text-on-surface">Leo M.</span>
+</div>
+<span class="text-stats-md font-stats-md text-primary">35.9h</span>
+</div>
+</div>
+<button class="w-full mt-8 py-3 text-label-caps font-label-caps text-on-surface-variant border border-outline-variant rounded hover:bg-surface-variant transition-colors">VIEW ALL RANKINGS</button>
+</div>
+<!-- Card 2: Weekly Hours Chart -->
+<div class="md:col-span-8 glass-card p-6 rounded-xl">
+<div class="flex justify-between items-center mb-10">
+<h3 class="text-label-caps font-label-caps text-on-surface-variant">GROUP WEEKLY HOURS</h3>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-signal-green"></span>
+<span class="text-[10px] font-bold text-on-surface-variant tracking-wider uppercase">Today Active</span>
+</div>
+</div>
+<div class="flex items-end justify-between h-48 gap-4 px-4">
+<div class="flex flex-col items-center flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[40%] group-hover:bg-primary/40 transition-colors"></div>
+<span class="mt-4 text-label-caps font-label-caps text-on-surface-variant opacity-50">MON</span>
+</div>
+<div class="flex flex-col items-center flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[65%] group-hover:bg-primary/40 transition-colors"></div>
+<span class="mt-4 text-label-caps font-label-caps text-on-surface-variant opacity-50">TUE</span>
+</div>
+<div class="flex flex-col items-center flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[55%] group-hover:bg-primary/40 transition-colors"></div>
+<span class="mt-4 text-label-caps font-label-caps text-on-surface-variant opacity-50">WED</span>
+</div>
+<div class="flex flex-col items-center flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[85%] group-hover:bg-primary/40 transition-colors"></div>
+<span class="mt-4 text-label-caps font-label-caps text-on-surface-variant opacity-50">THU</span>
+</div>
+<div class="flex flex-col items-center flex-1 group">
+<div class="w-full bg-primary/20 rounded-t-sm h-[70%] group-hover:bg-primary/40 transition-colors"></div>
+<span class="mt-4 text-label-caps font-label-caps text-on-surface-variant opacity-50">FRI</span>
+</div>
+<div class="flex flex-col items-center flex-1 group relative">
+<div class="w-full bg-primary/20 rounded-t-sm h-[95%]">
+<div class="w-full h-2 bg-signal-green absolute top-0 left-0 rounded-t-sm shadow-[0_0_10px_rgba(0,230,118,0.5)]"></div>
+</div>
+<span class="mt-4 text-label-caps font-label-caps text-on-surface">SAT</span>
+</div>
+<div class="flex flex-col items-center flex-1 group">
+<div class="w-full bg-surface-container-highest rounded-t-sm h-[30%]"></div>
+<span class="mt-4 text-label-caps font-label-caps text-on-surface-variant opacity-50">SUN</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Member Status Grid -->
+<div class="md:col-span-12 glass-card p-6 rounded-xl">
+<h3 class="text-label-caps font-label-caps text-on-surface-variant mb-8">REAL-TIME STATUS</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low border border-outline-variant/30 hover:border-primary/30 transition-all group">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Student avatar for UI status grid, dark cinematic lighting, high-tech academic feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvDRy2Bw6s5lqwcZg-438snGmKVoZztx28gkVL3YSQDsUgIdFwsNWFVgR0ppg3QGPnVCkVq18m-OCDG86YDdrrkt4BRsonwMSVmjx7S6PXzmRSDYtK5ttx6cQAXd2qgTEfu_qMs7yApdZUjBSEq7CQaY6N-FwOaWdmayLoBHSNo8ctybtnqBgVSC5fR03SHHAOCyA6Ldegqp0bcDSvqgNNIma7rkVD38UzhrFEv6yJ85e56DT47_j5"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-signal-green border-2 border-background rounded-full"></span>
+</div>
+<div>
+<p class="text-body-lg font-body-lg text-on-surface">James W.</p>
+<p class="text-[10px] font-bold text-signal-green tracking-widest uppercase">Studying</p>
+<p class="text-[11px] text-on-surface-variant mt-1">12.5h this week</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low border border-outline-variant/30">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Female student profile picture, dark and Moody science aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjLcJn4tF4Qz3-DBQ5ZES8zp2Z_WsWwgr7STjL__d5vY0Tu6lWBRh4Doe_NvcrcEO2ogI9fhbONvVVFe0q16LtR0bU7gOK_yydFD-tO4w8wFBPp1gI97e5bWsK6jsiMZaQfV33hlPq9iA1Vq5RPJs4M0Je8fAgO8qYM0FSKAeiciImHwZ0mIxuyjuBLl_lFnk3_84lvglMWnn5_LAEMOsx9VxmFRaa01gXLTUFCpQE_KIjNvOVxW5j"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-signal-green border-2 border-background rounded-full"></span>
+</div>
+<div>
+<p class="text-body-lg font-body-lg text-on-surface">Clara T.</p>
+<p class="text-[10px] font-bold text-signal-green tracking-widest uppercase">Studying</p>
+<p class="text-[11px] text-on-surface-variant mt-1">8.2h this week</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low border border-outline-variant/30 opacity-60">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Focused student avatar, minimalist dark theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYIzeGy5xIp6YdtWrP00I63w6TMEdTk7OKxmyQphYtKE_oGFuRDVBHw1AZKZFHQ6PkKFTPAvmMpBBC-dr4W5lMxzKIkraMcOi-7GV4atPD5UMGpUansJJtDxiqKMyDSidZJg8ozzyxmvhTgO7nhBywVncIE3pnAZ0sXRIenhgkyKqGAGbniYnsB4oMNPijwbRanmLH2-KagSu6298HLyMCdzqrG9F1V1o2hNEsJkEYO7xdSJgx3c1W"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-tertiary border-2 border-background rounded-full"></span>
+</div>
+<div>
+<p class="text-body-lg font-body-lg text-on-surface">Marcus V.</p>
+<p class="text-[10px] font-bold text-tertiary tracking-widest uppercase">Away</p>
+<p class="text-[11px] text-on-surface-variant mt-1">15.1h this week</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-low border border-outline-variant/30 opacity-60">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Student profile photo, high contrast lighting, black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCCVT8_qiZeJqBbmpgmLXgs_IuJTjz7HWjtASB28CNaw0ZDUZGePW9Fudd6GfFzpfBzK9cqWtN32vfnCcYVt87SHtCVXn1gpFasClU05_C5y3ZvZ2R6fyM4JIBXuvOqrHXo7RqTzZeLOPdAtTSrgik4w6TSOF2pZNvo-nP2SekFCCGkscLYChAOdvzwegtRdhrBrEdSgVRHnD3x0EE0AtYK6KkddWqVOBiW02j1x6Wo1E0QakbV2n5"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-outline border-2 border-background rounded-full"></span>
+</div>
+<div>
+<p class="text-body-lg font-body-lg text-on-surface">Evelyn N.</p>
+<p class="text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">Offline</p>
+<p class="text-[11px] text-on-surface-variant mt-1">6.4h this week</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ACTIVITY CONTENT -->
+<section class="tab-panel hidden" id="content-activity">
+<div class="max-w-3xl mx-auto space-y-2">
+<div class="flex gap-6 p-6 glass-card rounded-xl feed-flash mb-4">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full border border-signal-green p-0.5 overflow-hidden">
+<img class="w-full h-full rounded-full object-cover" data-alt="Profile of Alex R., momentum aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ4nz8M2fMcAEYcb_WxBQvvjLtxG42LHBjbWXZlZljz_sqCxi3FIfbeuT_HKodqj7Wpc2Omi7CBB9iZRfgNQjY1xMCb9vx79pcO-T9QUpnoGfURfL3_ChLcMSylPMVtCJxTvm_6ihqzs3tqHafD52499BeMj-yR-9tnqzWGvWILC9YRbPHD7ZRcK652ChabVA0aLjjgGMSe_0clskYvV3-h_yFVLagxEF5mUU_HbqtULCBkr8e-Vrr"/>
+</div>
+<div class="w-px h-full bg-outline-variant/30 mt-2"></div>
+</div>
+<div class="pb-8">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-body-lg font-headline-md text-on-surface">Alex R.</span>
+<span class="text-on-surface-variant text-body-sm">joined</span>
+<span class="text-primary font-bold text-body-sm uppercase tracking-wider">Focus Session</span>
+</div>
+<p class="text-body-sm text-on-surface-variant mb-3">Goal: Deriving Schrodinger equation variations</p>
+<span class="text-[10px] text-outline tracking-wider font-bold">JUST NOW</span>
+</div>
+</div>
+<div class="flex gap-6 p-6">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full rounded-full object-cover" data-alt="Profile of Sarah K." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7nEkbhJtP34zJWfHyMezXQH_Pnsfv_DmmrHplJPM3zbYlv1QXHaiZCTMU7Hjk6Mauzs2aX2i-nsqTRPj4lvRezC0SapErLhmdwKNH6FSW0kTAcK6u0EZLoAkNBeE-B9e_Beka1sFDWfcvX9yqAYSUfVsmiyaaO1mnJzqf-rVMZCNdK6yWmQ-3kRdMz9-MNDIuXIZKM006gA-in4IkvKoEmhlcUD4JppiVDs_zq9p1TIGYR4Q4gzD2"/>
+</div>
+<div class="w-px h-full bg-outline-variant/30 mt-2"></div>
+</div>
+<div class="pb-8">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-body-lg font-headline-md text-on-surface">Sarah K.</span>
+<span class="text-on-surface-variant text-body-sm">reached</span>
+<span class="text-signal-green font-bold text-body-sm uppercase tracking-wider">10h Goal</span>
+</div>
+<p class="text-body-sm text-on-surface-variant mb-3">Weekly target achieved 2 days early. High efficiency streak: 4 days.</p>
+<span class="text-[10px] text-outline tracking-wider font-bold">2 HOURS AGO</span>
+</div>
+</div>
+<div class="flex gap-6 p-6">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full rounded-full object-cover" data-alt="Profile of Leo M." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvzbHm7oEcNO-2xXGIhf9CiWF6u7EdZhZecDjVAbFuD7i9alCLRGH9ZYx7yJdQM8U0KbgT47KhKXvMtRcSzcuxUVTHhb0hsC8yrbSBAaUY_OzEueuNrW7qSX4OxDaqsnenawoLx2ri8lC9Pw7_AkmSAhIZp_fdk4wZ_ZhtUDhPgmLwvB89ATcrWOpDIbnbyE5bYLDiw3rGjWm_89BD-36i3HNuXuzFjSXS5ueGr8totX1GohNOT2Ma"/>
+</div>
+</div>
+<div class="pb-4">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-body-lg font-headline-md text-on-surface">Leo M.</span>
+<span class="text-on-surface-variant text-body-sm">uploaded</span>
+<span class="text-primary font-bold text-body-sm uppercase tracking-wider">Study Guide</span>
+</div>
+<p class="text-body-sm text-on-surface-variant mb-3">Chapter 4: Matrix Mechanics &amp; State Vectors.</p>
+<span class="text-[10px] text-outline tracking-wider font-bold">5 HOURS AGO</span>
+</div>
+</div>
+</div>
+</section>
+<!-- LEADERBOARD CONTENT -->
+<section class="tab-panel hidden max-w-4xl mx-auto" id="content-leaderboard">
+<div class="glass-card rounded-xl overflow-hidden">
+<div class="grid grid-cols-12 px-8 py-4 bg-surface-container-low border-b border-outline-variant text-label-caps font-label-caps text-on-surface-variant">
+<div class="col-span-1">RANK</div>
+<div class="col-span-6">MEMBER</div>
+<div class="col-span-3 text-center">STUDY TIME</div>
+<div class="col-span-2 text-right">TREND</div>
+</div>
+<div class="divide-y divide-outline-variant/30">
+<!-- Rank #1 -->
+<div class="grid grid-cols-12 px-8 py-6 items-center bg-primary/5 border-l-2 border-primary">
+<div class="col-span-1 text-stats-md font-stats-md text-primary">01</div>
+<div class="col-span-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border-2 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Top student avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ5Irxsr8aI-WwC3hjgsJshJZsj-06zxWYTPN-HusywyV-MaQvi2fJTK8qFUMeGBcLu9K7jjj6W5ftjSxRmHNoDXahjIQ0_wFGDW7599b53piIWmNHkkisjkbzwf7qEjeGxT10qouz_-lyFfvRATDXF7X5w8bKA6zCV7MDOequoxmyGa-NDBiN3ulEyKrLX5_GT3LKbv3sMVZmTqpMih89cNGiZ2YUXDf3ks3lrlCbiOlelPbvM2Dc"/>
+</div>
+<span class="text-body-lg font-headline-md text-on-surface">Alex R.</span>
+</div>
+<div class="col-span-3 text-center text-stats-md font-stats-md text-on-surface" data-count="425">0.0h</div>
+<div class="col-span-2 text-right flex items-center justify-end gap-1 text-signal-green">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+<span class="text-[11px] font-bold">2</span>
+</div>
+</div>
+<!-- Rank #2 -->
+<div class="grid grid-cols-12 px-8 py-6 items-center">
+<div class="col-span-1 text-stats-md font-stats-md text-on-surface-variant">02</div>
+<div class="col-span-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Second student avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF7wWEbK5-K8M22ysdI2BCl6bhzVQcKmtWOUKIQ9dW1YDc76hzETAEk3lYx8CLFtqZfZHTc1uOatA9jp_rJV4_5XfwI6499rW5kl0yN7e_roulkU2k7gO9cdk0ZIOChNVRIwOhcyFov-xdVE7nVHL_IJ-wLOy0BoMIApzJnGnBtgsjYdMUyEmNG4loIyrpv5CqR2jDsg0iB2KU27AAIArI0_enTS3qhrOp7LrdsrXtvYq-jQ3DnFAc"/>
+</div>
+<span class="text-body-lg font-headline-md text-on-surface">Sarah K.</span>
+</div>
+<div class="col-span-3 text-center text-stats-md font-stats-md text-on-surface" data-count="382">0.0h</div>
+<div class="col-span-2 text-right flex items-center justify-end gap-1 text-error">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+<span class="text-[11px] font-bold">1</span>
+</div>
+</div>
+<!-- Rank #3 -->
+<div class="grid grid-cols-12 px-8 py-6 items-center">
+<div class="col-span-1 text-stats-md font-stats-md text-on-surface-variant">03</div>
+<div class="col-span-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Third student avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDChiV4cjUE90Ge2YOFrX5diU_OPFSWRobUAhgcA1aBH4gUjRkIkyMNxAWckPNObL_Kq_JDf5UAtF7rKL-lB6Sa5COfQcjQspYOa0JeG-n2ycj6tsWGH8tpRj2Y1MERTVneK5SisTei6z7NGhxr0CecOtaZfNEc72ZFd_uCgJ_pFlPG2ohKsLly29nksBQFbLYhIvZqbBFO1WMnYmZC7CW1T3qkDKeV1rZ2mC5Mk5TrPvMXwQB409A1"/>
+</div>
+<span class="text-body-lg font-headline-md text-on-surface">Leo M.</span>
+</div>
+<div class="col-span-3 text-center text-stats-md font-stats-md text-on-surface" data-count="359">0.0h</div>
+<div class="col-span-2 text-right flex items-center justify-end gap-1 text-on-surface-variant opacity-40">
+<span class="material-symbols-outlined text-[16px]">horizontal_rule</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CHALLENGES CONTENT -->
+<section class="tab-panel hidden" id="content-challenges">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between h-[280px]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="text-[10px] font-bold text-primary tracking-widest uppercase bg-primary/10 px-2 py-1 rounded">Active Challenge</span>
+<span class="text-[10px] text-error font-bold tracking-widest uppercase">2 Days Left</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Finals Sprint</h3>
+<p class="text-body-sm text-on-surface-variant">Group goal: 500 total hours before end of semester.</p>
+</div>
+<div>
+<div class="flex justify-between text-[11px] font-bold text-on-surface mb-2">
+<span>80% COMPLETE</span>
+<span>400/500h</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary ease-out-expo duration-1000" style="width: 80%"></div>
+</div>
+</div>
+</div>
+<div class="glass-card p-6 rounded-xl border-dashed border-2 border-outline-variant flex flex-col items-center justify-center h-[280px] group cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500 ease-out-expo">
+<span class="material-symbols-outlined text-primary text-[32px]">add</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-1">Create Challenge</h3>
+<p class="text-body-sm text-on-surface-variant text-center px-8">Set a collective goal for the group to conquer.</p>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between h-[280px] relative">
+<!-- Background effect for upcoming -->
+<div class="absolute inset-0 bg-surface-container-low/40 backdrop-blur-[2px] z-10 flex items-center justify-center rounded-xl">
+<button class="bg-secondary text-on-secondary px-6 py-2.5 rounded-lg font-bold text-label-caps tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-secondary/20">JOIN UPCOMING</button>
+</div>
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="text-[10px] font-bold text-on-surface-variant tracking-widest uppercase bg-surface-container px-2 py-1 rounded">Starts Monday</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-2">Weekend Deep Work</h3>
+<p class="text-body-sm text-on-surface-variant">Focus on long-form derivation sessions without breaks.</p>
+</div>
+<div>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border border-background bg-surface-container"></div>
+<div class="w-8 h-8 rounded-full border border-background bg-surface-container"></div>
+<div class="w-8 h-8 rounded-full border border-background bg-surface-container"></div>
+<div class="w-8 h-8 rounded-full border border-background bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant">+6</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SETTINGS CONTENT -->
+<section class="tab-panel hidden max-w-4xl mx-auto space-y-12" id="content-settings">
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-6 border-b border-outline-variant pb-2">General Configuration</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between p-4 glass-card rounded-lg">
+<div>
+<p class="text-body-lg font-headline-md text-on-surface">Group Visibility</p>
+<p class="text-body-sm text-on-surface-variant">Private groups require invitations to join.</p>
+</div>
+<div class="w-12 h-6 bg-primary rounded-full relative flex items-center px-1">
+<div class="w-4 h-4 bg-white rounded-full absolute right-1"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 glass-card rounded-lg">
+<div>
+<p class="text-body-lg font-headline-md text-on-surface">Leaderboard Reset</p>
+<p class="text-body-sm text-on-surface-variant">Current: Weekly on Sunday 00:00 UTC</p>
+</div>
+<button class="text-primary-container font-bold text-[11px] tracking-widest uppercase">Change</button>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-6 border-b border-outline-variant pb-2">Member Management</h3>
+<div class="glass-card rounded-xl overflow-hidden">
+<div class="divide-y divide-outline-variant/30">
+<div class="flex items-center justify-between px-6 py-4 group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container"></div>
+<div>
+<p class="text-body-lg font-headline-md text-on-surface">James W.</p>
+<p class="text-body-sm text-on-surface-variant">Member since Sept 2023</p>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 px-4 py-2 text-error text-[10px] font-bold tracking-widest uppercase border border-error/20 hover:bg-error/10 rounded transition-all">Remove</button>
+</div>
+<div class="flex items-center justify-between px-6 py-4 group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container"></div>
+<div>
+<p class="text-body-lg font-headline-md text-on-surface">Clara T.</p>
+<p class="text-body-sm text-on-surface-variant">Member since Oct 2023</p>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 px-4 py-2 text-error text-[10px] font-bold tracking-widest uppercase border border-error/20 hover:bg-error/10 rounded transition-all">Remove</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 md:hidden bg-surface-container-lowest/90 backdrop-blur-xl border-t border-outline-variant shadow-lg">
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">dynamic_feed</span>
+<span class="text-label-caps font-label-caps">FEED</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary font-bold">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-label-caps font-label-caps">GROUPS</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span class="text-label-caps font-label-caps">RANK</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-label-caps font-label-caps">TASKS</span>
+</div>
+</nav>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-trigger');
+            const indicator = document.getElementById('tab-indicator');
+            const panels = document.querySelectorAll('.tab-panel');
+
+            function updateTab(targetTab) {
+                const trigger = document.querySelector(`[data-tab="${targetTab}"]`);
+                
+                // Update text colors
+                tabs.forEach(t => t.classList.replace('text-on-surface', 'text-on-surface-variant'));
+                trigger.classList.replace('text-on-surface-variant', 'text-on-surface');
+
+                // Update Indicator
+                indicator.style.width = `${trigger.offsetWidth}px`;
+                indicator.style.left = `${trigger.offsetLeft}px`;
+
+                // Update Visibility
+                panels.forEach(p => p.classList.add('hidden'));
+                const targetPanel = document.getElementById(`content-${targetTab}`);
+                targetPanel.classList.remove('hidden');
+
+                // Trigger specific tab logic
+                if (targetTab === 'leaderboard') {
+                    animateCounters();
+                }
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    const target = e.target.closest('button').dataset.tab;
+                    updateTab(target);
+                });
+            });
+
+            // Initial position
+            setTimeout(() => updateTab('overview'), 100);
+
+            // Counter Animation for Leaderboard
+            function animateCounters() {
+                const counters = document.querySelectorAll('[data-count]');
+                counters.forEach(counter => {
+                    const targetValue = parseInt(counter.dataset.count);
+                    let current = 0;
+                    const duration = 1500;
+                    const increment = targetValue / (duration / 16);
+                    
+                    const update = () => {
+                        current += increment;
+                        if (current < targetValue) {
+                            counter.innerText = (current / 10).toFixed(1) + 'h';
+                            requestAnimationFrame(update);
+                        } else {
+                            counter.innerText = (targetValue / 10).toFixed(1) + 'h';
+                        }
+                    };
+                    update();
+                });
+            }
+
+            // Simulated Feed Entry Animation
+            setInterval(() => {
+                const activePanel = document.getElementById('content-activity');
+                if (!activePanel.classList.contains('hidden')) {
+                    const firstItem = activePanel.querySelector('.feed-flash');
+                    if (firstItem) {
+                        firstItem.classList.remove('feed-flash');
+                        void firstItem.offsetWidth; // Trigger reflow
+                        firstItem.classList.add('feed-flash');
+                    }
+                }
+            }, 5000);
+        });
+    </script>
+</body></html>

@@ -1,5 +1,6 @@
 package com.momentum.backend.entity;
 
+import com.momentum.backend.enums.GroupMembershipStatus;
 import com.momentum.backend.enums.GroupRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,6 +40,11 @@ public class GroupMember {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private GroupRole role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private GroupMembershipStatus status = GroupMembershipStatus.ACTIVE;
 
     @CreationTimestamp
     @Column(name = "joined_at", nullable = false, updatable = false)

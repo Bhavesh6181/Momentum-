@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum | Focus Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.ease-out-expo {
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1)
+    }
+.grain-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDdzo6tB-6-KnA0Wl715ZgTLlTxsXDiqTUd_yHadTlNataXIaaMm5NZiEJ49feWG0ndz9AnJPISADfhKO1d0EO8RHDWUoK4x8pOqOEHWh4ZkXIp2NFsCkuklLDOn9ENYAcPetwLXEUmdo7imuDeafUgRa7bUatSUnxUtYgjYqvnwqFKLDhu4EIohUx5uF1mu8SKKZyQIXauRB03QQqgUGfPuOs_DZSQBH9KiPXNLJ4WsvuXA1CCMUG1);
+    opacity: 0.03;
+    pointer-events: none
+    }
+.timer-glow {
+    filter: blur(80px);
+    background: radial-gradient(circle, rgba(108, 92, 231, 0.15) 0%, rgba(10, 10, 13, 0) 70%);
+    animation: breath 8s ease-in-out infinite
+    }
+@keyframes breath {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.4;
+        } 50% {
+        transform: scale(1.1);
+        opacity: 0.6;
+        }
+    }
+.progress-ring__circle {
+    transition: stroke-dashoffset 0.35s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    stroke-linecap: round
+    }
+.presence-pulse {
+    animation: pulse-green 2s infinite
+    }
+@keyframes pulse-green {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.4);
+        } 70% {
+        box-shadow: 0 0 0 6px rgba(0, 255, 65, 0);
+        } 100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 65, 0);
+        }
+    }</style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#33343b",
+                        "secondary-fixed": "#62ff96",
+                        "on-primary-container": "#faf6ff",
+                        "surface-container-lowest": "#0d0e14",
+                        "secondary": "#7dffa2",
+                        "on-tertiary": "#4d2600",
+                        "on-surface-variant": "#c8c4d7",
+                        "on-primary-fixed-variant": "#4029ba",
+                        "error-container": "#93000a",
+                        "secondary-fixed-dim": "#00e475",
+                        "on-secondary-fixed-variant": "#005226",
+                        "primary-fixed": "#e4dfff",
+                        "outline-variant": "#474554",
+                        "inverse-surface": "#e3e1ea",
+                        "outline": "#928ea0",
+                        "inverse-on-surface": "#2f3037",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "on-primary": "#2900a0",
+                        "surface-container-high": "#292a30",
+                        "tertiary-fixed": "#ffdcc3",
+                        "background": "#0A0A0D",
+                        "surface": "#121319",
+                        "on-background": "#e3e1ea",
+                        "tertiary": "#ffb77d",
+                        "on-secondary": "#003918",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed": "#2f1500",
+                        "on-secondary-fixed": "#00210b",
+                        "secondary-container": "#05e777",
+                        "primary-fixed-dim": "#c6bfff",
+                        "on-tertiary-container": "#fff5f1",
+                        "surface-variant": "#33343b",
+                        "on-error": "#690005",
+                        "surface-container-low": "#1a1b21",
+                        "surface-tint": "#c6bfff",
+                        "surface-dim": "#121319",
+                        "primary-container": "#6c5ce7",
+                        "on-secondary-container": "#00622e",
+                        "inverse-primary": "#5847d2",
+                        "surface-container": "#1e1f26",
+                        "on-primary-fixed": "#160066",
+                        "tertiary-container": "#ac5d00",
+                        "on-surface": "#e3e1ea",
+                        "on-error-container": "#ffdad6",
+                        "surface-bright": "#383940",
+                        "primary": "#c6bfff",
+                        "on-tertiary-fixed-variant": "#6e3900"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "48px",
+                        "section-gap-v": "80px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "stats-md": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["96px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary-container selection:text-on-primary-container overflow-hidden h-screen flex flex-col font-body-lg">
+<!-- Grain Overlay -->
+<div class="fixed inset-0 grain-overlay z-50"></div>
+<!-- SideNavBar (from JSON, Active: Deep Work) -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 flex flex-col py-margin-desktop bg-surface-container-low border-r border-outline-variant shadow-sm hidden md:flex">
+<div class="px-6 mb-12 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-[18px]">bolt</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-secondary-fixed">Focus Mode</h2>
+<p class="text-on-surface-variant text-[10px] uppercase tracking-widest font-bold">Productive Session</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2 px-2">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed font-bold border-r-2 border-secondary-fixed hover:bg-surface-container-highest transition-all ease-out-expo hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">timer</span>
+<span class="font-body-lg text-body-lg">Deep Work</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-highest transition-all ease-out-expo hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-lg text-body-lg">Stats</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-highest transition-all ease-out-expo hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-lg text-body-lg">Friends</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-highest transition-all ease-out-expo hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">library_books</span>
+<span class="font-body-lg text-body-lg">Resources</span>
+</a>
+</nav>
+<div class="px-2 mt-auto">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-highest transition-all ease-out-expo" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-lg text-body-lg">Settings</span>
+</a>
+<div class="mt-4 px-4">
+<button class="w-full py-3 bg-error-container/20 border border-error-container/30 text-error hover:bg-error-container/30 rounded-lg text-label-caps font-label-caps transition-all duration-300">
+                    Exit Focus
+                </button>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col items-center justify-center relative md:ml-64 p-margin-mobile md:p-margin-desktop">
+<!-- Timer Ambient Background -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
+<div class="timer-glow w-[600px] h-[600px] rounded-full"></div>
+</div>
+<!-- Central Focus Section -->
+<div class="relative flex flex-col items-center text-center z-10">
+<!-- Subject Label -->
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-6 uppercase tracking-[0.2em] opacity-80">Quantum Physics II</span>
+<!-- Timer Display with Circular Progress -->
+<div class="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center">
+<!-- Progress Ring -->
+<svg class="absolute inset-0 w-full h-full">
+<circle class="md:r-[180] md:cx-[192] md:cy-[192]" cx="192" cy="192" fill="transparent" r="180" stroke="currentColor" stroke-width="1.5"></circle>
+<circle class="progress-ring__circle text-[#00FF41]" cx="192" cy="192" fill="transparent" id="progress-ring" r="180" stroke="currentColor" stroke-dasharray="1131" stroke-dashoffset="282" stroke-width="2"></circle>
+</svg>
+<!-- Timer Text -->
+<div class="flex flex-col items-center select-none">
+<h1 class="font-stats-md text-display-lg tabular-nums tracking-tighter text-on-surface drop-shadow-2xl">
+                        24:59
+                    </h1>
+</div>
+</div>
+<!-- Controls Row -->
+<div class="flex items-center gap-8 mt-12 px-8 py-4 bg-surface-container-lowest/50 rounded-full border border-white/5 backdrop-blur-md">
+<!-- Pause Button -->
+<button class="w-12 h-12 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors ease-out-expo group">
+<span class="material-symbols-outlined text-[28px] group-hover:scale-110 transition-transform">pause</span>
+</button>
+<!-- Status Pill -->
+<div class="relative flex items-center p-1 bg-surface-container-high rounded-full w-44 h-10 overflow-hidden cursor-pointer" onclick="toggleStatus(this)">
+<div class="absolute left-1 w-[86px] h-8 bg-primary-container rounded-full transition-all duration-500 ease-out-expo" id="status-indicator"></div>
+<div class="relative z-10 flex w-full justify-between text-[11px] font-label-caps uppercase px-4 font-bold">
+<span class="text-on-primary-container">Studying</span>
+<span class="text-on-surface-variant">Break</span>
+</div>
+</div>
+<!-- End Session (Text Button) -->
+<button class="text-label-caps font-label-caps text-on-surface-variant hover:text-error transition-colors px-2">
+                    End Session
+                </button>
+</div>
+</div>
+<!-- Social Accountability Strip (Bottom) -->
+<div class="absolute bottom-0 left-0 right-0 py-4 px-8 bg-surface-container-lowest/80 border-t border-outline-variant/30 backdrop-blur-xl flex items-center justify-between transform transition-transform duration-700 ease-out-expo translate-y-0" id="friends-strip">
+<div class="flex items-center gap-6">
+<span class="text-label-caps font-label-caps text-on-surface-variant uppercase tracking-widest text-[10px]">Friends studying now</span>
+<div class="flex -space-x-3">
+<div class="relative group">
+<img class="w-8 h-8 rounded-full border-2 border-background object-cover presence-pulse" data-alt="Close up profile portrait of a young student in a dark room with green monitor light reflections, cinematic high-end photography, ultra sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3dvAWLxfpvLT0atR7cBfc55vOMPefTcBrPJ67Q0brVjrd6pDRTtxITAxVnqCYP7pF55IX0NmfjsBgk8P4nLUoe7esVvlQyYBAPfuta1YOck9BftOkfbNmXNojkw8XH_hUtGHmjFednsOQKmEnVs80KtJ0fIuc5S-fSVWPNtjmSXcJMsLZQSEbm9inlqZDD4OrDaN2fjuVyV_ZFfWZd21XTVT_4sU3Fwxy3SlNeoHyZr6urk2po8BP"/>
+<div class="absolute -bottom-1 -right-1 w-3 h-3 bg-secondary-fixed rounded-full border-2 border-background"></div>
+</div>
+<div class="relative group">
+<img class="w-8 h-8 rounded-full border-2 border-background object-cover" data-alt="Portrait of a female student with glasses, dark aesthetic lighting with teal highlights, soft bokeh background of a library, highly detailed, realistic skin texture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcC6hTD_b0PzI94GsxIgBdv_mQC_NkxSTkHOmjKE4sulGzEln-UqhnF4AHK8kIDnV-v6GFOIx2LG1sRJ884mvbE9gUvvuQXTpngDaMPRwmaxgT6NueBkyv1dy3J8MyccweGsljjC5140eA7-2hY85dqO5otv8SKXMnVFf0S5QLz-6JlZ5OpV7F_OvU4kxQZ-cdgF91BP8PTHaNcIsMNyv_D15X61yU5GdhHUXM6Wpht21THTNbIEdA"/>
+<div class="absolute -bottom-1 -right-1 w-3 h-3 bg-secondary-fixed rounded-full border-2 border-background"></div>
+</div>
+<div class="relative group">
+<img class="w-8 h-8 rounded-full border-2 border-background object-cover" data-alt="Side profile of a person focusing on a digital interface, deep violet and blue ambient lighting, minimalist composition, professional digital art photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAohglYzN-gSViEjJfBUtrgkvXtvbMLs6isDmNPZC83CHxdFP0tAGxxSh4aETcnKhTZIKfZdX18Q0pwt5SvmVwL8pgtSGYmD4wHlqEE4sxgtKZQQ8GcEv9TPRIW8fFYJXkmpeu6WSjt6d6stQtw9i8yu12TFMoSWukuaN-ViCm8uLSogrMfqUYSDzzpoibekr8HW91xKVDvr9-BniId06c7hod9u17w_GGZgoOI6lKQ8EutrSbugJlL"/>
+<div class="absolute -bottom-1 -right-1 w-3 h-3 bg-secondary-fixed rounded-full border-2 border-background"></div>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface-variant">
+                        +12
+                    </div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end mr-4">
+<span class="text-[10px] font-label-caps text-secondary-fixed">8,421 users currently</span>
+<span class="text-[10px] font-label-caps text-on-surface-variant">Momentum Worldwide</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface" onclick="dismissFriends()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interactions and timer logic
+        function toggleStatus(el) {
+            const indicator = document.getElementById('status-indicator');
+            const labels = el.querySelectorAll('span');
+            
+            if (indicator.style.transform === 'translateX(82px)') {
+                indicator.style.transform = 'translateX(0)';
+                labels[0].classList.add('text-on-primary-container');
+                labels[0].classList.remove('text-on-surface-variant');
+                labels[1].classList.add('text-on-surface-variant');
+                labels[1].classList.remove('text-on-primary-container');
+            } else {
+                indicator.style.transform = 'translateX(82px)';
+                labels[1].classList.add('text-on-primary-container');
+                labels[1].classList.remove('text-on-surface-variant');
+                labels[0].classList.add('text-on-surface-variant');
+                labels[0].classList.remove('text-on-primary-container');
+            }
+        }
+
+        function dismissFriends() {
+            const strip = document.getElementById('friends-strip');
+            strip.classList.add('translate-y-full');
+        }
+
+        // Circular progress animation (demo logic)
+        let progress = 1131 * 0.25; // 75% filled
+        const ring = document.getElementById('progress-ring');
+        
+        // Soft animation for timer counting (visual only)
+        let timerSeconds = 1499;
+        const timerText = document.querySelector('h1');
+        
+        setInterval(() => {
+            if (timerSeconds > 0) {
+                timerSeconds--;
+                const mins = Math.floor(timerSeconds / 60);
+                const secs = timerSeconds % 60;
+                timerText.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                // Update ring (25 minute session)
+                const total = 25 * 60;
+                const offset = 1131 - ((timerSeconds / total) * 1131);
+                ring.style.strokeDashoffset = offset;
+            }
+        }, 1000);
+    </script>
+</body></html>

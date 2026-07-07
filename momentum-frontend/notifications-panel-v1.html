@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum Command Center - Notifications</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "secondary-container": "#05e777",
+                  "surface-variant": "#33343b",
+                  "primary": "#c6bfff",
+                  "surface": "#121319",
+                  "secondary": "#7dffa2",
+                  "on-secondary-fixed": "#00210b",
+                  "surface-dim": "#121319",
+                  "error-container": "#93000a",
+                  "background": "#121319",
+                  "tertiary-container": "#ac5d00",
+                  "outline": "#928ea0",
+                  "on-secondary-container": "#00622e",
+                  "on-background": "#e3e1ea",
+                  "error": "#ffb4ab",
+                  "inverse-on-surface": "#2f3037",
+                  "surface-container-lowest": "#0d0e14",
+                  "secondary-fixed-dim": "#00e475",
+                  "on-surface-variant": "#c8c4d7",
+                  "primary-fixed": "#e4dfff",
+                  "on-surface": "#e3e1ea",
+                  "inverse-primary": "#5847d2",
+                  "surface-container-highest": "#33343b",
+                  "tertiary-fixed-dim": "#ffb77d",
+                  "on-secondary-fixed-variant": "#005226",
+                  "surface-bright": "#383940",
+                  "primary-fixed-dim": "#c6bfff",
+                  "on-tertiary-container": "#fff5f1",
+                  "on-primary-fixed": "#160066",
+                  "surface-tint": "#c6bfff",
+                  "surface-container-low": "#1a1b21",
+                  "on-primary-fixed-variant": "#4029ba",
+                  "on-primary-container": "#faf6ff",
+                  "outline-variant": "#474554",
+                  "on-error": "#690005",
+                  "inverse-surface": "#e3e1ea",
+                  "tertiary": "#ffb77d",
+                  "secondary-fixed": "#62ff96",
+                  "on-tertiary-fixed-variant": "#6e3900",
+                  "surface-container": "#1e1f26",
+                  "on-tertiary": "#4d2600",
+                  "on-primary": "#2900a0",
+                  "primary-container": "#6c5ce7",
+                  "on-secondary": "#003918",
+                  "on-error-container": "#ffdad6",
+                  "tertiary-fixed": "#ffdcc3",
+                  "surface-container-high": "#292a30",
+                  "on-tertiary-fixed": "#2f1500"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {
+                  "margin-mobile": "16px",
+                  "unit": "8px",
+                  "margin-desktop": "48px",
+                  "gutter": "24px",
+                  "section-gap-v": "80px"
+          },
+          "fontFamily": {
+                  "display-lg": ["Inter"],
+                  "stats-md": ["JetBrains Mono"],
+                  "headline-md": ["Inter"],
+                  "body-sm": ["Inter"],
+                  "headline-lg": ["Inter"],
+                  "headline-lg-mobile": ["Inter"],
+                  "body-lg": ["Inter"],
+                  "label-caps": ["Inter"]
+          },
+          "fontSize": {
+                  "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                  "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}],
+                  "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                  "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                  "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                  "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #121319;
+      color: #e3e1ea;
+      overflow-x: hidden;
+    }
+    .ease-out-expo {
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .notification-shadow {
+      box-shadow: 0 10px 40px -10px rgba(108, 92, 231, 0.25), 0 24px 48px -12px rgba(0, 0, 0, 0.5);
+    }
+    .kinetic-border {
+      position: relative;
+      background: #131318;
+    }
+    .kinetic-border::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    @keyframes pulse-scale {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .animate-pulse-scale {
+      animation: pulse-scale 2s infinite ease-out-expo;
+    }
+    @keyframes slide-in-flash {
+      0% { transform: translateY(-10px); opacity: 0; background-color: rgba(0, 255, 163, 0.2); }
+      50% { background-color: rgba(0, 255, 163, 0.1); }
+      100% { transform: translateY(0); opacity: 1; background-color: rgba(108, 92, 231, 0.05); }
+    }
+    .animate-new-arrival {
+      animation: slide-in-flash 1s forwards cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-wash {
+      background: linear-gradient(to right, rgba(108, 92, 231, 0.05), transparent);
+    }
+  </style>
+</head>
+<body class="font-body-lg text-body-lg">
+<!-- Background Layer (Simulating Screen 10) -->
+<div class="fixed inset-0 z-0 opacity-20 pointer-events-none">
+
+</div>
+<div class="flex min-h-screen relative z-10">
+<!-- SideNavBar (Predicted from JSON) -->
+<aside class="fixed left-0 top-0 h-screen flex flex-col py-8 px-4 bg-surface-container-lowest border-r border-white/5 shadow-lg w-64 hidden md:flex">
+<div class="mb-10 px-3">
+<h1 class="font-headline-lg text-headline-lg font-black text-on-surface">Momentum</h1>
+<p class="text-body-sm text-outline">Academic Command</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-unit bg-secondary-container text-on-secondary-container rounded-xl p-3 font-body-lg text-body-lg" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center gap-unit text-on-surface-variant p-3 hover:bg-surface-bright transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-unit text-on-surface-variant p-3 hover:bg-surface-bright transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined">library_books</span>
+<span>Resources</span>
+</a>
+<a class="flex items-center gap-unit text-on-surface-variant p-3 hover:bg-surface-bright transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Mentors</span>
+</a>
+<a class="flex items-center gap-unit text-on-surface-variant p-3 hover:bg-surface-bright transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined">archive</span>
+<span>Archive</span>
+</a>
+</nav>
+<div class="mt-auto space-y-2 border-t border-white/5 pt-6">
+<button class="w-full bg-primary text-on-primary font-bold py-3 px-4 rounded-xl mb-4 hover:opacity-90 transition-opacity">
+          New Study Session
+        </button>
+<a class="flex items-center gap-unit text-on-surface-variant p-3 hover:bg-surface-bright transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Help</span>
+</a>
+<a class="flex items-center gap-unit text-on-surface-variant p-3 hover:bg-surface-bright transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 flex flex-col">
+<!-- TopNavBar (Predicted from JSON) -->
+<header class="bg-surface border-b border-white/5 shadow-sm flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-50">
+<div class="flex items-center gap-gutter">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-body-sm w-64 focus:ring-1 focus:ring-primary outline-none" placeholder="Search Command Center..." type="text"/>
+</div>
+<nav class="hidden lg:flex gap-gutter">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-headline-md text-headline-md" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-headline-md text-headline-md" href="#">Courses</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-headline-md text-headline-md" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-headline-md text-headline-md" href="#">Tasks</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<button class="bg-primary text-on-primary font-bold px-4 py-1.5 rounded-full text-body-sm hover:opacity-90 transition-opacity">Upgrade</button>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<!-- NOTIFICATION TRIGGER ICON -->
+<div class="relative cursor-pointer group">
+<span class="material-symbols-outlined hover:text-primary transition-colors">notifications</span>
+<!-- Numerical Badge with Pulse -->
+<div class="absolute -top-1 -right-1 w-4 h-4 bg-primary text-on-primary text-[10px] font-black flex items-center justify-center rounded-full border border-surface animate-pulse-scale">
+                2
+              </div>
+<!-- NOTIFICATION PANEL (Target of the Prompt) -->
+<div class="absolute right-0 top-10 w-[320px] kinetic-border rounded-xl notification-shadow z-50 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-2 origin-top-right">
+<!-- Panel Header -->
+<div class="px-4 py-3 flex justify-between items-center border-b border-white/5">
+<span class="font-headline-md text-headline-md text-on-surface">Notifications</span>
+<button class="text-label-caps font-label-caps text-primary hover:text-secondary transition-colors uppercase tracking-widest">Mark all read</button>
+</div>
+<!-- Notification List -->
+<div class="max-h-[400px] overflow-y-auto custom-scrollbar">
+<!-- Notification Item 1 (New Arrival/Unread) -->
+<div class="relative px-4 py-4 flex gap-3 glass-wash animate-new-arrival border-b border-white/5">
+<div class="absolute left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary text-[20px]">group</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<p class="text-body-sm leading-tight text-on-surface">
+<span class="font-bold">Marcus V.</span> just joined the 'Quantum Physics II' study room.
+                      </p>
+<span class="text-[11px] text-outline">2m ago</span>
+</div>
+</div>
+<!-- Notification Item 2 (Unread) -->
+<div class="relative px-4 py-4 flex gap-3 glass-wash border-b border-white/5">
+<div class="absolute left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary text-[20px]">bolt</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<p class="text-body-sm leading-tight text-on-surface">
+                        Daily goal reached! 4.5 hours of <span class="font-bold">Deep Work</span> completed.
+                      </p>
+<span class="text-[11px] text-outline">15m ago</span>
+</div>
+</div>
+<!-- Notification Item 3 (Read) -->
+<div class="relative px-4 py-4 flex gap-3 hover:bg-surface-bright/30 transition-colors border-b border-white/5">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-outline text-[20px]">star</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<p class="text-body-sm leading-tight text-on-surface-variant">
+                        You've moved up to Rank #42 on the Global Leaderboard.
+                      </p>
+<span class="text-[11px] text-outline">1h ago</span>
+</div>
+</div>
+<!-- Notification Item 4 (Read) -->
+<div class="relative px-4 py-4 flex gap-3 hover:bg-surface-bright/30 transition-colors">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-outline text-[20px]">settings</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<p class="text-body-sm leading-tight text-on-surface-variant">
+                        Weekly performance report is now available.
+                      </p>
+<span class="text-[11px] text-outline">4h ago</span>
+</div>
+</div>
+</div>
+<!-- Panel Footer -->
+<div class="px-4 py-2.5 bg-surface-container-low text-center border-t border-white/5">
+<a class="text-[11px] font-bold text-outline hover:text-primary transition-colors" href="#">VIEW ALL NOTIFICATIONS</a>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined hover:text-primary transition-colors cursor-pointer">settings</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10 cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a focused university student in their 20s, styled with high-contrast cinematic lighting. The portrait features a dark, minimalist background that blends into the Kinetic Dark theme. The overall aesthetic is high-performance, serious, and modern, using deep blacks and subtle highlights to create depth and focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWSANGQN8VIoZ6oiGyux53oc9s1aa-ckGYQrPJ-IlWJFvoOy5CPZmGdM91uQTgo3qch7lZge3K99Z8Jc_ryuicpXnFTYfwWdF3YlPJyKSDPb_R0-ReKMFbKsUYe6CGVleTnaWuo5n7M3P_eBvm2XqL0FQypryG4A_n0UTt4o65xMTbUUb9-imQb8_WP06YU3bFFWyK4jR9sqQJkXowob3nQ-kfqxjRlLuCoD2pwVY0UX1m0G9zjY_P"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Mock Content -->
+<section class="p-margin-desktop space-y-gutter">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Main Bento Card -->
+<div class="lg:col-span-8 h-[400px] kinetic-border rounded-xl p-8 overflow-hidden">
+<div class="flex justify-between items-start mb-10">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Welcome back, Alex.</h2>
+<p class="text-on-surface-variant">You are 82% of the way through your "Quantum Mechanics" sprint.</p>
+</div>
+<div class="flex gap-4">
+<div class="text-right">
+<p class="text-label-caps font-label-caps text-outline uppercase tracking-wider mb-1">Focus Streak</p>
+<p class="font-stats-md text-stats-md text-secondary">12 DAYS</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-gutter h-48">
+<div class="bg-surface-container rounded-xl border border-white/5 p-6 flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary">timer</span>
+<div>
+<p class="text-display-lg font-display-lg text-on-surface">4.5<span class="text-body-sm text-outline ml-1">h</span></p>
+<p class="text-body-sm text-outline">Deep Work Today</p>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl border border-white/5 p-6 flex flex-col justify-between">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<div>
+<p class="text-display-lg font-display-lg text-on-surface">18</p>
+<p class="text-body-sm text-outline">Tasks Completed</p>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl border border-white/5 p-6 flex flex-col justify-between overflow-hidden relative">
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]">auto_graph</span>
+</div>
+<span class="material-symbols-outlined text-tertiary">trending_up</span>
+<div>
+<p class="text-display-lg font-display-lg text-on-surface">+12%</p>
+<p class="text-body-sm text-outline">Vs. Last Week</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Bento Card -->
+<div class="lg:col-span-4 h-[400px] kinetic-border rounded-xl p-6 bg-surface-container-high/50 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Live Network</h3>
+<span class="flex items-center gap-2 text-[10px] text-secondary font-bold uppercase tracking-tighter">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                248 Online
+              </span>
+</div>
+<div class="flex-1 space-y-4">
+<div class="flex items-center gap-3 p-3 bg-surface rounded-lg border border-white/5">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A detailed portrait of a student, side profile, wearing minimalist headphones in a dark library setting with neon-tinted desk lamps. The visual style is monochromatic and moody, aligned with a high-end productivity app. Soft purple lighting highlights the contours of the face against the deep black surroundings." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-ICUqVkvcVgnz58XCwXPdCvvyC5K7n2Ifwz69lkF51h36bhpFrfbqUy7CfvmZy2vnO6qBmfrE4Ch1ZY4lYFSnpBHU8983bmk7WklT6JtL2dcgo8jo8V7tpSn28yFhzHxFdRv-afX0iqIODr0ygBPgQNssNyGSQwqr08Saa67y5ZLVX1ATWofWTbMUBq3ECbYafI84MFMY-2f5MigcpSd0GD3Q3nSSQuWm11lM4SRGs6FgEeYt4dRk"/>
+</div>
+<div class="flex-1">
+<p class="text-body-sm font-bold">Sarah Jenkins</p>
+<p class="text-[11px] text-outline">Studying 'Bio-Ethics'</p>
+</div>
+<button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-lg">chat_bubble</span></button>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface rounded-lg border border-white/5">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up of a focused male student studying at night, seen through a dark digital interface. Cinematic low-light photography with accent lighting in indigo. The image captures concentration and technical performance, fitting the high-achieving student persona of the Momentum brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkAyBgTe8ivUnlrQumXZJXkDyyiwk8SMwiulSTEDDazvSAS_67PKI2y7-awXypyVYeRQvxAyPF67OiQYWrXeon5y0POv8NGZ65K0OuRLd-o7X6IdpIx9qPnpPXxqUnPJWiSx_juT5xleby3BOpDXnEPCp6QwWiH22tj4pBsc9p6uGm1RsVc-hUveIF2RrZVQKcmWVBhU98HTq9xZzgXa9ylIXjAEnMR657s2725nSmSPrlYn37clmi"/>
+</div>
+<div class="flex-1">
+<p class="text-body-sm font-bold">David Chen</p>
+<p class="text-[11px] text-outline">Reviewing 'Linear Algebra'</p>
+</div>
+<button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-lg">chat_bubble</span></button>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface rounded-lg border border-white/5">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a diverse student in a modern tech-focused environment. Minimalist and professional composition, with the subject looking at a monitor off-camera. The lighting is sophisticated, emphasizing the high-performance tool-like aesthetic of the Momentum software platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDeW8so_nilu4mzKNVgyOWYWvjU-NDlWPyCVI8DIhPr0aEPc7qHvHUcLjCLYBQJtg_1-4XwyBmtUFlG0p9zVI-KXX24-bTXFzhxXaPSUys4XzlDvIOf_ypil6nyCWyog-c-VBhlInobWii0Ns2McSOTDk5raUK-od9sp-nTH1dVPlN9ssJN_EHqYNh-dVfd2klJWJUdLivVsHqXUwnlrXPGH_ukjp2jplYgQESG0YuW5MaZkkTS92Q"/>
+</div>
+<div class="flex-1">
+<p class="text-body-sm font-bold">Priya Patel</p>
+<p class="text-[11px] text-outline">In 'Global Law' Room</p>
+</div>
+<button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-lg">chat_bubble</span></button>
+</div>
+</div>
+<button class="mt-4 w-full py-3 border border-primary/20 rounded-xl text-primary text-body-sm font-bold hover:bg-primary/5 transition-colors">Join Global Study Hall</button>
+</div>
+</div>
+<!-- Secondary Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mt-8">
+<div class="kinetic-border rounded-xl p-6 h-64 bg-surface-container-low flex flex-col justify-between">
+<h4 class="text-label-caps font-label-caps text-outline uppercase">Active Projects</h4>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-body-sm mb-1">
+<span class="text-on-surface">Quantum Physics Thesis</span>
+<span class="text-secondary">85%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[85%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-body-sm mb-1">
+<span class="text-on-surface">Neural Networks Lab</span>
+<span class="text-primary">42%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[42%]"></div>
+</div>
+</div>
+</div>
+<a class="text-primary text-body-sm font-bold flex items-center gap-1" href="#">Open Project Planner <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+</div>
+<div class="kinetic-border rounded-xl p-6 h-64 bg-surface-container-low flex flex-col justify-between overflow-hidden relative">
+
+<div class="relative z-10">
+<h4 class="text-label-caps font-label-caps text-outline uppercase">Upcoming Sessions</h4>
+<div class="mt-4 space-y-3">
+<div class="flex items-center gap-3">
+<div class="w-1 bg-tertiary h-6"></div>
+<div>
+<p class="text-body-sm font-bold">14:00 - Thesis Review</p>
+<p class="text-[11px] text-outline">with Dr. Strauss</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-1 bg-primary h-6"></div>
+<div>
+<p class="text-body-sm font-bold">16:30 - Focus Block</p>
+<p class="text-[11px] text-outline">Momentum Study Group</p>
+</div>
+</div>
+</div>
+</div>
+<button class="relative z-10 text-on-surface font-bold text-body-sm flex items-center gap-2 bg-surface-bright px-4 py-2 rounded-lg border border-white/5 w-fit">
+<span class="material-symbols-outlined text-sm">calendar_today</span> View Calendar
+              </button>
+</div>
+<div class="kinetic-border rounded-xl p-6 h-64 bg-primary-container text-on-primary-container flex flex-col justify-between relative overflow-hidden group">
+<div class="absolute -right-10 -top-10 opacity-20 group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-[200px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h4 class="text-label-caps font-label-caps opacity-70 uppercase tracking-widest">Performance Insights</h4>
+<p class="font-headline-lg text-headline-lg mt-4 leading-tight">Your cognitive peak is between 9AM and 11AM.</p>
+</div>
+<p class="text-body-sm font-medium">Schedule your complex tasks for tomorrow morning to maximize output.</p>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Mobile Bottom Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container border-t border-white/5 flex justify-around items-center z-50">
+<a class="flex flex-col items-center text-primary" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center text-outline" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-[10px] font-bold">Data</span>
+</a>
+<a class="flex flex-col items-center text-outline" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-bold">Schedule</span>
+</a>
+<a class="flex flex-col items-center text-outline" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</a>
+</nav>
+<script>
+    // Logic for new arrival flash simulation
+    document.addEventListener('DOMContentLoaded', () => {
+      const bell = document.querySelector('.material-symbols-outlined.notifications');
+      const badge = document.querySelector('.animate-pulse-scale');
+      
+      // Simulate interaction for notification clearing
+      document.querySelector('button.uppercase').addEventListener('click', (e) => {
+        e.preventDefault();
+        const unreads = document.querySelectorAll('.glass-wash');
+        const dots = document.querySelectorAll('.bg-secondary.shadow-\\[0_0_8px_rgba\\(0\\,255\\,163\\,0\\.6\\)\\]');
+        
+        unreads.forEach(el => {
+          el.classList.remove('glass-wash', 'animate-new-arrival');
+          el.classList.add('hover:bg-surface-bright/30', 'transition-colors');
+        });
+
+        dots.forEach(dot => dot.remove());
+        badge.style.display = 'none';
+      });
+    });
+  </script>
+</body></html>

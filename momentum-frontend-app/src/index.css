@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0A0A0D;
+  --surface: #121319;
+  --surface-container-lowest: #0D0E14;
+  --surface-container-low: #1A1B21;
+  --surface-container: #1E1F26;
+  --primary-container: #6C5CE7;
+  --on-primary-container: #FAF6FF;
+  --signal-green: #00E676;
+  --on-surface-variant: #C8C4D7;
+  --outline: #928EA0;
+}
+
+@layer base {
+  html, body {
+    @apply bg-background text-on-background font-sans antialiased selection:bg-primary-container/30;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  .hairline-border {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .primary-card-gradient {
+    border: 1px solid transparent;
+    background: linear-gradient(#121319, #121319) padding-box,
+                linear-gradient(to bottom right, rgba(255, 255, 255, 0.12), transparent) border-box;
+  }
+
+  .glow-hairline {
+    box-shadow: 0 0 15px -5px rgba(198, 191, 255, 0.2);
+  }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(5, 231, 119, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(5, 231, 119, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(5, 231, 119, 0); }
+}
+
+@keyframes timer-breath {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.05); opacity: 0.6; }
+}
+
+@keyframes flash-settle {
+  0% { background-color: rgba(5, 231, 119, 0.3); transform: scale(1.02); }
+  100% { background-color: transparent; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.animate-timer-breath {
+  animation: timer-breath 8s infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.animate-flash-settle {
+  animation: flash-settle 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #121319 25%, #1e1f26 50%, #121319 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+.animate-ticker {
+  animation: ticker 25s linear infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}

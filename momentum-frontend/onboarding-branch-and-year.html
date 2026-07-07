@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum — Academic Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#c6bfff",
+                        "on-primary-fixed": "#160066",
+                        "background": "#121319",
+                        "surface-variant": "#33343b",
+                        "surface-bright": "#383940",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#e3e1ea",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-background": "#e3e1ea",
+                        "on-tertiary-fixed": "#2f1500",
+                        "primary": "#c6bfff",
+                        "surface": "#121319",
+                        "outline-variant": "#474554",
+                        "surface-container-lowest": "#0d0e14",
+                        "surface-container-highest": "#33343b",
+                        "surface-container-low": "#1a1b21",
+                        "surface-container": "#1e1f26",
+                        "tertiary": "#ffb77d",
+                        "on-primary-fixed-variant": "#4029ba",
+                        "inverse-on-surface": "#2f3037",
+                        "tertiary-fixed": "#ffdcc3",
+                        "primary-fixed-dim": "#c6bfff",
+                        "surface-container-high": "#292a30",
+                        "on-secondary": "#003918",
+                        "outline": "#928ea0",
+                        "on-error": "#690005",
+                        "on-surface-variant": "#c8c4d7",
+                        "on-secondary-container": "#00622e",
+                        "primary-container": "#6c5ce7",
+                        "surface-dim": "#121319",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "secondary-container": "#05e777",
+                        "on-tertiary": "#4d2600",
+                        "on-secondary-fixed-variant": "#005226",
+                        "inverse-primary": "#5847d2",
+                        "error": "#ffb4ab",
+                        "on-tertiary-container": "#fff5f1",
+                        "secondary-fixed-dim": "#00e475",
+                        "secondary": "#7dffa2",
+                        "tertiary-fixed": "#ffdcc3",
+                        "on-primary-container": "#faf6ff",
+                        "on-primary": "#2900a0",
+                        "primary-fixed": "#e4dfff",
+                        "on-secondary-fixed": "#00210b",
+                        "on-surface": "#e3e1ea",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "100px"
+                    },
+                    "spacing": {
+                        "section-gap-v": "80px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "stats-md": ["JetBrains Mono"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #121319;
+            color: #e3e1ea;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .ease-out-expo {
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .pill-selector {
+            transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .pill-selector:active {
+            transform: scale(0.98);
+        }
+
+        .pill-selector.active {
+            background-color: #6C5CE7;
+            border-color: #6C5CE7;
+            color: #faf6ff;
+        }
+
+        .progress-line {
+            width: 40%;
+            height: 2px;
+            background-color: #6C5CE7;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .slide-in {
+            animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .glass-card {
+            background: rgba(19, 19, 24, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- Progress Anchor -->
+<div class="fixed top-0 left-0 w-full z-50">
+<div class="progress-line"></div>
+<div class="w-full h-px bg-white/5"></div>
+</div>
+<!-- Main Onboarding Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop py-12 slide-in">
+<div class="w-full max-w-4xl">
+<!-- Branding/Back Navigation -->
+<div class="mb-12 flex items-center gap-4 opacity-60 hover:opacity-100 transition-opacity cursor-pointer group">
+<span class="material-symbols-outlined text-primary group-hover:-translate-x-1 transition-transform">arrow_back</span>
+<span class="font-label-caps text-label-caps uppercase tracking-widest">Personal Info</span>
+</div>
+<!-- Hero Headline -->
+<h1 class="font-display-lg text-display-lg mb-16 max-w-2xl">
+                What are you pursuing?
+            </h1>
+<div class="space-y-16">
+<!-- Branch Selection -->
+<section>
+<h2 class="font-label-caps text-label-caps text-on-surface-variant mb-6 uppercase tracking-widest">Select Your Academic Branch</h2>
+<div class="flex flex-wrap gap-4">
+<button class="pill-selector px-8 py-4 rounded-full font-headline-md text-headline-md bg-surface-container hover:bg-surface-container-high" onclick="togglePill(this, 'branch')">
+                            CS
+                        </button>
+<button class="pill-selector px-8 py-4 rounded-full font-headline-md text-headline-md bg-surface-container hover:bg-surface-container-high" onclick="togglePill(this, 'branch')">
+                            Electrical
+                        </button>
+<button class="pill-selector px-8 py-4 rounded-full font-headline-md text-headline-md bg-surface-container hover:bg-surface-container-high" onclick="togglePill(this, 'branch')">
+                            Mechanical
+                        </button>
+<button class="pill-selector px-8 py-4 rounded-full font-headline-md text-headline-md bg-surface-container hover:bg-surface-container-high" onclick="togglePill(this, 'branch')">
+                            Finance
+                        </button>
+</div>
+</section>
+<!-- Graduation Year Selection -->
+<section>
+<h2 class="font-label-caps text-label-caps text-on-surface-variant mb-6 uppercase tracking-widest">Expected Graduation</h2>
+<div class="flex flex-wrap gap-4">
+<button class="pill-selector px-10 py-4 rounded-full font-stats-md text-stats-md bg-surface-container hover:bg-surface-container-high" onclick="togglePill(this, 'grad')">
+                            2024
+                        </button>
+<button class="pill-selector px-10 py-4 rounded-full font-stats-md text-stats-md bg-surface-container hover:bg-surface-container-high" onclick="togglePill(this, 'grad')">
+                            2025
+                        </button>
+<button class="pill-selector px-10 py-4 rounded-full font-stats-md text-stats-md bg-surface-container hover:bg-surface-container-high" onclick="togglePill(this, 'grad')">
+                            2026
+                        </button>
+<button class="pill-selector px-10 py-4 rounded-full font-stats-md text-stats-md bg-surface-container hover:bg-surface-container-high" onclick="togglePill(this, 'grad')">
+                            2027
+                        </button>
+</div>
+</section>
+</div>
+<!-- Footer Controls -->
+<div class="mt-24 flex items-center justify-between border-t border-white/5 pt-12">
+<div class="flex items-center gap-6">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-background overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a serious young student wearing a dark turtleneck against a deep charcoal background, cinematic lighting, focused expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU_LnFwgAIoVpn0RoxBG64CVEfO9_Qhsnxcyc6nZkubQQ6-pAflVg11rgKB_4_6qi9zeiFOVMrQkhvWwKe57QfP7nUgGPDpGDbuAvLP95Rv0zxBwpTEKC6vHY_0z0ZTt0PJeCVSJ9ZVQsuzlAKsA4VRUb_5zECRNwulqOlz2TKyd-aaTIOwjIz1QrB_2joUWVqC7NLKpcoU889iCjciExBLH0E4Z5qBGlSPBLyMQV8zHPRc0Q8bgr5"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-background overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-performance portrait of a student researcher in a modern dark lab setting, subtle purple rim lighting, extremely detailed skin texture and focused gaze." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3Gchu0sipu20GA8gNEPetjt45J-CfTzFt-O35AQt5JRtq5NKKKnL5ziwX13zqKC_GSp-Ycfla82D1Y1R4WpaMPg3jj3pD8_rip1GYXAXjszID-OK6z2-numVB1vLja5BX-6az70-zx-N5j7xB0XM46NNJkSV5KtTpiWnnCmRMVX-6MDJiy-ZKafjOtuTm3yaQ3tgmvxa-3tPxmIwDRBTabxc213K_UHoIxImsEgK2q4fepEc4n_1f"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-background overflow-hidden flex items-center justify-center bg-primary-container text-on-primary-container text-xs font-bold">
+                            +12k
+                        </div>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                        Join 12,400+ high-achievers this semester.
+                    </p>
+</div>
+<button class="flex items-center gap-3 bg-primary-container text-on-primary-container px-10 py-5 rounded-xl font-headline-md text-headline-md hover:brightness-110 active:scale-95 transition-all ease-out-expo shadow-lg shadow-primary-container/20">
+                    Next Step
+                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Visual Accents -->
+<div class="fixed bottom-0 right-0 p-12 pointer-events-none opacity-20">
+<div class="relative w-64 h-64">
+
+</div>
+</div>
+<!-- Script for Interactions -->
+<script>
+        function togglePill(element, group) {
+            // Find all buttons in the same parent container (or conceptual group)
+            const parent = element.parentElement;
+            const buttons = parent.querySelectorAll('.pill-selector');
+            
+            // Remove active class from all
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked
+            element.classList.add('active');
+            
+            // Simple haptic-like micro-interaction
+            element.style.transform = 'scale(0.96)';
+            setTimeout(() => {
+                element.style.transform = '';
+            }, 100);
+        }
+
+        // Initialize state
+        window.onload = () => {
+            // Default selection simulation
+            const firstBranch = document.querySelector('section:first-of-type .pill-selector:first-child');
+            if(firstBranch) togglePill(firstBranch, 'branch');
+        };
+    </script>
+<!-- Footer Identity -->
+<footer class="w-full px-margin-desktop py-8 border-t border-white/5 bg-background">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="font-label-caps text-label-caps text-on-surface">MOMENTUM PERFORMANCE</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant opacity-60">© 2024 Momentum Productivity. Engineered for Performance.</span>
+<div class="flex gap-6">
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">Terms</a>
+</div>
+</div>
+</footer>
+</body></html>

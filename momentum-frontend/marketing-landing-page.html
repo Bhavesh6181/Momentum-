@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Momentum | High-Performance Study</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            background-color: #0A0A0D;
+            font-family: 'Inter', sans-serif;
+            color: #e3e1ea;
+            overflow-x: hidden;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .ease-out-expo { transition-timing-function: var(--ease-out-expo); }
+        
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee 40s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-track {
+            display: flex;
+            width: max-content;
+            animation: ticker 25s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-33.33%); }
+        }
+
+        .signal-pulse {
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 230, 118, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
+        }
+
+        .glow-card {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-container": "#6c5ce7",
+                        "inverse-surface": "#e3e1ea",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#121319",
+                        "surface-container-lowest": "#0d0e14",
+                        "outline-variant": "#474554",
+                        "tertiary": "#ffb77d",
+                        "on-secondary-fixed": "#00210b",
+                        "on-surface": "#e3e1ea",
+                        "on-primary-fixed-variant": "#4029ba",
+                        "surface-variant": "#33343b",
+                        "primary-fixed": "#e4dfff",
+                        "on-secondary-container": "#00622e",
+                        "on-primary-container": "#faf6ff",
+                        "on-error": "#690005",
+                        "surface-bright": "#383940",
+                        "on-surface-variant": "#c8c4d7",
+                        "on-background": "#e3e1ea",
+                        "inverse-primary": "#5847d2",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-primary-fixed": "#160066",
+                        "surface-container-high": "#292a30",
+                        "secondary": "#7dffa2",
+                        "tertiary-container": "#ac5d00",
+                        "surface-tint": "#c6bfff",
+                        "outline": "#928ea0",
+                        "on-tertiary-container": "#fff5f1",
+                        "surface-container-highest": "#33343b",
+                        "on-tertiary-fixed": "#2f1500",
+                        "secondary-container": "#05e777",
+                        "on-secondary": "#003918",
+                        "inverse-on-surface": "#2f3037",
+                        "surface": "#121319",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdcc3",
+                        "primary": "#c6bfff",
+                        "secondary-fixed": "#62ff96",
+                        "primary-fixed-dim": "#c6bfff",
+                        "surface-container": "#1e1f26",
+                        "on-tertiary": "#4d2600",
+                        "on-primary": "#2900a0",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "secondary-fixed-dim": "#00e475",
+                        "background": "#121319",
+                        "surface-container-low": "#1a1b21",
+                        "on-secondary-fixed-variant": "#005226",
+                        "kinetic-indigo": "#6C5CE7",
+                        "signal-green": "#00E676"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "section-gap-v": "80px",
+                        "unit": "8px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "48px"
+                    },
+                    fontFamily: {
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "stats-md": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    fontSize: {
+                        "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "stats-md": ["18px", {"lineHeight": "1", "letterSpacing": "0em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-dim selection:bg-primary-container selection:text-white">
+<div class="grain-overlay"></div>
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-surface-dim/80 backdrop-blur-md border-b border-white/10 flex justify-between items-center px-margin-desktop py-4">
+<div class="text-headline-md font-bold tracking-tighter text-on-surface">Momentum</div>
+<div class="hidden md:flex gap-gutter items-center">
+<a class="text-label-caps uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Dashboard</a>
+<a class="text-label-caps uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Study Rooms</a>
+<a class="text-label-caps uppercase text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Analytics</a>
+<button class="ml-4 bg-primary-container text-on-primary-container px-6 py-2 font-semibold hover:scale-95 transition-transform duration-300 ease-out-expo">Join Session</button>
+</div>
+</nav>
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="relative px-margin-desktop py-24 min-h-[819px] flex flex-col justify-center overflow-hidden">
+<div class="max-w-6xl w-full grid grid-cols-12 gap-gutter relative z-10">
+<div class="col-span-12 lg:col-span-8">
+<h1 class="text-display-lg font-display-lg tracking-tight mb-8 whitespace-pre-line">
+                        You're never
+                        studying alone.
+                    </h1>
+</div>
+</div>
+<!-- Horizontal Ticker Strip -->
+<div class="w-full overflow-hidden border-y border-white/5 py-4 my-12 bg-surface-container-low">
+<div class="ticker-track">
+<!-- Duplicate items for seamless loop -->
+<div class="flex gap-16 px-8 items-center">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-signal-green signal-pulse"></span>
+<span class="text-body-sm font-stats-md text-on-surface-variant">Rohan started Spring Boot · 2m ago</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-signal-green signal-pulse"></span>
+<span class="text-body-sm font-stats-md text-on-surface-variant">Elena reached 10h streak · 5m ago</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-signal-green signal-pulse"></span>
+<span class="text-body-sm font-stats-md text-on-surface-variant">James joined Physics 101 Room</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-signal-green signal-pulse"></span>
+<span class="text-body-sm font-stats-md text-on-surface-variant">Sarah completed Daily Focus Goal</span>
+</div>
+</div>
+<div class="flex gap-16 px-8 items-center">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-signal-green signal-pulse"></span>
+<span class="text-body-sm font-stats-md text-on-surface-variant">Rohan started Spring Boot · 2m ago</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-signal-green signal-pulse"></span>
+<span class="text-body-sm font-stats-md text-on-surface-variant">Elena reached 10h streak · 5m ago</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-signal-green signal-pulse"></span>
+<span class="text-body-sm font-stats-md text-on-surface-variant">James joined Physics 101 Room</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-signal-green signal-pulse"></span>
+<span class="text-body-sm font-stats-md text-on-surface-variant">Sarah completed Daily Focus Goal</span>
+</div>
+</div>
+</div>
+</div>
+<div class="px-margin-desktop">
+<div class="flex flex-wrap gap-6">
+<button class="group relative px-8 py-4 bg-kinetic-indigo text-white font-bold text-body-lg flex items-center gap-3 hover:shadow-[0_0_30px_rgba(108,92,231,0.4)] transition-all duration-500 ease-out-expo">
+                        Start Focus Session
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="px-8 py-4 border border-white/20 text-on-surface font-bold text-body-lg hover:bg-white/5 transition-colors duration-300">
+                        View Study Rooms
+                    </button>
+</div>
+</div>
+</section>
+<!-- Social Proof Marquee -->
+<section class="py-12 border-b border-white/5 bg-surface-container-lowest overflow-hidden">
+<div class="marquee-track">
+<div class="flex gap-24 items-center px-12">
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">MIT STUDY COLLECTIVE</span>
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">OXFORD FOCUS LAB</span>
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">STANFORD PEERS</span>
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">98.4% RETENTION RATE</span>
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">1.2M HOURS FOCUSED</span>
+</div>
+<div class="flex gap-24 items-center px-12">
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">MIT STUDY COLLECTIVE</span>
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">OXFORD FOCUS LAB</span>
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">STANFORD PEERS</span>
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">98.4% RETENTION RATE</span>
+<span class="text-label-caps font-bold text-on-surface-variant/40 tracking-widest uppercase">1.2M HOURS FOCUSED</span>
+</div>
+</div>
+</section>
+<!-- Dashboard Preview (Asymmetric Layout) -->
+<section class="relative py-section-gap-v px-margin-desktop bg-surface overflow-hidden">
+<div class="grid grid-cols-12 gap-gutter items-center">
+<div class="col-span-12 lg:col-span-4 mb-16 lg:mb-0">
+<div class="inline-block px-3 py-1 bg-kinetic-indigo/10 border border-kinetic-indigo/30 text-kinetic-indigo text-label-caps font-bold mb-6">LIVE INTERFACE</div>
+<h2 class="text-headline-lg font-headline-lg mb-6 max-w-sm">Precision tools for the modern scholar.</h2>
+<p class="text-body-lg text-on-surface-variant max-w-sm">Real-time data visualization that transforms raw study hours into actionable performance metrics.</p>
+</div>
+<div class="col-span-12 lg:col-span-8 relative">
+<div class="glow-card p-1 aspect-video relative group">
+<div class="absolute inset-0 bg-kinetic-indigo/5 blur-3xl group-hover:bg-kinetic-indigo/10 transition-colors duration-700"></div>
+<div class="relative w-full h-full bg-surface-container-lowest border border-white/10 p-8 flex flex-col gap-6 overflow-hidden">
+<!-- Abstract Dashboard Mock -->
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="w-12 h-12 bg-white/5 border border-white/10"></div>
+<div>
+<div class="w-32 h-4 bg-white/10 mb-2"></div>
+<div class="w-24 h-2 bg-white/5"></div>
+</div>
+</div>
+<div class="flex gap-2">
+<div class="w-8 h-8 rounded-full border border-signal-green flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-signal-green"></span>
+</div>
+<div class="w-24 h-8 bg-white/5 border border-white/10"></div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 h-full">
+<div class="col-span-2 border border-white/10 bg-white/5 p-4 flex flex-col gap-4">
+<div class="w-full h-32 border-b border-white/10 flex items-end gap-1 px-4">
+<!-- Abstract graph bars -->
+<div class="flex-1 bg-kinetic-indigo/20 h-[30%]"></div>
+<div class="flex-1 bg-kinetic-indigo/40 h-[60%]"></div>
+<div class="flex-1 bg-kinetic-indigo/60 h-[45%]"></div>
+<div class="flex-1 bg-kinetic-indigo/80 h-[90%]"></div>
+<div class="flex-1 bg-kinetic-indigo h-[70%]"></div>
+</div>
+<div class="space-y-3">
+<div class="w-full h-3 bg-white/10"></div>
+<div class="w-3/4 h-3 bg-white/10"></div>
+<div class="w-1/2 h-3 bg-white/10"></div>
+</div>
+</div>
+<div class="col-span-1 flex flex-col gap-4">
+<div class="flex-1 border border-white/10 bg-white/5 p-4 flex flex-col justify-center items-center gap-2">
+<div class="text-stats-md text-signal-green">2h 45m</div>
+<div class="text-label-caps text-on-surface-variant">SESSION</div>
+</div>
+<div class="flex-1 border border-white/10 bg-white/5 p-4 flex flex-col justify-center items-center gap-2">
+<div class="text-stats-md text-kinetic-indigo">14/20</div>
+<div class="text-label-caps text-on-surface-variant">TASKS</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features (3-column asymmetric) -->
+<section class="py-section-gap-v px-margin-desktop bg-surface-container-lowest">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
+<div class="group">
+<div class="mb-8 w-12 h-12 flex items-center justify-center border border-white/10 text-on-surface-variant group-hover:text-kinetic-indigo group-hover:border-kinetic-indigo transition-all duration-300 ease-out-expo">
+<span class="material-symbols-outlined text-[32px]">sync_alt</span>
+</div>
+<h3 class="text-headline-md font-bold mb-4">Live Sync</h3>
+<p class="text-body-lg text-on-surface-variant">Stream your focus sessions in real-time. Join thousands of high-achievers in low-latency study rooms designed for zero distraction.</p>
+</div>
+<div class="group">
+<div class="mb-8 w-12 h-12 flex items-center justify-center border border-white/10 text-on-surface-variant group-hover:text-kinetic-indigo group-hover:border-kinetic-indigo transition-all duration-300 ease-out-expo">
+<span class="material-symbols-outlined text-[32px]">bolt</span>
+</div>
+<h3 class="text-headline-md font-bold mb-4">Focus Streaks</h3>
+<p class="text-body-lg text-on-surface-variant">Our algorithm tracks deep work cycles. Momentum rewards consistency with performance-tier badges and analytics-driven insights.</p>
+</div>
+<div class="group">
+<div class="mb-8 w-12 h-12 flex items-center justify-center border border-white/10 text-on-surface-variant group-hover:text-kinetic-indigo group-hover:border-kinetic-indigo transition-all duration-300 ease-out-expo">
+<span class="material-symbols-outlined text-[32px]">hub</span>
+</div>
+<h3 class="text-headline-md font-bold mb-4">Peer Accountability</h3>
+<p class="text-body-lg text-on-surface-variant">Automated check-ins and shared progress metrics ensure you stay committed to your long-term academic trajectory.</p>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-section-gap-v px-margin-desktop text-center bg-surface relative overflow-hidden">
+
+<div class="relative z-10 max-w-2xl mx-auto">
+<h2 class="text-display-lg font-display-lg mb-8">Ready for takeoff?</h2>
+<button class="bg-white text-surface-dim px-12 py-5 font-bold text-body-lg hover:bg-kinetic-indigo hover:text-white transition-all duration-500 ease-out-expo mb-6">
+                    Launch Your Dashboard
+                </button>
+<div class="flex justify-center items-center gap-4 text-on-surface-variant">
+<span class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-signal-green"></span>
+<span class="text-label-caps">1,402 ACTIVE NOW</span>
+</span>
+<span class="w-1 h-1 rounded-full bg-white/20"></span>
+<span class="text-label-caps">FREE FOR STUDENTS</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-dim border-t border-white/5 px-margin-desktop py-12">
+<div class="flex flex-col md:flex-row justify-between items-start gap-12">
+<div class="max-w-xs">
+<div class="text-headline-md font-bold tracking-tighter text-on-surface mb-4">Momentum</div>
+<p class="text-body-sm text-on-surface-variant">High-performance study ecosystem for the digital age. Engineered for concentration and growth.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-16">
+<div>
+<h4 class="text-label-caps font-bold text-on-surface mb-6 uppercase">Product</h4>
+<ul class="space-y-3">
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Features</a></li>
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Dashboard</a></li>
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Rooms</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-label-caps font-bold text-on-surface mb-6 uppercase">Legal</h4>
+<ul class="space-y-3">
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy</a></li>
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms</a></li>
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Safety</a></li>
+</ul>
+</div>
+<div class="col-span-2 md:col-span-1">
+<h4 class="text-label-caps font-bold text-on-surface mb-6 uppercase">Connect</h4>
+<ul class="space-y-3">
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Twitter</a></li>
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Discord</a></li>
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Changelog</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="text-label-caps text-on-surface-variant/40">© 2024 MOMENTUM PRODUCTIVITY. ENGINEERED FOR PERFORMANCE.</div>
+<div class="flex gap-6">
+<span class="text-label-caps text-on-surface-variant/40">v2.4.0-STABLE</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions and subtle effects
+        document.addEventListener('mousemove', (e) => {
+            const cursor = { x: e.clientX, y: e.clientY };
+            // Optional: Light follow effect implementation if needed
+        });
+
+        // Numerical count-up for stats (Simulated)
+        const stats = document.querySelectorAll('.font-stats-md');
+        stats.forEach(stat => {
+            // Logic for counting up could go here
+        });
+    </script>
+</body></html>

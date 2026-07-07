@@ -1,0 +1,2 @@
+ALTER TABLE user_profiles ADD COLUMN onboarding_completed BOOLEAN DEFAULT FALSE NOT NULL;
+ALTER TABLE user_profiles ADD COLUMN onboarding_step INTEGER DEFAULT 0 NOT NULL;

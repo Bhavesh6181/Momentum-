@@ -25,7 +25,20 @@ spring:
     date-format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
     time-zone: UTC
 
-# JWT Configurations (strictly use environment variables, never hardcode secret keys)
-jwt:
-  secret: ${JWT_SECRET:dGhpcy1pcy1hLXZlcnktc2VjdXJlLWJhc2U2NC1lbmNvZGVkLXNlY3JldC1rZXktZm9yLW1vbWVudHVtLWJhY2tlbmQtZGV2ZWxvcG1lbnQ=}
-  expiration-ms: ${JWT_EXPIRATION_MS:86400000} # Default 24 hours
+# Security and JWT Configurations (strictly use environment variables, never hardcode secret keys)
+app:
+  security:
+    jwt-secret: ${JWT_SECRET:dGhpcy1pcy1hLXZlcnktc2VjdXJlLWJhc2U2NC1lbmNvZGVkLXNlY3JldC1rZXktZm9yLW1vbWVudHVtLWJhY2tlbmQtZGV2ZWxvcG1lbnQ=}
+    access-token-expiration-ms: ${JWT_EXPIRATION_MS:900000} # 15 minutes default
+    refresh-token-expiration-ms: ${REFRESH_TOKEN_EXPIRATION_MS:604800000} # 7 days
+    max-failed-login-attempts: 5
+    lockout-duration-minutes: 15
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:4173}
+  upload:
+    dir: ${UPLOAD_DIR:uploads}
+    base-url: ${UPLOAD_BASE_URL:}
+  scheduler:
+    group-analytics-cron: ${GROUP_ANALYTICS_CRON:0 0 2 * * *}
+    nightly-streak-cron: ${NIGHTLY_STREAK_CRON:0 1 0 * * *}
+
+
