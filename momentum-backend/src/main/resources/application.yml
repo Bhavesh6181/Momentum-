@@ -3,6 +3,10 @@ spring:
     name: momentum-backend
   profiles:
     active: local
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
 
   # Common Mail Settings (secrets overridden by env vars)
   mail:
