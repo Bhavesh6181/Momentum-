@@ -60,7 +60,7 @@ export const FocusMode: React.FC = () => {
 
   return (
     <div className="bg-background text-on-surface select-none overflow-hidden h-screen flex flex-col font-body-lg relative text-left">
-      {/* Subtle ambient background — no noisy textures */}
+      {/* Subtle ambient background Â— no noisy textures */}
       <div
         className="fixed inset-0 pointer-events-none z-0"
         style={{
@@ -217,7 +217,7 @@ export const FocusMode: React.FC = () => {
                 <span className="text-[11px] text-on-surface-variant/60 font-medium uppercase tracking-wider">
                   Session {currentSession} / {TOTAL_SESSIONS}
                 </span>
-                <span className="text-on-surface-variant/30 text-xs">·</span>
+                <span className="text-on-surface-variant/30 text-xs">Â·</span>
                 <span className="text-[11px] font-bold text-[#00FF41]/80">
                   {percentDone}%
                 </span>
