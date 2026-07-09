@@ -47,7 +47,7 @@ export const Login: React.FC = () => {
       {/* Left Column Form */}
       <main className="relative w-full lg:w-[55%] min-h-screen flex flex-col justify-center px-8 sm:px-16 lg:px-24 xl:px-32 bg-background z-20 text-left">
         {/* Grain overlay */}
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay pointer-events-none" />
+        <div className="absolute inset-0 bg-noise opacity-[0.02] mix-blend-overlay pointer-events-none" />
 
         {/* Wordmark Header */}
         <header className="absolute top-12 left-8 sm:left-16 lg:left-24">

@@ -24,7 +24,7 @@ export const FriendsOnlineRow: React.FC = () => {
 
   return (
     <div className="rounded-xl border border-white/[0.08] bg-surface overflow-hidden transition-all duration-300 text-left">
-      {/* Collapsed header — always visible */}
+      {/* Collapsed header Â— always visible */}
       <button
         onClick={() => setIsExpanded((p) => !p)}
         className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-surface-container-high transition-colors duration-200 group"
@@ -88,7 +88,7 @@ export const FriendsOnlineRow: React.FC = () => {
                     <div className="flex flex-col min-w-0">
                       <span className="text-[13px] font-semibold text-on-surface truncate">{friend.name}</span>
                       <span className="text-[11px] text-secondary-fixed-dim font-medium flex items-center gap-1 mt-0.5">
-                        Focusing · {friend.time}
+                        Focusing Â· {friend.time}
                       </span>
                     </div>
                   </div>

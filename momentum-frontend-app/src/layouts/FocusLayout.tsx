@@ -20,7 +20,7 @@ export const FocusLayout: React.FC = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-primary-container/10 blur-[120px] pointer-events-none animate-timer-breath" />
 
       {/* Grain shader overlay */}
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay pointer-events-none" />
+      <div className="absolute inset-0 bg-noise opacity-[0.02] mix-blend-overlay pointer-events-none" />
 
       {/* Floating Exit Trigger */}
       <header className="absolute top-8 right-8 z-50">
